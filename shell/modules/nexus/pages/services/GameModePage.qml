@@ -16,7 +16,7 @@ import Caelestia
 PageBase {
     id: root
 
-    title: qsTr("Game mode")
+    title: "Modo juego"
     isSubPage: true
 
     ColumnLayout {
@@ -28,13 +28,13 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("Auto-enable rules")
+            text: "Reglas de autoactivación"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Enable automatically")
-            subtext: qsTr("Turn on game mode when a target window is focused or running")
+            text: "Activar automáticamente"
+            subtext: "Activar modo juego cuando una ventana objetivo esté enfocada o ejecutándose"
             checked: GlobalConfig.utilities.gameMode.autoEnable
             onToggled: GlobalConfig.utilities.gameMode.autoEnable = checked
         }
@@ -42,8 +42,8 @@ PageBase {
         NavRow {
             last: true
             icon: "ads_click"
-            label: qsTr("Target windows")
-            status: qsTr("Add or remove auto-enable targets")
+            label: "Ventanas objetivo"
+            status: "Añadir o quitar objetivos de autoactivación"
             onClicked: root.nState.openSubPage(3)
         }
 
@@ -53,37 +53,37 @@ PageBase {
             visible: Quickshell.env("XDG_CURRENT_DESKTOP").includes("Hyprland")
 
             SectionHeader {
-                text: qsTr("Hyprland overrides")
+                text: "Anulaciones de Hyprland"
             }
 
             ToggleRow {
                 Layout.fillWidth: true
                 first: true
-                text: qsTr("Disable animations")
+                text: "Desactivar animaciones"
                 checked: GlobalConfig.utilities.gameMode.disableHyprlandAnimations
                 onToggled: GlobalConfig.utilities.gameMode.disableHyprlandAnimations = checked
             }
             ToggleRow {
                 Layout.fillWidth: true
-                text: qsTr("Disable blur")
+                text: "Desactivar desenfoque"
                 checked: GlobalConfig.utilities.gameMode.disableHyprlandBlur
                 onToggled: GlobalConfig.utilities.gameMode.disableHyprlandBlur = checked
             }
             ToggleRow {
                 Layout.fillWidth: true
-                text: qsTr("Disable gaps and rounding")
+                text: "Desactivar espacios y esquinas"
                 checked: GlobalConfig.utilities.gameMode.disableHyprlandGaps
                 onToggled: GlobalConfig.utilities.gameMode.disableHyprlandGaps = checked
             }
             ToggleRow {
                 Layout.fillWidth: true
-                text: qsTr("Disable shadows")
+                text: "Desactivar sombras"
                 checked: GlobalConfig.utilities.gameMode.disableHyprlandShadows
                 onToggled: GlobalConfig.utilities.gameMode.disableHyprlandShadows = checked
             }
             ToggleRow {
                 Layout.fillWidth: true
-                text: qsTr("Disable window transparency")
+                text: "Desactivar transparencia de ventanas"
                 last: true
                 checked: GlobalConfig.utilities.gameMode.disableWindowTransparency
                 onToggled: GlobalConfig.utilities.gameMode.disableWindowTransparency = checked
@@ -91,32 +91,32 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Caelestia feature overrides")
+            text: "Anulaciones de funciones de Caelestia"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Disable shell transparency")
+            text: "Desactivar transparencia del shell"
             checked: GlobalConfig.utilities.gameMode.disableShellTransparency
             onToggled: GlobalConfig.utilities.gameMode.disableShellTransparency = checked
         }
         ToggleRow {
-            text: qsTr("Disable toast notifications transparency")
+            text: "Desactivar transparencia de notificaciones toast"
             checked: GlobalConfig.utilities.gameMode.disableToastTransparency
             onToggled: GlobalConfig.utilities.gameMode.disableToastTransparency = checked
         }
         ToggleRow {
-            text: qsTr("Disable desktop lyrics")
+            text: "Desactivar letras en escritorio"
             checked: GlobalConfig.utilities.gameMode.disableDesktopLyrics
             onToggled: GlobalConfig.utilities.gameMode.disableDesktopLyrics = checked
         }
         ToggleRow {
-            text: qsTr("Disable visualizer")
+            text: "Desactivar visualizador"
             checked: GlobalConfig.utilities.gameMode.disableVisualizer
             onToggled: GlobalConfig.utilities.gameMode.disableVisualizer = checked
         }
         ToggleRow {
-            text: qsTr("Disable shimeji pets")
+            text: "Desactivar mascotas shimeji"
             last: true
             checked: GlobalConfig.utilities.gameMode.disableShimeji
             onToggled: GlobalConfig.utilities.gameMode.disableShimeji = checked

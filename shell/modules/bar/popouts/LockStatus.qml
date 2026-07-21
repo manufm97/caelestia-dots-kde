@@ -21,7 +21,7 @@ ColumnLayout {
     StyledText {
         Layout.topMargin: Tokens.padding.medium * root.scaleOffset
         Layout.leftMargin: Tokens.padding.small * root.scaleOffset
-        text: qsTr("Keyboard Locks")
+        text: "Bloqueos de teclado"
         font.weight: 500
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
@@ -43,12 +43,12 @@ ColumnLayout {
             spacing: Tokens.spacing.small * root.scaleOffset
 
             StyledText {
-                text: qsTr("Capslock: %1").arg(Hypr.capsLock ? "Enabled" : "Disabled")
+                text: "Bloq Mayús: %1".arg(Hypr.capsLock ? "Enabled" : "Disabled")
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
             }
 
             StyledText {
-                text: qsTr("Numlock: %1").arg(Hypr.numLock ? "Enabled" : "Disabled")
+                text: "Bloq Num: %1".arg(Hypr.numLock ? "Enabled" : "Disabled")
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
             }
         }

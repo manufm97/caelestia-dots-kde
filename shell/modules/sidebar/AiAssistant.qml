@@ -211,7 +211,7 @@ Item {
         }
     }
 
-    property string currentActionText: "Thinking..."
+    property string currentActionText: "Pensando..."
 
     function fetchOllamaModels() {
         var ollamaUrl = GlobalConfig.ai.ollamaUrl || "http://localhost:11434";
@@ -511,16 +511,16 @@ Item {
         
         if (isSystemToolResult) {
             if (toolName === "web_search" || toolName === "read_webpage") {
-                currentActionText = "Reading results...";
+                currentActionText = "Leyendo resultados...";
             } else if (toolName === "take_screenshot") {
-                currentActionText = "Analyzing screen...";
+                currentActionText = "Analizando pantalla...";
             } else if (toolName === "get_weather") {
-                currentActionText = "Analyzing weather...";
+                currentActionText = "Analizando clima...";
             } else {
-                currentActionText = "Thinking...";
+                currentActionText = "Pensando...";
             }
         } else {
-            currentActionText = "Thinking...";
+            currentActionText = "Pensando...";
         }
         var xhr = new XMLHttpRequest();
         root.currentRequest = xhr;
@@ -628,7 +628,7 @@ Item {
 
                         if (textToolCalls.length > 0) {
                             if (enableTools) {
-                                currentActionText = "Using tools...";
+                                currentActionText = "Usando herramientas...";
                                 accumulatedToolResults = "";
                                 accumulatedToolImage = "";
                                 runningToolsCount = 0;
@@ -644,29 +644,29 @@ Item {
                                     }
 
                                     if (toolName === "take_screenshot") {
-                                        currentActionText = "Analyzing screen...";
+                                        currentActionText = "Analizando pantalla...";
                                         var screenCmd = `grim -g "$(hyprctl monitors -j | jq -r '.[] | select(.focused) | \\"\\\\(.x),\\\\(.y) \\\\(.width)x\\\\(.height)\\"')" ${Paths.runtimeTemp("orion_screenshot.png")}`;
                                         runAgentCommand(screenCmd, "screenshot_take");
 
                                     } else if (toolName === "web_search") {
-                                        currentActionText = "Searching the web...";
+                                        currentActionText = "Buscando en la web...";
                                         var query = String(args.query || "");
                                         var page = args.page || 1;
                                         runAgentCommand(["env", "PYTHONIOENCODING=utf8", "python3", Quickshell.shellDir + "/scripts/orion_search.py", "--mode", "search", "--query", query, "--page", String(page)], "exec_" + toolName);
 
                                     } else if (toolName === "read_webpage") {
-                                        currentActionText = "Reading webpage...";
+                                        currentActionText = "Leyendo página web...";
                                         var url = String(args.url || "");
                                         runAgentCommand(["env", "PYTHONIOENCODING=utf8", "python3", Quickshell.shellDir + "/scripts/orion_search.py", "--mode", "read", "--url", url], "exec_" + toolName);
 
                                     } else if (toolName === "open_app") {
-                                        currentActionText = "Opening app...";
+                                        currentActionText = "Abriendo aplicación...";
                                         var app = String(args.app_name || "");
                                         var safeApp = shellQuote("Name=.*" + app);
                                         runAgentCommand(["sh", "-c", 'grep -i -m 1 "^Exec=" $(find /usr/share/applications ~/.local/share/applications -name "*.desktop" -exec grep -il "$1" {} + 2>/dev/null) | cut -d "=" -f 2- | sed "s/ %[a-zA-Z]//g" | xargs -I {} sh -c "setsid {} >/dev/null 2>&1 &"', "--", safeApp], "exec_" + toolName);
 
                                     } else if (toolName === "set_timer") {
-                                        currentActionText = "Setting timer...";
+                                        currentActionText = "Configurando temporizador...";
                                         var secs = Number(args.seconds) || 5;
                                         var msg = String(args.message || "Timer finished");
                                         var timerQml = "import QtQuick; Timer { interval: " + (secs * 1000) + "; running: true; onTriggered: { root.runAgentCommand(['notify-send', 'Orion Timer', " + JSON.stringify(msg) + "], 'timer_trigger'); destroy(); } }";
@@ -674,12 +674,12 @@ Item {
                                         accumulatedToolResults += "Tool: set_timer\nResult: Timer set for " + secs + " seconds with message: " + msg + "\n\n";
 
                                     } else if (toolName === "get_weather") {
-                                        currentActionText = "Checking weather...";
-                                        var weatherStr = Weather.city + ": " + Weather.temp + " (" + Weather.description + "). Humidity: " + Weather.humidity + "%, Wind: " + Weather.windSpeed + " km/h";
+                                        currentActionText = "Consultando clima...";
+                                        var weatherStr = Weather.city + ": " + Weather.temp + " (" + Weather.description + "). Humedad: " + Weather.humidity + "%, Viento: " + Weather.windSpeed + " km/h";
                                         accumulatedToolResults += "Tool: get_weather\nResult: Local weather from system dashboard: " + weatherStr + "\n\n";
 
                                     } else if (toolName === "caelestia_command") {
-                                        currentActionText = "Running caelestia...";
+                                        currentActionText = "Ejecutando caelestia...";
                                         var subcmd = String(args.subcommand || "");
                                         var subargs = String(args.args || "").trim();
                                         var cmdArr = ["caelestia", subcmd];
@@ -697,26 +697,26 @@ Item {
                                     if (accumulatedToolResults !== "") {
                                         checkToolsFinished();
                                     } else {
-                                        currentActionText = "Thinking...";
+                                        currentActionText = "Pensando...";
                                         isTyping = false;
                                         isThinking = false;
                                         inAgentLoop = false;
                                     }
                                 }
                             } else {
-                                currentActionText = "Thinking...";
+                                currentActionText = "Pensando...";
                                 isTyping = false;
                                 isThinking = false;
                                 inAgentLoop = false;
                             }
                         } else {
-                            currentActionText = "Thinking...";
+                            currentActionText = "Pensando...";
                             isTyping = false;
                             isThinking = false;
                             inAgentLoop = false;
                         }
                     } else {
-                        var errMsg = (xhr.status === 0) ? "Generation cancelled" : "Ollama request failed (status " + xhr.status + ").";
+                        var errMsg = (xhr.status === 0) ? "Generación cancelada" : "Ollama falló (estado %1).".arg(xhr.status);
                         var currentText = chatHistory.get(chatHistory.count - 1).text;
                         if (currentText.trim() === "") {
                             chatHistory.setProperty(chatHistory.count - 1, "text", errMsg);
@@ -891,7 +891,7 @@ Item {
                              }
                              Text {
                                  anchors.verticalCenter: parent.verticalCenter
-                                 text: "History"
+                                 text: "Historial"
                                  color: isHistoryTab ? Colours.palette.m3onPrimary : Colours.palette.m3onSurfaceVariant
                                  font: Tokens.font.body.small
                                  visible: !isHistoryTab
@@ -918,7 +918,7 @@ Item {
                  menuItems: modelVariants.instances
 
                  fallbackIcon: "smart_toy"
-                 fallbackText: qsTr("Select Model")
+                 fallbackText: "Seleccionar modelo"
                  stateLayer.disabled: true
 
                  Variants {
@@ -999,14 +999,14 @@ Item {
                              color: Colours.palette.m3onSurfaceVariant
 
                              property var phrases: [
-                                 "Ask away, %1!",
-                                 "How can I help you today, %1?",
-                                 "What's on your mind, %1?",
-                                 "Ready when you are, %1!",
-                                 "Let's get started, %1.",
-                                 "What shall we explore today, %1?",
-                                 "I'm all ears, %1!"
-                             ]
+                                "¡Pregunta lo que quieras, %1!",
+                                "¿Cómo puedo ayudarte hoy, %1?",
+                                "¿En qué piensas, %1?",
+                                "¡Listo cuando quieras, %1!",
+                                "Empecemos, %1.",
+                                "¿Qué exploramos hoy, %1?",
+                                "¡Soy todo oídos, %1!"
+                            ]
 
                              Component.onCompleted: {
                                  var user = Quickshell.env("USER") || "user";
@@ -1247,7 +1247,7 @@ Item {
                                          id: thoughtRow
                                          spacing: Tokens.spacing.small
                                          Text {
-                                             text: "Thought Process"
+                                             text: "Proceso de pensamiento"
                                              color: Colours.palette.m3onSurfaceVariant
                                              font: Tokens.font.body.small
                                          }
@@ -1446,7 +1446,7 @@ Item {
                              TextArea {
                                  id: inputArea
                                  verticalAlignment: TextInput.AlignVCenter
-                                 placeholderText: qsTr("Ask assistant...")
+                                 placeholderText: "Preguntar al asistente..."
                                  color: Colours.palette.m3onSurface
                                  placeholderTextColor: Colours.palette.m3outline
                                  font: Tokens.font.body.small
@@ -1657,7 +1657,7 @@ Item {
                              font: Tokens.font.icon.small
                          }
                          Text {
-                             text: "Clear All"
+                             text: "Borrar todo"
                              color: Colours.palette.m3onErrorContainer
                              font: Tokens.font.body.small
                          }
@@ -1689,7 +1689,7 @@ Item {
                              font: Tokens.font.icon.small
                          }
                          Text {
-                             text: "New Chat"
+                             text: "Nuevo chat"
                              color: Colours.palette.m3onPrimaryContainer
                              font: Tokens.font.body.small
                          }

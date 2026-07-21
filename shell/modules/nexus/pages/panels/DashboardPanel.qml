@@ -13,108 +13,108 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Dashboard")
+    title: "Panel principal"
     isSubPage: true
 
     readonly property list<MenuItem> dashboardShapeItems: [
         MenuItem {
             property int value: MaterialShape.Circle
-            text: qsTr("Circle")
+            text: "Círculo"
         },
         MenuItem {
             property int value: MaterialShape.Square
-            text: qsTr("Square")
+            text: "Cuadrado"
         },
         MenuItem {
             property int value: MaterialShape.Pill
-            text: qsTr("Pill")
+            text: "Píldora"
         },
         MenuItem {
             property int value: MaterialShape.Diamond
-            text: qsTr("Diamond")
+            text: "Rombo"
         },
         MenuItem {
             property int value: MaterialShape.ClamShell
-            text: qsTr("Clam Shell")
+            text: "Concha"
         },
         MenuItem {
             property int value: MaterialShape.Pentagon
-            text: qsTr("Pentagon")
+            text: "Pentágono"
         },
         MenuItem {
             property int value: MaterialShape.Gem
-            text: qsTr("Gem")
+            text: "Gema"
         },
         MenuItem {
             property int value: MaterialShape.Cookie4Sided
-            text: qsTr("Cookie 4-Sided")
+            text: "Galleta 4 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie6Sided
-            text: qsTr("Cookie 6-Sided")
+            text: "Galleta 6 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie7Sided
-            text: qsTr("Cookie 7-Sided")
+            text: "Galleta 7 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie9Sided
-            text: qsTr("Cookie 9-Sided")
+            text: "Galleta 9 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie12Sided
-            text: qsTr("Cookie 12-Sided")
+            text: "Galleta 12 lados"
         }
     ]
 
     readonly property list<MenuItem> lockShapeItems: [
         MenuItem {
             property int value: MaterialShape.Circle
-            text: qsTr("Circle")
+            text: "Círculo"
         },
         MenuItem {
             property int value: MaterialShape.Square
-            text: qsTr("Square")
+            text: "Cuadrado"
         },
         MenuItem {
             property int value: MaterialShape.Pill
-            text: qsTr("Pill")
+            text: "Píldora"
         },
         MenuItem {
             property int value: MaterialShape.Diamond
-            text: qsTr("Diamond")
+            text: "Rombo"
         },
         MenuItem {
             property int value: MaterialShape.ClamShell
-            text: qsTr("Clam Shell")
+            text: "Concha"
         },
         MenuItem {
             property int value: MaterialShape.Pentagon
-            text: qsTr("Pentagon")
+            text: "Pentágono"
         },
         MenuItem {
             property int value: MaterialShape.Gem
-            text: qsTr("Gem")
+            text: "Gema"
         },
         MenuItem {
             property int value: MaterialShape.Cookie4Sided
-            text: qsTr("Cookie 4-Sided")
+            text: "Galleta 4 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie6Sided
-            text: qsTr("Cookie 6-Sided")
+            text: "Galleta 6 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie7Sided
-            text: qsTr("Cookie 7-Sided")
+            text: "Galleta 7 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie9Sided
-            text: qsTr("Cookie 9-Sided")
+            text: "Galleta 9 lados"
         },
         MenuItem {
             property int value: MaterialShape.Cookie12Sided
-            text: qsTr("Cookie 12-Sided")
+            text: "Galleta 12 lados"
         }
     ]
 
@@ -127,30 +127,30 @@ PageBase {
         // General
         SectionHeader {
             first: true
-            text: qsTr("General")
+            text: "General"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Enabled")
+            text: "Activado"
             checked: Config.dashboard.enabled
             onToggled: GlobalConfig.dashboard.enabled = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Show on hover")
-            subtext: qsTr("Reveal when the cursor reaches the screen edge")
+            text: "Mostrar al pasar"
+            subtext: "Revelar cuando el cursor llegue al borde"
             checked: Config.dashboard.showOnHover
             onToggled: GlobalConfig.dashboard.showOnHover = checked
         }
 
         SelectRow {
             Layout.fillWidth: true
-            label: qsTr("Dashboard profile picture shape")
-            subtext: qsTr("Choose the shape of the profile picture on the dashboard")
+            label: "Forma de foto de perfil del panel"
+            subtext: "Elige la forma de la foto de perfil en el panel"
             fallbackIcon: "person"
-            fallbackText: qsTr("Pill")
+            fallbackText: "Píldora"
             active: {
                 for (let i = 0; i < dashboardShapeItems.length; i++) {
                     if (dashboardShapeItems[i].value === GlobalConfig.dashboard.profilePicShape)
@@ -167,10 +167,10 @@ PageBase {
         SelectRow {
             Layout.fillWidth: true
             last: true
-            label: qsTr("Lock screen profile picture shape")
-            subtext: qsTr("Choose the shape of the profile picture on the lock screen")
+            label: "Forma de foto de perfil de bloqueo"
+            subtext: "Elige la forma en la pantalla de bloqueo"
             fallbackIcon: "lock"
-            fallbackText: qsTr("Clam Shell")
+            fallbackText: "Concha"
             active: {
                 for (let i = 0; i < lockShapeItems.length; i++) {
                     if (lockShapeItems[i].value === GlobalConfig.lock.profilePicShape)
@@ -186,70 +186,70 @@ PageBase {
 
         // Tabs
         SectionHeader {
-            text: qsTr("Tabs")
+            text: "Pestañas"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Dashboard")
+            text: "Panel principal"
             checked: Config.dashboard.showDashboard
             onToggled: GlobalConfig.dashboard.showDashboard = checked
         }
 
         ToggleRow {
-            text: qsTr("Media")
+            text: "Medios"
             checked: Config.dashboard.showMedia
             onToggled: GlobalConfig.dashboard.showMedia = checked
         }
 
         ToggleRow {
-            text: qsTr("Performance")
+            text: "Rendimiento"
             checked: Config.dashboard.showPerformance
             onToggled: GlobalConfig.dashboard.showPerformance = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Weather")
+            text: "Clima"
             checked: Config.dashboard.showWeather
             onToggled: GlobalConfig.dashboard.showWeather = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Terminal")
+            text: "Terminal"
             checked: Config.dashboard.showTerminal
             onToggled: GlobalConfig.dashboard.showTerminal = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: Strings.localizeEnglishSpelling(qsTr("Recolour media GIF"))
-            subtext: Strings.localizeEnglishSpelling(qsTr("Apply system theme colours to the media GIF"))
+            text: Strings.localizeEnglishSpelling("Recolorear GIF multimedia")
+            subtext: Strings.localizeEnglishSpelling("Aplicar colores del tema al GIF")
             checked: Config.dashboard.colorizeMediaGif
             onToggled: GlobalConfig.dashboard.colorizeMediaGif = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Use material shapes")
-            subtext: qsTr("Replace the media GIF with audio-reactive material shapes")
+            text: "Usar formas Material"
+            subtext: "Reemplazar el GIF con formas reactivas al audio"
             checked: Config.dashboard.useMediaShapes
             onToggled: GlobalConfig.dashboard.useMediaShapes = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: Strings.localizeEnglishSpelling(qsTr("Randomize shape colours"))
-            subtext: Strings.localizeEnglishSpelling(qsTr("Randomly shift shape colours while morphing"))
+            text: Strings.localizeEnglishSpelling("Colores de formas aleatorios")
+            subtext: Strings.localizeEnglishSpelling("Cambiar colores de formas al morfear")
             checked: Config.dashboard.randomizeMediaShapeColors
             onToggled: GlobalConfig.dashboard.randomizeMediaShapeColors = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Sync with music")
-            subtext: qsTr("Randomly pick shapes to the beat instead of bass level")
+            text: "Sincronizar con música"
+            subtext: "Elegir formas al ritmo en lugar de nivel de graves"
             checked: Config.dashboard.syncMediaShapesToBeat
             onToggled: GlobalConfig.dashboard.syncMediaShapesToBeat = checked
         }
@@ -257,66 +257,66 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             last: true
-            text: qsTr("Hyprland splash")
+            text: "Mensaje de Hyprland"
             visible: Quickshell.env("XDG_CURRENT_DESKTOP").includes("Hyprland")
-            subtext: qsTr("Show the current Hyprland splash text")
+            subtext: "Mostrar texto de bienvenida de Hyprland"
             checked: Config.dashboard.showHyprlandSplash
             onToggled: GlobalConfig.dashboard.showHyprlandSplash = checked
         }
 
         // Performance widgets
         SectionHeader {
-            text: qsTr("Performance widgets")
+            text: "Widgets de rendimiento"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Battery")
+            text: "Batería"
             checked: Config.dashboard.performance.showBattery
             onToggled: GlobalConfig.dashboard.performance.showBattery = checked
         }
 
         ToggleRow {
-            text: qsTr("GPU")
+            text: "GPU"
             checked: Config.dashboard.performance.showGpu
             onToggled: GlobalConfig.dashboard.performance.showGpu = checked
         }
 
         ToggleRow {
-            text: qsTr("CPU")
+            text: "CPU"
             checked: Config.dashboard.performance.showCpu
             onToggled: GlobalConfig.dashboard.performance.showCpu = checked
         }
 
         ToggleRow {
-            text: qsTr("Memory")
+            text: "Memoria"
             checked: Config.dashboard.performance.showMemory
             onToggled: GlobalConfig.dashboard.performance.showMemory = checked
         }
 
         ToggleRow {
-            text: qsTr("Storage")
+            text: "Almacenamiento"
             checked: Config.dashboard.performance.showStorage
             onToggled: GlobalConfig.dashboard.performance.showStorage = checked
         }
 
         ToggleRow {
             last: true
-            text: qsTr("Network")
+            text: "Red"
             checked: Config.dashboard.performance.showNetwork
             onToggled: GlobalConfig.dashboard.performance.showNetwork = checked
         }
 
         // Behaviour
         SectionHeader {
-            text: Strings.localizeEnglishSpelling(qsTr("Behaviour"))
+            text: Strings.localizeEnglishSpelling("Comportamiento")
         }
 
         StepperRow {
             first: true
             last: true
-            label: qsTr("Drag threshold")
-            subtext: qsTr("Pixels dragged before the dashboard opens")
+            label: "Umbral de arrastre"
+            subtext: "Píxeles arrastrados antes de abrir el panel"
             value: Config.dashboard.dragThreshold
             from: 0
             to: 200

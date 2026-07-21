@@ -38,7 +38,7 @@ ColumnLayout {
     StyledText {
         Layout.topMargin: Tokens.padding.medium * scaleOffset
         Layout.rightMargin: Tokens.padding.extraSmall * scaleOffset
-        text: qsTr("Keyboard Layouts")
+        text: "Distribuciones de teclado"
         font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
     }
 
@@ -102,7 +102,7 @@ ColumnLayout {
             width: list.width
             height: Math.max(36, rowText.implicitHeight + Tokens.padding.small)
             ToolTip.visible: isDisabled && layer.containsMouse
-            ToolTip.text: "XKB limitation: maximum 4 layouts allowed"
+            ToolTip.text: "Límite XKB: máximo 4 distribuciones permitidas"
 
             StateLayer {
                 id: layer

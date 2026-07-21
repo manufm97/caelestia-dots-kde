@@ -8,7 +8,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Dock")
+    title: "Muelle"
     isSubPage: true
 
     ColumnLayout {
@@ -20,7 +20,7 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Enable component")
+            text: "Activar componente"
             checked: {
                 for (let i = 0; i < Config.bar.entries.length; i++) {
                     if (Config.bar.entries[i].id === "dock")
@@ -53,8 +53,8 @@ PageBase {
 
         StepperRow {
             Layout.fillWidth: true
-            label: qsTr("Icon size")
-            subtext: qsTr("Size of app icons in the dock")
+            label: "Tamaño de icono"
+            subtext: "Tamaño de iconos de apps en el muelle"
             value: Config.bar.dock.iconSize
             from: 20
             to: Math.max(20, Tokens.sizes.bar.innerWidth)
@@ -67,8 +67,8 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             last: true
-            text: Strings.localizeEnglishSpelling(qsTr("Recolour icons"))
-            subtext: Strings.localizeEnglishSpelling(qsTr("Recolour application icons using the system theme"))
+            text: Strings.localizeEnglishSpelling("Recolorear iconos")
+            subtext: Strings.localizeEnglishSpelling("Recolorear iconos con el tema del sistema")
             checked: Config.bar.dock.recolourIcons
             onToggled: GlobalConfig.bar.dock.recolourIcons = checked
         }

@@ -15,7 +15,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Wallpaper & style")
+    title: "Fondo y estilo"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -57,7 +57,7 @@ PageBase {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Wallpaper disabled")
+                        text: "Fondo desactivado"
                         color: Colours.palette.m3onSurfaceVariant
                         font: Tokens.font.body.large
                     }
@@ -148,7 +148,7 @@ PageBase {
 
             IconTextButton {
                 icon: "wallpaper"
-                text: qsTr("Wallpapers")
+                text: "Fondos de pantalla"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -161,7 +161,7 @@ PageBase {
 
             IconTextButton {
                 icon: "image_search"
-                text: qsTr("Wallhaven")
+                text: "Wallhaven"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -174,7 +174,7 @@ PageBase {
 
             IconTextButton {
                 icon: "palette"
-                text: Strings.localizeEnglishSpelling(qsTr("Colours"))
+                text: Strings.localizeEnglishSpelling("Colores")
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -186,13 +186,13 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Wallpaper")
+            text: "Fondo"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Display wallpaper")
+            text: "Mostrar fondo"
             checked: Config.background.wallpaperEnabled
             onToggled: GlobalConfig.background.wallpaperEnabled = checked
         }
@@ -200,8 +200,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: Strings.localizeEnglishSpelling(qsTr("Recolour wallpaper"))
-            subtext: Strings.localizeEnglishSpelling(qsTr("Tint the wallpaper to match static colour schemes"))
+            text: Strings.localizeEnglishSpelling("Recolorear fondo")
+            subtext: Strings.localizeEnglishSpelling("Teñir el fondo para que coincida con esquemas de color")
             checked: Config.background.wallpaperRecolor
             onToggled: GlobalConfig.background.wallpaperRecolor = checked
             enabled: Config.background.wallpaperEnabled
@@ -211,7 +211,7 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             icon: ""
-            label: Strings.localizeEnglishSpelling(qsTr("Recolour strength"))
+            label: Strings.localizeEnglishSpelling("Intensidad de recoloreado")
             valueLabel: Math.round(value * 100) + "%"
             value: Config.background.wallpaperRecolorStrength
             enabled: Config.background.wallpaperRecolor && Config.background.wallpaperEnabled
@@ -221,8 +221,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Wallpaper slideshow")
-            subtext: qsTr("Automatically change wallpaper on a timer")
+            text: "Presentación de fondos"
+            subtext: "Cambiar fondo automáticamente"
             checked: Config.background.slideshowEnabled
             onToggled: GlobalConfig.background.slideshowEnabled = checked
             enabled: Config.background.wallpaperEnabled
@@ -232,7 +232,7 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             icon: ""
-            label: qsTr("Slideshow interval")
+            label: "Intervalo de presentación"
             valueLabel: Math.max(1, Math.round(value * 60)) + " min"
             value: Config.background.slideshowInterval
             enabled: Config.background.slideshowEnabled && Config.background.wallpaperEnabled
@@ -242,7 +242,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Random order")
+            text: "Orden aleatorio"
             checked: Config.background.slideshowRandom
             onToggled: GlobalConfig.background.slideshowRandom = checked
             enabled: Config.background.slideshowEnabled && Config.background.wallpaperEnabled
@@ -251,7 +251,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Pause video wallpapers")
+            text: "Pausar fondos de video"
             checked: Config.background.videoWallpaperPaused
             onToggled: GlobalConfig.background.videoWallpaperPaused = checked
         }
@@ -259,7 +259,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Enable video audio")
+            text: "Activar audio de video"
             checked: Config.background.videoWallpaperSoundEnabled
             onToggled: GlobalConfig.background.videoWallpaperSoundEnabled = checked
         }
@@ -267,7 +267,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Pause video on fullscreen")
+            text: "Pausar video en pantalla completa"
             visible: Quickshell.env("XDG_CURRENT_DESKTOP").includes("Hyprland")
             checked: Config.background.videoWallpaperPauseOnFullscreen
             onToggled: GlobalConfig.background.videoWallpaperPauseOnFullscreen = checked
@@ -277,19 +277,19 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Mute video when media plays")
+            text: "Silenciar video al reproducir música"
             checked: Config.background.videoWallpaperMuteOnMedia
             onToggled: GlobalConfig.background.videoWallpaperMuteOnMedia = checked
         }
 
         SectionHeader {
-            text: qsTr("Appearance")
+            text: "Apariencia"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Desktop clock")
+            text: "Reloj del escritorio"
             checked: Config.background.desktopClock.enabled
             onToggled: GlobalConfig.background.desktopClock.enabled = checked
         }
@@ -297,7 +297,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Desktop lyrics")
+            text: "Letras en el escritorio"
             checked: Config.background.desktopLyrics.enabled
             onToggled: GlobalConfig.background.desktopLyrics.enabled = checked
         }
@@ -305,8 +305,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Auto-hide lyrics")
-            subtext: qsTr("Hide lyrics when a window is open")
+            text: "Ocultar letras automáticamente"
+            subtext: "Ocultar letras al abrir ventana"
             checked: Config.background.desktopLyrics.autoHide
             onToggled: GlobalConfig.background.desktopLyrics.autoHide = checked
             enabled: Config.background.desktopLyrics.enabled
@@ -315,7 +315,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Background visualiser")
+            text: "Visualizador de fondo"
             checked: Config.background.visualiser.enabled
             onToggled: GlobalConfig.background.visualiser.enabled = checked
         }
@@ -323,8 +323,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Auto-hide visualiser")
-            subtext: qsTr("Hide visualiser when a window is open")
+            text: "Ocultar visualizador automáticamente"
+            subtext: "Ocultar visualizador al abrir ventana"
             checked: Config.background.visualiser.autoHide
             onToggled: GlobalConfig.background.visualiser.autoHide = checked
             enabled: Config.background.visualiser.enabled
@@ -333,7 +333,7 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Shimeji characters")
+            text: "Personajes Shimeji"
             checked: Config.shimeji.enabled
             onToggled: GlobalConfig.shimeji.enabled = checked
         }
@@ -341,8 +341,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Bezel mode (Pitch black)")
-            subtext: qsTr("Make the shell pitch black to blend with display bezels")
+            text: "Modo bisel (Negro total)"
+            subtext: "Hacer el shell negro para integrarse con los biseles"
             checked: Config.appearance.pitchBlack
             onToggled: GlobalConfig.appearance.pitchBlack = checked
         }
@@ -350,8 +350,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Islands")
-            subtext: qsTr("Everything appears as its own floating widget (Very Experimental)")
+            text: "Islas"
+            subtext: "Todo aparece como widget flotante (Muy experimental)"
             checked: GlobalConfig.appearance.islands
             onToggled: GlobalConfig.appearance.islands = checked
         }
@@ -359,8 +359,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Transparency")
-            subtext: qsTr("Base %1, layers %2").arg(Colours.transparency.base).arg(Colours.transparency.layers)
+            text: "Transparencia"
+            subtext: "Base %1, capas %2".arg(Colours.transparency.base).arg(Colours.transparency.layers)
             checked: Colours.transparency.enabled
             onToggled: GlobalConfig.appearance.transparency.enabled = checked
         }
@@ -370,7 +370,7 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Dark theme")
+            text: "Tema oscuro"
             checked: !Colours.light
             onToggled: Colours.setMode(checked ? "dark" : "light")
         }

@@ -17,7 +17,7 @@ import Caelestia
 PageBase {
     id: root
 
-    title: qsTr("Discord Rich Presence")
+    title: "Presencia de Discord"
     isSubPage: true
 
     function saveToken(token) {
@@ -49,14 +49,14 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("Broadcast settings")
+            text: "Ajustes de transmisión"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Enable rich presence")
-            subtext: qsTr("Broadcast custom presence to Vesktop")
+            text: "Activar presencia enriquecida"
+            subtext: "Transmitir presencia personalizada a Vesktop"
             checked: GlobalConfig.services.arpcEnabled
             onToggled: GlobalConfig.services.arpcEnabled = checked
         }
@@ -64,8 +64,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Auto-detect Steam games")
-            subtext: qsTr("Automatically broadcast running Steam games")
+            text: "Detectar juegos de Steam automáticamente"
+            subtext: "Transmitir juegos de Steam en ejecución"
             checked: GlobalConfig.services.arpcSteamAutoDetect
             onToggled: GlobalConfig.services.arpcSteamAutoDetect = checked
         }
@@ -74,14 +74,14 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Broadcast Caelestia info")
-            subtext: qsTr("Broadcast shell uptime and system info")
+            text: "Transmitir info de Caelestia"
+            subtext: "Transmitir tiempo de actividad e info del sistema"
             checked: GlobalConfig.services.arpcCaelestiaInfo
             onToggled: GlobalConfig.services.arpcCaelestiaInfo = checked
         }
 
         SectionHeader {
-            text: qsTr("SteamGridDB integration")
+            text: "Integración con SteamGridDB"
         }
 
         Item {
@@ -109,13 +109,13 @@ PageBase {
                     spacing: 0
 
                     StyledText {
-                        text: qsTr("SteamGridDB API Key")
+                        text: "Clave API de SteamGridDB"
                         font: Tokens.font.body.small
                         elide: Text.ElideRight
                     }
 
                     StyledText {
-                        text: qsTr("Used to fetch game icons for Steam games")
+                        text: "Usado para obtener iconos de juegos de Steam"
                         font: Tokens.font.label.small
                         color: Colours.palette.m3outline
                         elide: Text.ElideRight
@@ -134,7 +134,7 @@ PageBase {
                         anchors.leftMargin: Tokens.padding.medium
                         anchors.rightMargin: Tokens.padding.medium
                         verticalAlignment: TextInput.AlignVCenter
-                        placeholderText: "API Key..."
+                        placeholderText: "Clave API..."
                         echoMode: TextInput.Password
                         passwordCharacter: "•"
                         onAccepted: root.saveToken(text)
@@ -161,7 +161,7 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Target windows picker")
+            text: "Selector de ventanas objetivo"
         }
 
         AutoEnableRow {
@@ -169,8 +169,8 @@ PageBase {
             first: true
             last: true
             icon: "touch_app"
-            label: qsTr("Pick from running windows")
-            status: qsTr("Select an open window to add to ARPC")
+            label: "Elegir entre ventanas abiertas"
+            status: "Seleccionar ventana abierta para añadir a ARPC"
             onSelected: windowClass => {
                 let list = Array.from(GlobalConfig.services.arpcTargetWindows);
                 if (!list.includes(windowClass)) {
@@ -258,7 +258,7 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Hidden Steam Games")
+            text: "Juegos ocultos de Steam"
         }
 
         AutoEnableRow {
@@ -266,8 +266,8 @@ PageBase {
             first: true
             last: true
             icon: "visibility_off"
-            label: qsTr("Hide a running Steam game")
-            status: qsTr("Select an open Steam game to prevent it from broadcasting")
+            label: "Ocultar un juego de Steam en ejecución"
+            status: "Seleccionar juego de Steam para evitar su transmisión"
             onSelected: windowClass => {
                 let appId = windowClass.replace("steam_app_", "");
                 let list = Array.from(GlobalConfig.services.arpcSteamBlacklist);
@@ -324,7 +324,7 @@ PageBase {
                         StyledText {
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
-                            text: "Steam App ID: " + blacklistDelegateRect.modelData
+                            text: "ID de Steam: " + blacklistDelegateRect.modelData
                             font: Tokens.font.body.small
                             elide: Text.ElideRight
                         }
@@ -357,14 +357,14 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Manual custom presence")
+            text: "Presencia personalizada manual"
         }
 
         ToggleRow {
             first: true
             last: true
-            text: qsTr("Enable manual override")
-            subtext: qsTr("Force broadcast this custom presence and ignore all other apps")
+            text: "Activar anulación manual"
+            subtext: "Transmitir esta presencia e ignorar otras apps"
             checked: GlobalConfig.services.arpcManualOverride
             onToggled: GlobalConfig.services.arpcManualOverride = checked
         }
@@ -384,7 +384,7 @@ PageBase {
                 ColumnLayout {
                     spacing: Tokens.spacing.extraSmall
                     Layout.fillWidth: true
-                    StyledText { text: "App/game name"; color: Colours.palette.m3onSurface }
+                    StyledText { text: "Nombre de app/juego"; color: Colours.palette.m3onSurface }
                     StyledInputField {
                         id: manualAppName
                         Layout.fillWidth: true
@@ -396,7 +396,7 @@ PageBase {
                 ColumnLayout {
                     spacing: Tokens.spacing.extraSmall
                     Layout.fillWidth: true
-                    StyledText { text: "Details"; color: Colours.palette.m3onSurface }
+                    StyledText { text: "Detalles"; color: Colours.palette.m3onSurface }
                     StyledInputField {
                         id: manualDetails
                         Layout.fillWidth: true
@@ -408,7 +408,7 @@ PageBase {
                 ColumnLayout {
                     spacing: Tokens.spacing.extraSmall
                     Layout.fillWidth: true
-                    StyledText { text: "State"; color: Colours.palette.m3onSurface }
+                    StyledText { text: "Estado"; color: Colours.palette.m3onSurface }
                     StyledInputField {
                         id: manualState
                         Layout.fillWidth: true
@@ -420,7 +420,7 @@ PageBase {
                 ColumnLayout {
                     spacing: Tokens.spacing.extraSmall
                     Layout.fillWidth: true
-                    StyledText { text: "Large image key/URL"; color: Colours.palette.m3onSurface }
+                    StyledText { text: "Clave/URL de imagen grande"; color: Colours.palette.m3onSurface }
                     StyledInputField {
                         id: manualLargeImage
                         Layout.fillWidth: true
@@ -432,7 +432,7 @@ PageBase {
                 ColumnLayout {
                     spacing: Tokens.spacing.extraSmall
                     Layout.fillWidth: true
-                    StyledText { text: "Small image key/URL"; color: Colours.palette.m3onSurface }
+                    StyledText { text: "Clave/URL de imagen pequeña"; color: Colours.palette.m3onSurface }
                     StyledInputField {
                         id: manualSmallImage
                         Layout.fillWidth: true
@@ -448,7 +448,7 @@ PageBase {
                     IconTextButton {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "Save presence"
+                        text: "Guardar presencia"
                         icon: "save"
                         type: TextButton.Filled
                         onClicked: {

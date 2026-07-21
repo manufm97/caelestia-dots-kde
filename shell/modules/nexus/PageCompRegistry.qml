@@ -217,14 +217,14 @@ QtObject {
 
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Page under construction")
+                text: "Página en construcción"
                 color: Colours.palette.m3outlineVariant
                 font: Tokens.font.title.large
             }
 
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("This page will be available in a future update.")
+                text: "Esta página estará disponible en una próxima actualización."
                 color: Colours.palette.m3outlineVariant
                 font: Tokens.font.body.large
             }

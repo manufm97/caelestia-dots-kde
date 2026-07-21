@@ -13,30 +13,30 @@ Item {
 
     readonly property string msg: {
         if (pam.fprintState === "error")
-            return qsTr("FP ERROR: %1").arg(pam.fprint.message);
+            return "ERROR DH: %1".arg(pam.fprint.message);
         if (pam.state === "error")
-            return qsTr("PW ERROR: %1").arg(pam.passwd.message);
+            return "ERROR CT: %1".arg(pam.passwd.message);
 
         if (pam.lockMessage)
             return pam.lockMessage;
 
         if (pam.state === "max" && pam.fprintState === "max")
-            return qsTr("Maximum password and fingerprint attempts reached.");
+            return "Se alcanzó el máximo de intentos de contraseña y huella.";
         if (pam.state === "max") {
             if (pam.fprint.available)
-                return qsTr("Maximum password attempts reached. Please use fingerprint.");
-            return qsTr("Maximum password attempts reached.");
+                return "Máximo de intentos de contraseña. Usa la huella.";
+            return "Máximo de intentos de contraseña.";
         }
         if (pam.fprintState === "max")
-            return qsTr("Maximum fingerprint attempts reached. Please use password.");
+            return "Máximo de intentos de huella. Usa la contraseña.";
 
         if (pam.state === "fail") {
             if (pam.fprint.available)
-                return qsTr("Incorrect password. Please try again or use fingerprint.");
-            return qsTr("Incorrect password. Please try again.");
+                return "Contraseña incorrecta. Intenta de nuevo o usa huella.";
+            return "Contraseña incorrecta. Intenta de nuevo.";
         }
         if (pam.fprintState === "fail")
-            return qsTr("Fingerprint not recognized (%1/%2). Please try again or use password.").arg(pam.fprint.tries).arg(Config.lock.maxFprintTries);
+            return "Huella no reconocida (%1/%2). Intenta de nuevo o usa contraseña.".arg(pam.fprint.tries).arg(Config.lock.maxFprintTries);
 
         return "";
     }
@@ -44,20 +44,20 @@ Item {
     readonly property string stateMsg: {
         if (Hypr.kbLayout !== Hypr.defaultKbLayout) {
             if (Hypr.capsLock && Hypr.numLock)
-                return qsTr("Caps lock and Num lock are ON.\nKeyboard layout: %1").arg(Hypr.kbLayoutFull);
+                return "BloqMayús y BloqNum activados.\nTeclado: %1".arg(Hypr.kbLayoutFull);
             if (Hypr.capsLock)
-                return qsTr("Caps lock is ON. Kb layout: %1").arg(Hypr.kbLayoutFull);
+                return "BloqMayús activado. Teclado: %1".arg(Hypr.kbLayoutFull);
             if (Hypr.numLock)
-                return qsTr("Num lock is ON. Kb layout: %1").arg(Hypr.kbLayoutFull);
-            return qsTr("Keyboard layout: %1").arg(Hypr.kbLayoutFull);
+                return "BloqNum activado. Teclado: %1".arg(Hypr.kbLayoutFull);
+            return "Distribución del teclado: %1".arg(Hypr.kbLayoutFull);
         }
 
         if (Hypr.capsLock && Hypr.numLock)
-            return qsTr("Caps lock and Num lock are ON.");
+            return "BloqMayús y BloqNum están activados.";
         if (Hypr.capsLock)
-            return qsTr("Caps lock is ON.");
+            return "BloqMayús está activado.";
         if (Hypr.numLock)
-            return qsTr("Num lock is ON.");
+            return "BloqNum está activado.";
 
         return "";
     }

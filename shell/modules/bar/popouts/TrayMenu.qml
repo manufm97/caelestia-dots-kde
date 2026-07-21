@@ -290,7 +290,7 @@ StackView {
 
                         StyledText {
                             anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr("Back")
+                            text: "Atrás"
                             color: Colours.palette.m3onSecondaryContainer
                             font.pointSize: Tokens.font.body.medium.pointSize * menu.fontScale
                         }

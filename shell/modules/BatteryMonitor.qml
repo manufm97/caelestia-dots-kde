@@ -14,10 +14,10 @@ Scope {
         function onOnBatteryChanged(): void {
             if (UPower.onBattery) {
                 if (GlobalConfig.utilities.toasts.chargingChanged)
-                    Toaster.toast(qsTr("Charger unplugged"), qsTr("Battery is discharging"), "power_off");
+                    Toaster.toast("Cargador desconectado", "Batería descargándose", "power_off");
             } else {
                 if (GlobalConfig.utilities.toasts.chargingChanged)
-                    Toaster.toast(qsTr("Charger plugged in"), qsTr("Battery is charging"), "power");
+                    Toaster.toast("Cargador conectado", "Batería cargando", "power");
                 for (const level of root.warnLevels)
                     level.warned = false;
             }
@@ -35,12 +35,12 @@ Scope {
             for (const level of root.warnLevels) {
                 if (p <= level.level && !level.warned) {
                     level.warned = true;
-                    Toaster.toast(level.title ?? qsTr("Battery warning"), level.message ?? qsTr("Battery level is low"), level.icon ?? "battery_android_alert", level.critical ? Toast.Error : Toast.Warning);
+                    Toaster.toast(level.title ?? "Aviso de batería", level.message ?? "Nivel de batería bajo", level.icon ?? "battery_android_alert", level.critical ? Toast.Error : Toast.Warning);
                 }
             }
 
             if (!hibernateTimer.running && p <= GlobalConfig.general.battery.criticalLevel) {
-                Toaster.toast(qsTr("Hibernating in 5 seconds"), qsTr("Hibernating to prevent data loss"), "battery_android_alert", Toast.Error);
+                Toaster.toast("Hibernando en 5 segundos", "Hibernando para evitar pérdida de datos", "battery_android_alert", Toast.Error);
                 hibernateTimer.start();
             }
         }

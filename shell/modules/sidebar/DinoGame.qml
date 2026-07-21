@@ -241,7 +241,7 @@ Item {
         
         StyledText {
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("All up to date!")
+            text: "¡Todo actualizado!"
             color: root.activeColor
             font: Tokens.font.headline.builders.small.width(90).build()
         }
@@ -295,7 +295,7 @@ Item {
         
         // Score
         StyledText {
-            text: "HI " + ("00000" + Math.floor(DinoGameBackend.highScore)).slice(-5) + "  " + ("00000" + Math.floor(DinoGameBackend.score)).slice(-5)
+            text: "REC" + " " + ("00000" + Math.floor(DinoGameBackend.highScore)).slice(-5) + "  " + ("00000" + Math.floor(DinoGameBackend.score)).slice(-5)
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 10
@@ -329,7 +329,7 @@ Item {
     // Game Over Text
     StyledText {
         visible: root.isGameOver && Math.floor(DinoGameBackend.score) < 99999
-        text: "G A M E   O V E R\nClick to restart"
+        text: "F I N   D E L   J U E G O\nHaz clic para reiniciar"
         horizontalAlignment: Text.AlignHCenter
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -40
@@ -340,7 +340,7 @@ Item {
     // Win Text
     StyledText {
         visible: root.isGameOver && Math.floor(DinoGameBackend.score) >= 99999
-        text: "Y O U   W I N !\nNow go touch grass"
+        text: "¡ H A S   G A N A D O !\nAhora sal a tocar el césped"
         horizontalAlignment: Text.AlignHCenter
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -40

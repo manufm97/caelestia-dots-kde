@@ -33,7 +33,7 @@ ColumnLayout {
     StyledText {
         Layout.topMargin: Tokens.padding.medium * root.scaleOffset
         Layout.leftMargin: Tokens.padding.small * root.scaleOffset
-        text: qsTr("Network")
+        text: "Red"
         font.weight: 500
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
@@ -60,14 +60,14 @@ ColumnLayout {
         
         Layout.topMargin: visible ? Tokens.padding.medium * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("Wireless")
+        text: "Inalámbrica"
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
 
     Toggle {
         visible: root.view === "wireless"
         
-        label: qsTr("Enabled")
+        label: "Activado"
         checked: Nmcli.wifiEnabled
         toggle.onToggled: Nmcli.enableWifi(checked)
     }
@@ -77,7 +77,7 @@ ColumnLayout {
         
         Layout.topMargin: visible ? Tokens.spacing.small * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("%1 networks available").arg(Nmcli.networks.length) // qmllint disable missing-property
+        text: "%1 redes disponibles".arg(Nmcli.networks.length) // qmllint disable missing-property
         color: Colours.palette.m3onSurfaceVariant
         font.pointSize: Tokens.font.body.small.pointSize * root.fontScale
     }
@@ -235,7 +235,7 @@ ColumnLayout {
 
             StyledText {
                 Layout.topMargin: -Math.round(scanIcon.fontInfo.pointSize * 0.0575)
-                text: qsTr("Rescan networks")
+                text: "Reescanear redes"
                 color: Colours.palette.m3onPrimaryContainer
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
             }
@@ -262,7 +262,7 @@ ColumnLayout {
 
         Layout.topMargin: visible ? Tokens.spacing.small * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("VPN")
+        text: "VPN"
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
 
@@ -271,7 +271,7 @@ ColumnLayout {
 
         Layout.topMargin: visible ? Tokens.spacing.extraSmall * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("%1 profiles available").arg(Nmcli.vpnConnections.length)
+        text: "%1 perfiles disponibles".arg(Nmcli.vpnConnections.length)
         color: Colours.palette.m3onSurfaceVariant
         font.pointSize: Tokens.font.body.small.pointSize * root.fontScale
     }
@@ -378,7 +378,7 @@ ColumnLayout {
         visible: root.view === "wireless" && Nmcli.vpnConnections.length === 0
 
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("No VPN profiles found")
+        text: "No se encontraron perfiles VPN"
         color: Colours.palette.m3onSurfaceVariant
         font.pointSize: Tokens.font.body.small.pointSize * root.fontScale
     }
@@ -389,7 +389,7 @@ ColumnLayout {
         
         Layout.topMargin: visible ? Tokens.padding.medium * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("Ethernet")
+        text: "Ethernet"
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
 
@@ -398,7 +398,7 @@ ColumnLayout {
         
         Layout.topMargin: visible ? Tokens.spacing.small * root.scaleOffset : 0
         Layout.rightMargin: Tokens.padding.extraSmall * root.scaleOffset
-        text: qsTr("%1 devices available").arg(Nmcli.ethernetDevices.length)
+        text: "%1 dispositivos disponibles".arg(Nmcli.ethernetDevices.length)
         color: Colours.palette.m3onSurfaceVariant
         font.pointSize: Tokens.font.body.small.pointSize * root.fontScale
     }
@@ -453,7 +453,7 @@ ColumnLayout {
                 Layout.leftMargin: Tokens.spacing.extraSmall * root.scaleOffset
                 Layout.rightMargin: Tokens.spacing.extraSmall * root.scaleOffset
                 Layout.fillWidth: true
-                text: ethernetItem.modelData.interface || qsTr("Unknown")
+                text: ethernetItem.modelData.interface || "Desconocido"
                 elide: Text.ElideRight
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
                 color: ethernetItem.modelData.connected ? Colours.palette.m3primary : Colours.palette.m3onSurface

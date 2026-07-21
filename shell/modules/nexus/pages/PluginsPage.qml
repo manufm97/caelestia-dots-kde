@@ -9,7 +9,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
     
-    title: qsTr("Plugins")
+    title: "Plugins"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -18,20 +18,20 @@ PageBase {
         spacing: Tokens.spacing.extraSmall / 2
 
         SectionHeader {
-            text: qsTr("Automatic Updates")
+            text: "Actualizaciones automáticas"
         }
 
         ToggleRow {
             first: true
             last: true
-            text: qsTr("Check for updates in background")
-            subtext: qsTr("Periodically check GitHub for new Caelestia shell updates")
+            text: "Buscar actualizaciones en segundo plano"
+            subtext: "Buscar actualizaciones de Caelestia periódicamente"
             checked: GlobalConfig.general.checkUpdates
             onClicked: GlobalConfig.general.checkUpdates = !GlobalConfig.general.checkUpdates
         }
 
         SectionHeader {
-            text: qsTr("Installed Plugins")
+            text: "Plugins instalados"
         }
 
         ConnectedRect {
@@ -53,7 +53,7 @@ PageBase {
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: qsTr("No third-party plugins installed")
+                    text: "Sin plugins de terceros instalados"
                     color: Colours.palette.m3outlineVariant
                     font: Tokens.font.body.large
                 }

@@ -17,7 +17,7 @@ import Caelestia
 PageBase {
     id: root
     
-    title: qsTr("Target windows")
+    title: "Ventanas objetivo"
     isSubPage: true
     scrollable: false
 
@@ -29,7 +29,7 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("Add target window")
+            text: "Añadir ventana objetivo"
         }
 
         Item {
@@ -56,13 +56,13 @@ PageBase {
                     spacing: 0
 
                     StyledText {
-                        text: qsTr("Custom regex")
+                        text: "Regex personalizada"
                         font: Tokens.font.body.small
                         elide: Text.ElideRight
                     }
 
                     StyledText {
-                        text: qsTr("Add a custom class or regex pattern")
+                        text: "Añadir una clase o patrón regex personalizado"
                         font: Tokens.font.label.small
                         color: Colours.palette.m3outline
                         elide: Text.ElideRight
@@ -119,8 +119,8 @@ PageBase {
             Layout.fillWidth: true
             last: true
             icon: "touch_app"
-            label: qsTr("Pick from running windows")
-            status: qsTr("Select an open window to add it automatically")
+            label: "Elegir entre ventanas abiertas"
+            status: "Seleccionar ventana abierta para añadirla"
             onSelected: windowClass => {
                 let list = Array.from(GlobalConfig.utilities.gameMode.autoEnableRegexes);
                 if (!list.includes(windowClass)) {
@@ -132,7 +132,7 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Target window list")
+            text: "Lista de ventanas objetivo"
         }
 
         StyledRect {

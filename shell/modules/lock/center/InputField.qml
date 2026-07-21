@@ -47,10 +47,10 @@ Item {
 
         text: {
             if (root.pam.passwd.active)
-                return qsTr("Loading...");
+                return "Cargando...";
             if (root.pam.state === "max")
-                return qsTr("Max tries reached");
-            return qsTr("Enter your password");
+                return "Máximo de intentos alcanzado";
+            return "Introduce tu contraseña";
         }
         font: placeholder.font
     }

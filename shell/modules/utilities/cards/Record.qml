@@ -60,14 +60,14 @@ StyledRect {
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: qsTr("Screen Recorder")
+                    text: "Grabador de pantalla"
                     font: Tokens.font.body.medium
                     elide: Text.ElideRight
                 }
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Recorder.paused ? qsTr("Paused") : Recorder.running ? qsTr("Running...") : qsTr("Ready")
+                    text: Recorder.paused ? "En pausa" : Recorder.running ? "Ejecutando..." : "Listo"
                     color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.body.small
                     elide: Text.ElideRight
@@ -84,20 +84,20 @@ StyledRect {
                 menuItems: [
                     MenuItem {
                         icon: "fullscreen"
-                        text: qsTr("Start Recording")
-                        activeText: qsTr("Start")
+                        text: "Iniciar grabación"
+                        activeText: "Iniciar"
                         onClicked: Recorder.start()
                     },
                     MenuItem {
                         icon: "select_to_speak"
-                        text: qsTr("Start Recording with sound")
-                        activeText: qsTr("Start")
+                        text: "Iniciar grabación con sonido"
+                        activeText: "Iniciar"
                         onClicked: Recorder.start(["-s"])
                     },
                     MenuItem {
                         icon: "screenshot_region"
-                        text: qsTr("Use Spectacle")
-                        activeText: qsTr("Spectacle")
+                        text: "Usar Spectacle"
+                        activeText: "Spectacle"
                         onClicked: Recorder.launchSpectacle()
                     }
                 ]
@@ -231,7 +231,7 @@ StyledRect {
                     else
                         time = `${mins}:${secs}`;
 
-                    return qsTr("Recording for %1").arg(time);
+                    return "Grabando desde %1".arg(time);
                 }
                 font: Tokens.font.body.medium
                 elide: Text.ElideMiddle

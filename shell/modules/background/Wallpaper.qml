@@ -100,7 +100,7 @@ Item {
                     spacing: Tokens.spacing.small
 
                     StyledText {
-                        text: qsTr("Wallpaper missing?")
+                        text: "¿Falta el fondo?"
                         color: Colours.palette.m3onSurfaceVariant
                         font: Tokens.font.body.builders.large.size(28 * 2).weight(Font.Bold).build()
                     }
@@ -115,8 +115,8 @@ Item {
                         FileDialog {
                             id: dialog
 
-                            title: qsTr("Select a wallpaper")
-                            filterLabel: qsTr("Media files")
+                            title: "Seleccionar un fondo"
+                            filterLabel: "Archivos multimedia"
                             filters: Images.validImageExtensions.concat(Images.validVideoExtensions)
                             onAccepted: path => Wallpapers.setWallpaper(path)
                         }
@@ -132,7 +132,7 @@ Item {
 
                             anchors.centerIn: parent
 
-                            text: qsTr("Set it now!")
+                            text: "¡Configúralo ahora!"
                             color: Colours.palette.m3onPrimary
                             font: Tokens.font.body.large
                         }

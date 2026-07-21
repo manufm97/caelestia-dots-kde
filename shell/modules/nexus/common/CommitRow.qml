@@ -45,7 +45,7 @@ ConnectedRect {
 
             StyledText {
                 Layout.fillWidth: true
-                text: qsTr("%1 • %2").arg(root.author).arg(root.date)
+                text: "%1 • %2".arg(root.author).arg(root.date)
                 color: Colours.palette.m3outline
                 font: Tokens.font.label.small
                 elide: Text.ElideRight

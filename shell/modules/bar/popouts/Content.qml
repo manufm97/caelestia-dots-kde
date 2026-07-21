@@ -24,6 +24,13 @@ Item {
         anchors.margins: Tokens.padding.large * (currentPopout?.item?.scaleOffset ?? 1.0)
 
         Popout {
+            name: "weather"
+            sourceComponent: Weather {
+                popouts: root.popouts
+            }
+        }
+
+        Popout {
             name: "activewindow"
             sourceComponent: ActiveWindow {
                 popouts: root.popouts

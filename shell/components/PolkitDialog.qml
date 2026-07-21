@@ -32,7 +32,7 @@ StyledWindow {
         let pkexecMatch = msg.match(/Authentication is needed to run `(.+?)' as the super user/);
         if (pkexecMatch) {
             cmd = pkexecMatch[1];
-            msg = "Root privileges are required to execute:";
+            msg = "Se requieren privilegios de root para ejecutar:";
         } else if (msg.includes('\n')) {
             let parts = msg.split('\n').filter(s => s.trim().length > 0);
             if (parts.length > 1) {
@@ -110,7 +110,7 @@ StyledWindow {
     TextMetrics {
         id: nonAnimPlaceholder
 
-        text: "Enter your password"
+        text: "Introduce tu contraseña"
         font: Tokens.font.body.builders.medium.scale(centerScale).width(110).build()
     }
 
@@ -208,7 +208,7 @@ StyledWindow {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: "Authentication Required"
+                        text: "Autenticación requerida"
                         font: Tokens.font.title.builders.large.weight(Font.Medium).build()
                         color: Colours.palette.m3onSurface
                         horizontalAlignment: Text.AlignHCenter

@@ -5,7 +5,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Panels")
+    title: "Paneles"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -16,30 +16,30 @@ PageBase {
         NavRow {
             first: true
             icon: "dashboard"
-            label: qsTr("Dashboard")
-            status: Config.dashboard.enabled ? qsTr("Enabled") : qsTr("Disabled")
+            label: "Panel principal"
+            status: Config.dashboard.enabled ? "Activado" : "Desactivado"
             onClicked: root.nState.openSubPage(1)
         }
 
         NavRow {
             icon: "dock_to_bottom"
-            label: qsTr("Taskbar")
-            status: Config.bar.persistent ? qsTr("Always visible") : Config.bar.showOnHover ? qsTr("Reveal on hover") : qsTr("Reveal on drag")
+            label: "Barra de tareas"
+            status: Config.bar.persistent ? "Siempre visible" : Config.bar.showOnHover ? "Mostrar al pasar" : "Mostrar al arrastrar"
             onClicked: root.nState.openSubPage(2)
         }
 
         NavRow {
             icon: "apps"
-            label: qsTr("Launcher")
-            status: Config.launcher.enabled ? qsTr("Enabled") : qsTr("Disabled")
+            label: "Lanzador"
+            status: Config.launcher.enabled ? "Activado" : "Desactivado"
             onClicked: root.nState.openSubPage(3)
         }
 
         NavRow {
             last: true
             icon: "dock_to_right"
-            label: qsTr("Sidebar")
-            status: Config.sidebar.enabled ? qsTr("Enabled") : qsTr("Disabled")
+            label: "Barra lateral"
+            status: Config.sidebar.enabled ? "Activado" : "Desactivado"
             onClicked: root.nState.openSubPage(4)
         }
     }

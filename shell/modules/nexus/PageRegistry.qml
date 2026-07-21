@@ -9,85 +9,85 @@ QtObject {
     readonly property list<var> pages: [
         // Appearance
         {
-            label: qsTr("Wallpaper & style"),
+            label: "Fondo y estilo",
             icon: "palette",
-            description: Strings.localizeEnglishSpelling(qsTr("Wallpaper, fonts, colours")),
+            description: Strings.localizeEnglishSpelling("Fondo, fuentes, colores"),
             category: "appearance"
         },
 
         // Connectivity
         // TODO
         // {
-        //     label: qsTr("Display"),
+        //     label: "Pantalla",
         //     icon: "monitor",
-        //     description: qsTr("Output configuration"),
+        //     description: "Configuración de salida",
         //     category: "connectivity"
         // },
         {
-            label: qsTr("Network"),
+            label: "Red",
             icon: "wifi",
-            description: qsTr("Wi-Fi, ethernet"),
+            description: "Wi-Fi, ethernet",
             category: "connectivity"
         },
         {
-            label: qsTr("Connected devices"),
+            label: "Dispositivos conectados",
             icon: "devices_other",
-            description: qsTr("Bluetooth, pairing"),
+            description: "Bluetooth, emparejamiento",
             category: "connectivity",
             noFill: true
         },
         {
-            label: qsTr("Audio"),
+            label: "Audio",
             icon: "volume_up",
-            description: qsTr("App volumes, sound devices"),
+            description: "Volumen de apps, dispositivos",
             category: "connectivity"
         },
 
         // System
         {
-            label: qsTr("Updates"),
+            label: "Actualizaciones",
             icon: "update",
-            description: qsTr("System updates"),
+            description: "Actualizaciones del sistema",
             category: "system"
         },
         {
-            label: qsTr("Plugins"),
+            label: "Plugins",
             icon: "extension",
-            description: qsTr("Manage plugins"),
+            description: "Gestionar plugins",
             category: "system"
         },
 
         // Shell
         {
-            label: qsTr("Panels"),
+            label: "Paneles",
             icon: "dock_to_bottom",
-            description: qsTr("Dashboard, taskbar, launcher, sidebar"),
+            description: "Panel, barra, lanzador, lateral",
             category: "shell"
         },
         {
-            label: qsTr("Apps"),
+            label: "Aplicaciones",
             icon: "apps",
-            description: Strings.localizeEnglishSpelling(qsTr("Default apps, favourites, hidden apps")),
+            description: Strings.localizeEnglishSpelling("Apps predeterminadas, favoritas, ocultas"),
             category: "shell"
         },
         {
-            label: qsTr("Services"),
+            label: "Servicios",
             icon: "build",
-            description: qsTr("Poll intervals, lyrics backend"),
+            description: "Intervalos, motor de letras",
             category: "shell"
         },
         {
-            label: qsTr("Language & region"),
+            label: "Idioma y región",
             icon: "globe",
-            description: qsTr("UI language, weather location, display units"),
+            description: "Idioma, ubicación, unidades",
             category: "shell"
         },
 
         // About
         {
-            label: qsTr("About"),
+            label: "Acerca de",
             icon: "info",
-            description: qsTr("System information, credits"),
+            description: "Info del sistema, créditos",
             category: "about"
         },
     ]

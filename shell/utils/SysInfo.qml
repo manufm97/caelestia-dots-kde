@@ -127,11 +127,11 @@ Singleton {
 
             let str = "";
             if (days > 0)
-                str += `${days} day${days === 1 ? "" : "s"}`;
+                str += `${days} día${days === 1 ? "" : "s"}`;
             if (hours > 0)
-                str += `${str ? ", " : ""}${hours} hour${hours === 1 ? "" : "s"}`;
+                str += `${str ? ", " : ""}${hours} hora${hours === 1 ? "" : "s"}`;
             if (minutes > 0 || !str)
-                str += `${str ? ", " : ""}${minutes} minute${minutes === 1 ? "" : "s"}`;
+                str += `${str ? ", " : ""}${minutes} minuto${minutes === 1 ? "" : "s"}`;
             root.uptime = str;
         }
     }

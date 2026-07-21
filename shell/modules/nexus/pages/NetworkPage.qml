@@ -15,7 +15,7 @@ PageBase {
 
     signal networkSelected(ap: Nmcli.AccessPoint)
 
-    title: qsTr("Network")
+    title: "Red"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -49,7 +49,7 @@ PageBase {
 
         ToggleRow {
             first: true
-            text: qsTr("Wi-Fi")
+            text: "Wi-Fi"
             font: Tokens.font.body.medium
             horizontalPadding: Tokens.padding.largeIncreased
             checked: Nmcli.wifiEnabled
@@ -61,7 +61,7 @@ PageBase {
 
             showList: Nmcli.wifiEnabled
             placeholderIcon: Nmcli.wifiEnabled ? "wifi_find" : "signal_wifi_off"
-            placeholderText: Nmcli.wifiEnabled ? qsTr("No networks found") : qsTr("Wi-Fi disabled")
+            placeholderText: Nmcli.wifiEnabled ? "No se encontraron redes" : "Wi-Fi desactivado"
             extraHeight: Nmcli.scanning ? Tokens.rounding.extraSmall : 0 // Inline so it isn't affected by anim
             list.anchors.top: scanningIndicator.bottom
 
@@ -151,7 +151,7 @@ PageBase {
 
                         StyledText {
                             Layout.fillWidth: true
-                            text: qsTr("Security: %1%2").arg(network.modelData.security).arg(network.modelData.active ? qsTr(" • Connected") : Nmcli.hasSavedProfile(network.modelData.ssid) ? qsTr(" • Saved") : "")
+                            text: "Seguridad: %1%2".arg(network.modelData.security).arg(network.modelData.active ? " • Conectado" : Nmcli.hasSavedProfile(network.modelData.ssid) ? " • Guardado" : "")
                             color: Colours.palette.m3outline
                             font: Tokens.font.label.small
                             elide: Text.ElideRight
@@ -205,7 +205,7 @@ PageBase {
 
             showList: true
             placeholderIcon: "vpn_key_off"
-            placeholderText: qsTr("No VPN profiles found")
+            placeholderText: "No se encontraron perfiles VPN"
 
             model: ScriptModel {
                 values: [...Nmcli.vpnConnections]
@@ -285,7 +285,7 @@ PageBase {
 
                         StyledText {
                             Layout.fillWidth: true
-                            text: vpn.connected ? qsTr("Connected") : qsTr("Available")
+                            text: vpn.connected ? "Conectado" : "Disponible"
                             color: Colours.palette.m3outline
                             font: Tokens.font.label.small
                             elide: Text.ElideRight
@@ -349,7 +349,7 @@ PageBase {
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: qsTr("Add network")
+                    text: "Añadir red"
                     font: Tokens.font.body.small
                     elide: Text.ElideRight
                 }

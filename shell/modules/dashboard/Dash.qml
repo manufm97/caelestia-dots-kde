@@ -85,7 +85,7 @@ GridLayout {
         }
     }
 
-    Rect {
+    StyledRect {
         Layout.row: 0
         Layout.column: 5
         Layout.rowSpan: 2
@@ -93,6 +93,7 @@ GridLayout {
         Layout.fillHeight: true
 
         radius: Tokens.rounding.extraLarge * 2
+        color: "transparent"
 
         Media {
             id: media

@@ -24,7 +24,7 @@ Searcher {
     property bool pendingPreviewClear
 
     onActualCurrentChanged: {
-        // Sync KDE Plasma wallpaper
+        if (!Config.background.wallpaperEnabled) return;
         Quickshell.execDetached(["sh", "-c", 'qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops();for (i=0;i<allDesktops.length;i++) {d = allDesktops[i];d.wallpaperPlugin = \\"org.kde.image\\";d.currentConfigGroup = Array(\\"Wallpaper\\", \\"org.kde.image\\", \\"General\\");d.writeConfig(\\"Image\\", \\"file://$1\\")}"', "--", actualCurrent]);
     }
 
@@ -135,6 +135,7 @@ Searcher {
         printErrors: false
         onFileChanged: reload()
         onLoaded: {
+            if (!Config.background.wallpaperEnabled) return;
             let wall = text().trim();
             if (!wall) {
                 wall = root.fallback;
@@ -144,6 +145,7 @@ Searcher {
             root.previewColourLock = false;
         }
         onLoadFailed: {
+            if (!Config.background.wallpaperEnabled) return;
             root.actualCurrent = root.fallback;
             root.previewColourLock = false;
             Quickshell.execDetached(["caelestia", "wallpaper", "-f", root.fallback, ...root.smartArg]);

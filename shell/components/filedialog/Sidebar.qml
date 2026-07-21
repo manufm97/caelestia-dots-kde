@@ -30,7 +30,7 @@ StyledRect {
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: Tokens.padding.extraSmall / 2
             Layout.bottomMargin: Tokens.spacing.medium
-            text: qsTr("Files")
+            text: "Archivos"
             color: Colours.palette.m3onSurface
             font: Tokens.font.body.builders.large.weight(Font.Bold).build()
         }
@@ -102,7 +102,17 @@ StyledRect {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: place.modelData
+                        text: {
+                            const p = place.modelData;
+                            if (p === "Home") return "Inicio";
+                            if (p === "Downloads") return "Descargas";
+                            if (p === "Desktop") return "Escritorio";
+                            if (p === "Documents") return "Documentos";
+                            if (p === "Music") return "Música";
+                            if (p === "Pictures") return "Imágenes";
+                            if (p === "Videos") return "Vídeos";
+                            return p;
+                        }
                         color: place.selected ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
                         font: Tokens.font.body.small
                         elide: Text.ElideRight

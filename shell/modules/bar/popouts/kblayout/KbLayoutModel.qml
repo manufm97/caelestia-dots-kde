@@ -110,7 +110,7 @@ Item {
             return;
 
         if (layoutsModel.count > 4) {
-            Toaster.toast(qsTr("Keyboard layout limit"), qsTr("XKB supports only 4 layouts at a time"), "warning");
+            Toaster.toast("Límite de distribuciones", "XKB solo soporta 4 distribuciones a la vez", "warning");
         }
     }
 

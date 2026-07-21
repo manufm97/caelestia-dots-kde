@@ -14,7 +14,7 @@ import Quickshell.Io
 PageBase {
     id: root
 
-    title: qsTr("GitHub")
+    title: "GitHub"
     isSubPage: true
 
     function saveToken(token: string): void {
@@ -54,14 +54,14 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("Configuration")
+            text: "Configuración"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Component background")
-            subtext: qsTr("Render a solid background behind the GitHub activity widget")
+            text: "Fondo del componente"
+            subtext: "Renderizar fondo sólido tras el widget de GitHub"
             checked: Config.bar.github.background
             onToggled: GlobalConfig.bar.github.background = checked
         }
@@ -90,13 +90,13 @@ PageBase {
                     spacing: 0
 
                     StyledText {
-                        text: qsTr("Personal Access Token")
+                        text: "Token de acceso personal"
                         font: Tokens.font.body.small
                         elide: Text.ElideRight
                     }
 
                     StyledText {
-                        text: qsTr("Used to fetch your contribution graph (read:user)")
+                        text: "Usado para obtener tu gráfico de contribuciones"
                         font: Tokens.font.label.small
                         color: Colours.palette.m3outline
                         elide: Text.ElideRight

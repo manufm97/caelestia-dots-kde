@@ -130,9 +130,9 @@ Singleton {
         Quickshell.execDetached(["bash", "-c", "PATH=$HOME/.local/bin:$PATH hyprctl dispatch \"$1\"", "--", request]);
 
         if (capsLock)
-            Toaster.toast(qsTr("Caps lock enabled"), qsTr("Caps lock is currently enabled"), "keyboard_capslock_badge");
+            Toaster.toast("BloqMayús activado", "BloqMayús está activado", "keyboard_capslock_badge");
         else
-            Toaster.toast(qsTr("Caps lock disabled"), qsTr("Caps lock is currently disabled"), "keyboard_capslock");
+            Toaster.toast("BloqMayús desactivado", "BloqMayús está desactivado", "keyboard_capslock");
     }
 
     onNumLockChanged: {
@@ -141,14 +141,14 @@ Singleton {
         Quickshell.execDetached(["bash", "-c", "PATH=$HOME/.local/bin:$PATH hyprctl dispatch \"$1\"", "--", request]);
 
         if (numLock)
-            Toaster.toast(qsTr("Num lock enabled"), qsTr("Num lock is currently enabled"), "looks_one");
+            Toaster.toast("BloqNum activado", "BloqNum está activado", "looks_one");
         else
-            Toaster.toast(qsTr("Num lock disabled"), qsTr("Num lock is currently disabled"), "timer_1");
+            Toaster.toast("BloqNum desactivado", "BloqNum está desactivado", "timer_1");
     }
 
     onKbLayoutFullChanged: {
         if (hadKeyboard && GlobalConfig.utilities.toasts.kbLayoutChanged)
-            Toaster.toast(qsTr("Keyboard layout changed"), qsTr("Layout changed to: %1").arg(kbLayoutFull), "keyboard");
+            Toaster.toast("Distribución cambiada", "Distribución cambiada a: %1".arg(kbLayoutFull), "keyboard");
 
         hadKeyboard = !!keyboard;
     }

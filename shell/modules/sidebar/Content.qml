@@ -83,13 +83,13 @@ Item {
                             id: tabRepeater
                             model: {
                                 var tabs = [
-                                    { id: "notifications", label: qsTr("Notifications"), icon: "notifications" }
+                                    { id: "notifications", label: "Notificaciones", icon: "notifications" }
                                 ];
                                 if (GlobalConfig.ai.enableOllama) {
-                                    tabs.push({ id: "ai", label: qsTr("AI Assistant"), icon: "smart_toy" });
+                                    tabs.push({ id: "ai", label: "Asistente IA", icon: "smart_toy" });
                                 }
                                 if (GlobalConfig.ai.showNews) {
-                                    tabs.push({ id: "news", label: qsTr("News"), icon: "newspaper" });
+                                    tabs.push({ id: "news", label: "Noticias", icon: "newspaper" });
                                 }
                                 return tabs;
                             }

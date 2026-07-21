@@ -12,44 +12,44 @@ ColumnLayout {
     spacing: Tokens.spacing.extraSmall
 
     StyledText {
-        text: qsTr("IP Address")
+        text: "Dirección IP"
     }
 
     StyledText {
-        text: root.deviceDetails?.ipAddress || qsTr("Not available")
+        text: root.deviceDetails?.ipAddress || "No disponible"
         color: Colours.palette.m3outline
         font: Tokens.font.body.small
     }
 
     StyledText {
         Layout.topMargin: Tokens.spacing.medium
-        text: qsTr("Subnet Mask")
+        text: "Máscara de subred"
     }
 
     StyledText {
-        text: root.deviceDetails?.subnet || qsTr("Not available")
+        text: root.deviceDetails?.subnet || "No disponible"
         color: Colours.palette.m3outline
         font: Tokens.font.body.small
     }
 
     StyledText {
         Layout.topMargin: Tokens.spacing.medium
-        text: qsTr("Gateway")
+        text: "Puerta de enlace"
     }
 
     StyledText {
-        text: root.deviceDetails?.gateway || qsTr("Not available")
+        text: root.deviceDetails?.gateway || "No disponible"
         color: Colours.palette.m3outline
         font: Tokens.font.body.small
     }
 
     StyledText {
         Layout.topMargin: Tokens.spacing.medium
-        text: qsTr("DNS Servers")
+        text: "Servidores DNS"
     }
 
     StyledText {
-        text: (root.deviceDetails && root.deviceDetails.dns && root.deviceDetails.dns.length > 0) ? root.deviceDetails.dns.join(", ") : qsTr("Not available")
+        text: (root.deviceDetails && root.deviceDetails.dns && root.deviceDetails.dns.length > 0) ? root.deviceDetails.dns.join(", ") : "No disponible"
         color: Colours.palette.m3outline
         font: Tokens.font.body.small
         wrapMode: Text.Wrap

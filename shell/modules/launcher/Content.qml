@@ -80,7 +80,7 @@ Item {
             topPadding: Tokens.padding.medium
             bottomPadding: Tokens.padding.medium
 
-            placeholderText: qsTr("Type \"%1\" for commands").arg(GlobalConfig.launcher.actionPrefix)
+            placeholderText: "Escribe \"%1\" para comandos".arg(GlobalConfig.launcher.actionPrefix)
 
             onAccepted: {
                 const currentItem = list.currentList?.currentItem;

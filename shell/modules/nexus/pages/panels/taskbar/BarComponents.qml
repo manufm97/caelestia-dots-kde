@@ -16,31 +16,32 @@ import Quickshell.Services.UPower
 PageBase {
     id: root
 
-    title: qsTr("Toggle & rearrange")
+    title: "Alternar y reordenar"
     isSubPage: true
     scrollable: true
 
     readonly property var componentMeta: {
-        "logo": { icon: "rocket_launch", name: qsTr("Logo") },
-        "workspaces": { icon: "workspaces", name: qsTr("Workspaces") },
+        "logo": { icon: "rocket_launch", name: "Logotipo" },
+        "workspaces": { icon: "workspaces", name: "Espacios de trabajo" },
         "github": {
             icon: "commit",
-            name: qsTr("GitHub"),
+            name: "GitHub",
             available: BarComponents.GithubStore.available,
-            unavailableText: qsTr("GitHub token not detected")
+            unavailableText: "Token de GitHub no detectado"
         },
-        "activeWindow": { icon: "dock_to_right", name: qsTr("Active window") },
-        "tray": { icon: "expand_more", name: qsTr("System tray") },
-        "clock": { icon: "schedule", name: qsTr("Clock") },
-        "statusIcons": { icon: "wifi", name: qsTr("Status icons") },
-        "perfCpu": { icon: "memory", name: qsTr("CPU"), available: Cpu.name.length > 0, unavailableText: qsTr("CPU sensor not detected") },
-        "perfMemory": { icon: "memory_alt", name: qsTr("Memory"), available: Memory.total > 1, unavailableText: qsTr("Memory sensor not detected") },
-        "perfStorage": { icon: "hard_disk", name: qsTr("Storage"), available: Storage.disks.length > 0, unavailableText: qsTr("Storage disks not detected") },
-        "perfNetwork": { icon: "swap_vert", name: qsTr("Network") },
-        "perfGpu": { icon: "desktop_windows", name: qsTr("GPU"), available: Gpu.type !== Gpu.None, unavailableText: qsTr("GPU not detected") },
-        "perfBattery": { icon: "battery_full", name: qsTr("Battery"), available: UPower.displayDevice.isLaptopBattery, unavailableText: qsTr("Battery not detected") },
-        "dock": { icon: "apps", name: qsTr("Dock") },
-        "power": { icon: "power_settings_new", name: qsTr("Power menu") }
+        "activeWindow": { icon: "dock_to_right", name: "Ventana activa" },
+        "tray": { icon: "expand_more", name: "Bandeja del sistema" },
+        "clock": { icon: "schedule", name: "Reloj" },
+        "weather": { icon: "partly_cloudy_day", name: "Clima" },
+        "statusIcons": { icon: "wifi", name: "Iconos de estado" },
+        "perfCpu": { icon: "memory", name: "CPU", available: Cpu.name.length > 0, unavailableText: "Sensor de CPU no detectado" },
+        "perfMemory": { icon: "memory_alt", name: "Memoria", available: Memory.total > 1, unavailableText: "Sensor de memoria no detectado" },
+        "perfStorage": { icon: "hard_disk", name: "Almacenamiento", available: Storage.disks.length > 0, unavailableText: "Discos de almacenamiento no detectados" },
+        "perfNetwork": { icon: "swap_vert", name: "Red" },
+        "perfGpu": { icon: "desktop_windows", name: "GPU", available: Gpu.type !== Gpu.None, unavailableText: "GPU no detectada" },
+        "perfBattery": { icon: "battery_full", name: "Batería", available: UPower.displayDevice.isLaptopBattery, unavailableText: "Batería no detectada" },
+        "dock": { icon: "apps", name: "Muelle" },
+        "power": { icon: "power_settings_new", name: "Menú de apagado" }
     }
 
     property bool isGlobalDragging: false
@@ -181,13 +182,13 @@ PageBase {
             spacing: Tokens.spacing.medium
 
             Text {
-                text: qsTr("Active components")
+                text: "Componentes activos"
                 font: Tokens.font.title.small
                 color: Colours.palette.m3onSurface
             }
 
             Text {
-                text: qsTr("Drag to rearrange or disable")
+                text: "Arrastra para reordenar o desactivar"
                 font: Tokens.font.body.small
                 color: Colours.palette.m3onSurfaceVariant
             }
@@ -200,7 +201,7 @@ PageBase {
                 radius: Tokens.rounding.large
                 
                 Text {
-                    text: qsTr("Left Zone")
+                    text: "Zona izquierda"
                     font: Tokens.font.label.large
                     color: Colours.palette.m3onSurfaceVariant
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -252,7 +253,7 @@ PageBase {
                 radius: Tokens.rounding.large
                 
                 Text {
-                    text: qsTr("Middle Zone")
+                    text: "Zona central"
                     font: Tokens.font.label.large
                     color: Colours.palette.m3onSurfaceVariant
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -304,7 +305,7 @@ PageBase {
                 radius: Tokens.rounding.large
                 
                 Text {
-                    text: qsTr("Right Zone")
+                    text: "Zona derecha"
                     font: Tokens.font.label.large
                     color: Colours.palette.m3onSurfaceVariant
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -364,13 +365,13 @@ PageBase {
                     spacing: 0
                     
                     Text {
-                        text: qsTr("Library")
+                        text: "Biblioteca"
                         font: Tokens.font.title.small
                         color: Colours.palette.m3onSurface
                     }
 
                     Text {
-                        text: qsTr("Disabled components")
+                        text: "Componentes desactivados"
                         font: Tokens.font.body.small
                         color: Colours.palette.m3onSurfaceVariant
                     }
@@ -379,9 +380,9 @@ PageBase {
                 Item { Layout.fillWidth: true }
 
                 TextButton {
-                    text: qsTr("RESET")
+                    text: "RESTABLECER"
                     type: TextButton.Filled
-                    ToolTip.text: qsTr("Restore the default taskbar component layout")
+                    ToolTip.text: "Restaurar diseño predeterminado de la barra"
                     ToolTip.visible: hovered
                     onClicked: root.resetToDefaults()
                 }
@@ -393,7 +394,7 @@ PageBase {
                 color: "transparent"
                 
                 Text {
-                    text: qsTr("Empty")
+                    text: "Vacío"
                     font: Tokens.font.label.large
                     color: Colours.palette.m3onSurfaceVariant
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -588,7 +589,7 @@ PageBase {
                             const base = componentMeta[compId]?.name ?? compId;
                             if (delegateWrapper.isAvailable)
                                 return base;
-                            const reason = componentMeta[compId]?.unavailableText ?? qsTr("Not detected");
+                            const reason = componentMeta[compId]?.unavailableText ?? "No detectado";
                             return `${base} (${reason})`;
                         }
                         font: Tokens.font.body.small

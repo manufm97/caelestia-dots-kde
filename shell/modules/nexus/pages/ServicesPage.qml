@@ -18,7 +18,7 @@ PageBase {
     // Lyrics backends, ordered to match LyricsBackend::Backend (Auto, Local, LRCLIB, NetEase)
     readonly property list<MenuItem> lyricsItems: [
         MenuItem {
-            text: qsTr("Auto")
+            text: "Automático"
         },
         MenuItem {
             text: "Local"
@@ -34,16 +34,16 @@ PageBase {
     // GPU options + the config string each maps to (see Gpu::parseType)
     readonly property list<MenuItem> gpuItems: [
         MenuItem {
-            text: qsTr("Auto")
+            text: "Automático"
         },
         MenuItem {
             text: "NVIDIA"
         },
         MenuItem {
-            text: qsTr("Generic")
+            text: "Genérico"
         },
         MenuItem {
-            text: qsTr("None")
+            text: "Ninguno"
         }
     ]
     readonly property list<string> gpuValues: ["", "NVIDIA", "GENERIC", "None"]
@@ -184,7 +184,7 @@ PageBase {
 
     Component.onCompleted: root.refreshIdleSuspendState()
 
-    title: qsTr("Services")
+    title: "Servicios"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -210,27 +210,27 @@ PageBase {
         // Notifications
         SectionHeader {
             first: true
-            text: qsTr("Notifications")
+            text: "Notificaciones"
         }
 
         NavRow {
             first: true
             last: true
             icon: "notifications"
-            label: qsTr("Notifications")
-            status: qsTr("Notifications, toasts, timeouts")
+            label: "Notificaciones"
+            status: "Notificaciones, toasts, tiempos"
             onClicked: root.nState.openSubPage(1)
         }
 
         // Connections
         SectionHeader {
-            text: qsTr("Polling")
+            text: "Intervalos"
         }
 
         StepperRow {
             first: true
-            label: qsTr("Media refresh")
-            subtext: qsTr("How often the media position updates (ms)")
+            label: "Actualización de medios"
+            subtext: "Cada cuánto se actualiza la posición del medio (ms)"
             value: GlobalConfig.dashboard.mediaUpdateInterval
             from: 100
             to: 2000
@@ -239,8 +239,8 @@ PageBase {
         }
 
         StepperRow {
-            label: qsTr("System stats refresh")
-            subtext: qsTr("CPU, memory and GPU update interval (seconds)")
+            label: "Actualización de estadísticas"
+            subtext: "Intervalo de actualización de CPU, RAM y GPU (segundos)"
             value: GlobalConfig.dashboard.resourceUpdateInterval / 1000
             from: 0.5
             to: 10
@@ -250,8 +250,8 @@ PageBase {
 
         StepperRow {
             last: true
-            label: qsTr("Wi-Fi rescan")
-            subtext: qsTr("How often available networks are rescanned (seconds)")
+            label: "Reescanear Wi-Fi"
+            subtext: "Cada cuánto se reescanen las redes (segundos)"
             value: GlobalConfig.nexus.networkRescanInterval / 1000
             from: 5
             to: 120
@@ -261,13 +261,13 @@ PageBase {
 
         // Media & lyrics
         SectionHeader {
-            text: qsTr("Media & lyrics")
+            text: "Medios y letras"
         }
 
         SelectRow {
             first: true
-            label: qsTr("Lyrics backend")
-            subtext: qsTr("Source used to fetch synced lyrics")
+            label: "Motor de letras"
+            subtext: "Fuente para obtener letras sincronizadas"
             menuItems: root.lyricsItems
             active: root.lyricsItems[Lyrics.preferredBackend] ?? root.lyricsItems[0]
             onSelected: item => Lyrics.preferredBackend = root.lyricsItems.indexOf(item)
@@ -275,24 +275,24 @@ PageBase {
 
         SelectRow {
             last: true
-            label: qsTr("Default player")
-            subtext: qsTr("Preferred media player when several are open")
+            label: "Reproductor predeterminado"
+            subtext: "Reproductor preferido cuando hay varios abiertos"
             menuItems: playerVariants.instances
             active: menuItems.find(i => i.text === GlobalConfig.services.defaultPlayer) ?? null
             fallbackIcon: "music_note"
-            fallbackText: GlobalConfig.services.defaultPlayer || qsTr("Auto")
+            fallbackText: GlobalConfig.services.defaultPlayer || "Automático"
             onSelected: item => GlobalConfig.services.defaultPlayer = item.text
         }
 
         // Input increments
         SectionHeader {
-            text: qsTr("Input increments")
+            text: "Incrementos de entrada"
         }
 
         StepperRow {
             first: true
-            label: qsTr("Volume step")
-            subtext: qsTr("Amount the volume changes per scroll (%)")
+            label: "Paso de volumen"
+            subtext: "Cambio de volumen por scroll (%)"
             value: Math.round(GlobalConfig.services.audioIncrement * 100)
             from: 1
             to: 50
@@ -301,8 +301,8 @@ PageBase {
         }
 
         StepperRow {
-            label: qsTr("Brightness step")
-            subtext: qsTr("Amount the brightness changes per scroll (%)")
+            label: "Paso de brillo"
+            subtext: "Cambio de brillo por scroll (%)"
             value: Math.round(GlobalConfig.services.brightnessIncrement * 100)
             from: 1
             to: 50
@@ -312,8 +312,8 @@ PageBase {
 
         StepperRow {
             last: true
-            label: qsTr("Max volume")
-            subtext: qsTr("Upper limit for output volume (%)")
+            label: "Volumen máximo"
+            subtext: "Límite superior de volumen de salida (%)"
             value: Math.round(GlobalConfig.services.maxVolume * 100)
             from: 50
             to: 200
@@ -323,13 +323,13 @@ PageBase {
 
         // Idle behavior
         SectionHeader {
-            text: qsTr("Idle & sleep")
+            text: "Inactividad y suspensión"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Idle suspend")
-            subtext: qsTr("Suspend the system after inactivity")
+            text: "Suspensión por inactividad"
+            subtext: "Suspender el sistema tras inactividad"
             checked: root.idleSuspendEnabledState
             onToggled: root.setSuspendTimeoutEnabled(checked)
         }
@@ -337,10 +337,10 @@ PageBase {
         StepperRow {
             last: true
             enabled: root.idleSuspendEnabledState
-            label: qsTr("Idle suspend timer")
+            label: "Temporizador de suspensión"
             subtext: root.idleSuspendEnabledState
-                     ? qsTr("Suspend after %1 minute(s) of inactivity").arg(root.idleSuspendMinutesState)
-                     : qsTr("Enable idle suspend to apply a timer")
+                     ? "Suspender tras %1 minuto(s) de inactividad".arg(root.idleSuspendMinutesState)
+                     : "Activar suspensión para aplicar un temporizador"
             value: root.idleSuspendMinutesState
             from: 1
             to: 180
@@ -353,27 +353,27 @@ PageBase {
 
         // Service tuning
         SectionHeader {
-            text: qsTr("Service tuning")
+            text: "Ajustes de servicio"
         }
 
         NavRow {
             first: true
             icon: "sports_esports"
-            label: qsTr("Game mode")
-            status: qsTr("Manage how Caelestia behaves while gaming")
+            label: "Modo juego"
+            status: "Gestionar comportamiento de Caelestia durante juegos"
             onClicked: root.nState.openSubPage(2)
         }
 
         NavRow {
             icon: "chat" // Using chat since discord icon might not be available in Material icons
-            label: qsTr("Discord Rich Presence")
-            status: qsTr("Broadcast your status to Vesktop")
+            label: "Presencia de Discord"
+            status: "Transmitir tu estado a Vesktop"
             onClicked: root.nState.openSubPage(4)
         }
 
         StepperRow {
-            label: qsTr("Visualiser bars")
-            subtext: qsTr("Number of bars in the audio visualisers")
+            label: "Barras del visualizador"
+            subtext: "Número de barras en el visualizador"
             value: GlobalConfig.services.visualiserBars
             from: 10
             to: 120
@@ -382,8 +382,8 @@ PageBase {
         }
 
         ToggleRow {
-            text: Strings.localizeEnglishSpelling(qsTr("Smart colour scheme"))
-            subtext: qsTr("Derive theme mode and variant from the wallpaper")
+            text: Strings.localizeEnglishSpelling("Esquema de color inteligente")
+            subtext: "Derivar modo y variante del tema desde el fondo"
             checked: GlobalConfig.services.smartScheme
             onToggled: GlobalConfig.services.smartScheme = checked
         }
@@ -392,8 +392,8 @@ PageBase {
         SelectRow {
             Layout.fillWidth: true
             last: true
-            label: qsTr("GPU")
-            subtext: Gpu.name ? qsTr("Monitoring: %1").arg(Gpu.name) : qsTr("Override for GPU type")
+            label: "GPU"
+            subtext: Gpu.name ? "Monitoreando: %1".arg(Gpu.name) : "Anulación para tipo de GPU"
             menuOnTop: true
             menuItems: root.gpuItems
             active: root.gpuItems[root.gpuKeyToIndex(GlobalConfig.services.gpuType)]

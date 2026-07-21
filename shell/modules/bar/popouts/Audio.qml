@@ -37,7 +37,7 @@ ColumnLayout {
     StyledText {
         Layout.topMargin: Tokens.padding.medium * root.scaleOffset
         Layout.leftMargin: Tokens.padding.small * root.scaleOffset
-        text: qsTr("Audio")
+        text: "Audio"
         font.weight: 500
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
@@ -59,7 +59,7 @@ ColumnLayout {
             spacing: Tokens.spacing.medium * root.scaleOffset
 
             StyledText {
-                text: qsTr("Output device")
+                text: "Dispositivo de salida"
                 font.weight: Font.Medium
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
             }
@@ -99,7 +99,7 @@ ColumnLayout {
             spacing: Tokens.spacing.medium * root.scaleOffset
 
             StyledText {
-                text: qsTr("Input device")
+                text: "Dispositivo de entrada"
                 font.weight: Font.Medium
                 font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
             }
@@ -124,7 +124,7 @@ ColumnLayout {
 
     StyledText {
         Layout.topMargin: Tokens.spacing.medium * root.scaleOffset
-        text: qsTr("Volume (%1)").arg(Audio.muted ? qsTr("Muted") : `${Math.round(Audio.volume * 100)}%`)
+        text: "Volumen (%1)".arg(Audio.muted ? "Silenciado" : `${Math.round(Audio.volume * 100)}%`)
         font.weight: Font.Medium
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
@@ -156,7 +156,7 @@ ColumnLayout {
         inactiveColour: Colours.palette.m3primaryContainer
         inactiveOnColour: Colours.palette.m3onPrimaryContainer
         verticalPadding: Tokens.padding.small * root.scaleOffset
-        text: qsTr("Open settings")
+        text: "Abrir ajustes"
         icon: "settings"
 
         onClicked: root.popouts.detachRequested("audio")

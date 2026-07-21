@@ -283,7 +283,7 @@ Item {
                 }
 
                 StyledText {
-                    text: qsTr("Loading lyrics...")
+                    text: "Cargando letras..."
                     color: root.safeSecondary
                     font.pointSize: Tokens.font.title.medium.pointSize * root.lyricsScale
                     font.family: Tokens.font.title.medium.family

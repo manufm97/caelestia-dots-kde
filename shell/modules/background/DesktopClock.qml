@@ -131,7 +131,7 @@ Item {
                 spacing: 0
 
                 StyledText {
-                    text: Time.format("MMMM").toUpperCase()
+                    text: Time.date.toLocaleDateString(Qt.locale(), "MMMM")
                     font: Tokens.font.clock.size(Tokens.font.title.medium.pointSize * root.clockScale).letterSpacing(4).weight(Font.Bold).family(root.sansFont).build()
                     color: root.safeSecondary
                 }
@@ -143,7 +143,7 @@ Item {
                 }
 
                 StyledText {
-                    text: Time.format("dddd")
+                    text: Time.date.toLocaleDateString(Qt.locale(), "dddd")
                     font: Tokens.font.clock.size(Tokens.font.body.large.pointSize * root.clockScale).letterSpacing(2).family(root.sansFont).build()
                     color: root.safeSecondary
                 }

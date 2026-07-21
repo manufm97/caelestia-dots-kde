@@ -209,7 +209,7 @@ Item {
             }
 
             StyledText {
-                text: qsTr("Loading lyrics...")
+                text: "Cargando letras..."
                 color: Colours.palette.m3onSurfaceVariant
                 font: Tokens.font.title.medium
             }
@@ -241,7 +241,7 @@ Item {
             }
 
             StyledText {
-                text: qsTr("No lyrics found")
+                text: "No se encontraron letras"
                 color: Colours.palette.m3outline
                 font: Tokens.font.title.medium
             }

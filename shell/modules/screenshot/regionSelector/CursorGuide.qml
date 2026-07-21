@@ -10,14 +10,14 @@ Item {
     property string description: switch (root.action) {
     case RegionSelection.SnipAction.Copy:
     case RegionSelection.SnipAction.Edit:
-        return qsTr("Copy region (LMB) or annotate (RMB)");
+        return "Copiar región (LC) o anotar (RC)";
     case RegionSelection.SnipAction.Search:
-        return qsTr("Search with Google Lens");
+        return "Buscar con Google Lens";
     case RegionSelection.SnipAction.CharRecognition:
-        return qsTr("Recognize text");
+        return "Reconocer texto";
     case RegionSelection.SnipAction.Record:
     case RegionSelection.SnipAction.RecordWithSound:
-        return qsTr("Record region");
+        return "Grabar región";
     }
     property string materialSymbol: switch (root.action) {
     case RegionSelection.SnipAction.Copy:

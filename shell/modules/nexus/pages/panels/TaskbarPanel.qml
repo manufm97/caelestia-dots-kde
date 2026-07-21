@@ -13,26 +13,26 @@ PageBase {
         MenuItem {
             property string value: "top"
 
-            text: qsTr("Top")
+            text: "Arriba"
         },
         MenuItem {
             property string value: "bottom"
 
-            text: qsTr("Bottom")
+            text: "Abajo"
         },
         MenuItem {
             property string value: "left"
 
-            text: qsTr("Left")
+            text: "Izquierda"
         },
         MenuItem {
             property string value: "right"
 
-            text: qsTr("Right")
+            text: "Derecha"
         }
     ]
 
-    title: qsTr("Taskbar")
+    title: "Barra de tareas"
     isSubPage: true
 
     ColumnLayout {
@@ -44,21 +44,21 @@ PageBase {
         // Behaviour
         SectionHeader {
             first: true
-            text: Strings.localizeEnglishSpelling(qsTr("Behaviour"))
+            text: Strings.localizeEnglishSpelling("Comportamiento")
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Persistent")
-            subtext: qsTr("Keep the bar visible at all times")
+            text: "Persistente"
+            subtext: "Mantener la barra siempre visible"
             checked: GlobalConfig.bar.persistent
             onToggled: GlobalConfig.bar.persistent = checked
         }
 
         SelectRow {
             Layout.fillWidth: true
-            label: qsTr("Position")
-            subtext: qsTr("Screen edge to place the bar on")
+            label: "Posición"
+            subtext: "Borde de la pantalla donde colocar la barra"
             active: {
                 for (let i = 0; i < positionItems.length; i++) {
                     if (positionItems[i].value === GlobalConfig.bar.position)
@@ -71,15 +71,15 @@ PageBase {
         }
 
         ToggleRow {
-            text: qsTr("Show on hover")
-            subtext: qsTr("Reveal the bar when the cursor reaches the screen edge")
+            text: "Mostrar al pasar"
+            subtext: "Revelar la barra al llegar al borde"
             checked: GlobalConfig.bar.showOnHover
             onToggled: GlobalConfig.bar.showOnHover = checked
         }
 
         StepperRow {
-            label: qsTr("Drag threshold")
-            subtext: qsTr("Pixels dragged before the bar reveals")
+            label: "Umbral de arrastre"
+            subtext: "Píxeles arrastrados antes de mostrar la barra"
             value: GlobalConfig.bar.dragThreshold
             from: 0
             to: 200
@@ -88,8 +88,8 @@ PageBase {
         }
 
         StepperRow {
-            label: qsTr("Bar scale")
-            subtext: qsTr("Scales taskbar thickness and component sizing")
+            label: "Escala de la barra"
+            subtext: "Escala el grosor y tamaño"
             value: GlobalConfig.bar.scale
             from: 0.6
             to: 1.6
@@ -98,8 +98,8 @@ PageBase {
         }
 
         StepperRow {
-            label: qsTr("Preview scale")
-            subtext: qsTr("Scales taskbar hover previews")
+            label: "Escala de vista previa"
+            subtext: "Escala las vistas previas al pasar"
             value: GlobalConfig.bar.previewScale
             from: 0.5
             to: 1.6
@@ -108,15 +108,15 @@ PageBase {
         }
 
         ToggleRow {
-            text: qsTr("Scale with bar size")
-            subtext: qsTr("Multiply the preview scale with the bar scale")
+            text: "Escalar con el tamaño de la barra"
+            subtext: "Multiplica la escala de vista previa con la de la barra"
             checked: GlobalConfig.bar.previewScaleWithBar
             onToggled: GlobalConfig.bar.previewScaleWithBar = checked
         }
 
         StepperRow {
-            label: qsTr("Font scaling offset")
-            subtext: qsTr("Scales the text size across taskbar popouts")
+            label: "Ajuste de escala de fuente"
+            subtext: "Escala el texto en ventanas emergentes"
             value: GlobalConfig.bar.fontScaleOffset
             from: -1.0; to: 1.0; stepSize: 0.05
             onMoved: v => GlobalConfig.bar.fontScaleOffset = v
@@ -125,98 +125,105 @@ PageBase {
         NavRow {
             last: true
             icon: "aspect_ratio"
-            label: qsTr("Per-element scaling offsets")
-            status: qsTr("Customize scale and font for each popout type")
+            label: "Ajustes de escala por elemento"
+            status: "Personaliza escala y fuente para cada tipo emergente"
             onClicked: root.nState.openSubPage(13)
         }
 
         // Components
         SectionHeader {
-            text: qsTr("Components")
+            text: "Componentes"
         }
 
         NavRow {
             first: true
             icon: "view_agenda"
-            label: qsTr("Toggle & rearrange")
-            status: qsTr("Add, remove or reorder components")
+            label: "Alternar y reordenar"
+            status: "Añadir, eliminar o reordenar componentes"
             onClicked: root.nState.openSubPage(5)
         }
 
         NavRow {
             icon: "workspaces"
-            label: qsTr("Workspaces")
-            status: qsTr("Indicators, window icons")
+            label: "Espacios de trabajo"
+            status: "Indicadores, iconos de ventana"
             onClicked: root.nState.openSubPage(6)
         }
 
         NavRow {
             icon: "web_asset"
-            label: qsTr("Active window")
-            status: qsTr("Title display, popout")
+            label: "Ventana activa"
+            status: "Título, ventana emergente"
             onClicked: root.nState.openSubPage(7)
         }
 
         NavRow {
             icon: "dock"
-            label: qsTr("Dock")
-            status: Strings.localizeEnglishSpelling(qsTr("Positioning, recolouring"))
+            label: "Muelle"
+            status: Strings.localizeEnglishSpelling("Posición, recoloreado")
             onClicked: root.nState.openSubPage(11)
         }
 
         NavRow {
             icon: "widgets"
-            label: qsTr("Tray")
-            status: qsTr("System tray icons")
+            label: "Bandeja"
+            status: "Iconos de bandeja"
             onClicked: root.nState.openSubPage(8)
         }
 
         NavRow {
             icon: "signal_cellular_alt"
-            label: qsTr("Status icons")
-            status: qsTr("Visible indicators")
+            label: "Iconos de estado"
+            status: "Indicadores visibles"
             onClicked: root.nState.openSubPage(9)
         }
 
         NavRow {
             icon: "schedule"
-            label: qsTr("Clock")
-            status: qsTr("Date, icon, background")
+            label: "Reloj"
+            status: "Fecha, icono, fondo"
             onClicked: root.nState.openSubPage(10)
+        }
+
+        NavRow {
+            icon: "partly_cloudy_day"
+            label: "Clima"
+            status: "Tiempo actual, temperatura"
+            onClicked: root.nState.openSubPage(14)
         }
 
         NavRow {
             last: true
             icon: "code"
-            label: qsTr("GitHub")
-            status: qsTr("Contributions, token setup")
+            label: "GitHub"
+            status: "Contribuciones, configuración de token"
             onClicked: root.nState.openSubPage(12)
         }
 
         // Scroll actions
         SectionHeader {
-            text: qsTr("Scroll actions")
+            text: "Acciones de scroll"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Workspaces")
-            subtext: qsTr("Scroll over the workspace indicator to switch workspaces")
+            text: "Espacios de trabajo"
+            subtext: "Desplázate sobre el indicador para cambiar de espacio"
             checked: GlobalConfig.bar.scrollActions.workspaces
             onToggled: GlobalConfig.bar.scrollActions.workspaces = checked
         }
 
         ToggleRow {
-            text: qsTr("Volume")
-            subtext: qsTr("Scroll on the top half of the bar to adjust volume")
+            text: "Volumen"
+            subtext: "Desplázate en la mitad superior de la barra para ajustar volumen"
             checked: GlobalConfig.bar.scrollActions.volume
             onToggled: GlobalConfig.bar.scrollActions.volume = checked
         }
 
         ToggleRow {
             last: true
-            text: qsTr("Brightness")
-            subtext: qsTr("Scroll on the bottom half of the bar to adjust brightness")
+            text: "Brillo"
+            subtext: "Desplázate en la mitad inferior de la barra para ajustar brillo"
             checked: GlobalConfig.bar.scrollActions.brightness
             onToggled: GlobalConfig.bar.scrollActions.brightness = checked
         }

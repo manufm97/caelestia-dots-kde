@@ -119,7 +119,7 @@ fi
                     root.hasUpdate = root.pendingCount > 0;
                     
                     if (root.hasUpdate && prevCount === 0 && root.loaded) {
-                        Toaster.toast(qsTr("System Update Available"), qsTr("%1 new commits on %2 branch").arg(root.pendingCount).arg(root.currentBranch), "update");
+                        Toaster.toast("Actualización disponible", "%1 nuevos commits en la rama %2".arg(root.pendingCount).arg(root.currentBranch), "update");
                     }
                 } catch(e) {
                     console.log("UpdateChecker git parse error:", e);

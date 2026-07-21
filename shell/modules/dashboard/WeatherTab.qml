@@ -28,13 +28,19 @@ Item {
                 spacing: Tokens.spacing.extraSmall
 
                 StyledText {
-                    text: Weather.city || qsTr("Loading...")
+                    text: Weather.city || "Cargando..."
                     font: Tokens.font.body.builders.large.size(28).weight(Font.DemiBold).build()
                     color: Colours.palette.m3onSurface
                 }
 
                 StyledText {
-                    text: new Date().toLocaleDateString(Qt.locale(), "dddd, MMMM d")
+                    text: {
+                        const d = new Date();
+                        const weekday = d.toLocaleDateString(Qt.locale(), "dddd");
+                        const day = d.toLocaleDateString(Qt.locale(), "d");
+                        const month = d.toLocaleDateString(Qt.locale(), "MMMM");
+                        return weekday + " " + day + " de " + month;
+                    }
                     font: Tokens.font.body.small
                     color: Colours.palette.m3onSurfaceVariant
                 }
@@ -49,14 +55,14 @@ Item {
 
                 WeatherStat {
                     icon: "wb_twilight"
-                    label: "Sunrise"
+                    label: "Amanecer"
                     value: Weather.sunrise
                     colour: Colours.palette.m3tertiary
                 }
 
                 WeatherStat {
                     icon: "bedtime"
-                    label: "Sunset"
+                    label: "Atardecer"
                     value: Weather.sunset
                     colour: Colours.palette.m3tertiary
                 }
@@ -110,19 +116,19 @@ Item {
 
             DetailCard {
                 icon: "water_drop"
-                label: "Humidity"
+                label: "Humedad"
                 value: Weather.humidity + "%"
                 colour: Colours.palette.m3secondary
             }
             DetailCard {
                 icon: "thermostat"
-                label: "Feels Like"
+                label: "Sensación térmica"
                 value: Weather.feelsLike
                 colour: Colours.palette.m3primary
             }
             DetailCard {
                 icon: "air"
-                label: "Wind"
+                label: "Viento"
                 value: Weather.windSpeed ? Weather.windSpeed + " km/h" : "--"
                 colour: Colours.palette.m3tertiary
             }
@@ -131,8 +137,73 @@ Item {
         StyledText {
             Layout.topMargin: Tokens.spacing.medium
             Layout.leftMargin: Tokens.padding.medium
+            visible: hourlyRepeater.count > 0
+            text: "Pronóstico por hora"
+            font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
+            color: Colours.palette.m3onSurface
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.leftMargin: Tokens.padding.medium
+            Layout.rightMargin: Tokens.padding.medium
+            spacing: Tokens.spacing.small
+
+            Repeater {
+                id: hourlyRepeater
+
+                model: Weather.hourlyForecast
+
+                delegate: ColumnLayout {
+                    required property int index
+                    required property var modelData
+
+                    visible: index < 12
+
+                    Layout.fillWidth: true
+                    spacing: Tokens.spacing.extraSmall
+
+                    StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: index === 0 ? "Ahora" : Qt.formatDateTime(new Date(modelData.timestamp.replace("T", " ")), GlobalConfig.services.useTwelveHourClock ? "ha" : "hh:00")
+                        font: Tokens.font.body.builders.small.weight(Font.DemiBold).build()
+                        color: Colours.palette.m3primary
+                    }
+
+                    MaterialIcon {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: modelData.icon
+                        fontStyle: Tokens.font.icon.large
+                        color: Colours.palette.m3secondary
+                    }
+
+                    StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: Weather.formatTemp(modelData.tempC).slice(0, -1)
+                        font: Tokens.font.body.builders.small.weight(Font.DemiBold).build()
+                        color: Colours.palette.m3tertiary
+                    }
+
+                    Loader {
+                        Layout.alignment: Qt.AlignHCenter
+                        active: modelData.precipChance !== undefined && modelData.precipChance > 0
+                        visible: active
+
+                        sourceComponent: StyledText {
+                            text: modelData.precipChance + "%"
+                            font: Tokens.font.body.builders.small.scale(0.8).build()
+                            color: Colours.palette.m3tertiary
+                        }
+                    }
+                }
+            }
+        }
+
+        StyledText {
+            Layout.topMargin: Tokens.spacing.medium
+            Layout.leftMargin: Tokens.padding.medium
             visible: forecastRepeater.count > 0
-            text: qsTr("7-Day Forecast")
+            text: "Pronóstico de 7 días"
             font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
             color: Colours.palette.m3onSurface
         }
@@ -166,7 +237,7 @@ Item {
 
                         StyledText {
                             Layout.alignment: Qt.AlignHCenter
-                            text: forecastItem.index === 0 ? qsTr("Today") : new Date(forecastItem.modelData.date).toLocaleDateString(Qt.locale(), "ddd")
+                            text: forecastItem.index === 0 ? "Hoy" : new Date(forecastItem.modelData.date).toLocaleDateString(Qt.locale(), "ddd")
                             font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
                             color: Colours.palette.m3primary
                         }

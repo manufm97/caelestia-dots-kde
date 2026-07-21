@@ -12,7 +12,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Sidebar")
+    title: "Barra lateral"
     isSubPage: true
 
     ColumnLayout {
@@ -23,12 +23,12 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("General")
+            text: "General"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Enabled")
+            text: "Activado"
             checked: Config.sidebar.enabled
             onToggled: GlobalConfig.sidebar.enabled = checked
         }
@@ -37,8 +37,8 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            label: qsTr("Drag threshold")
-            subtext: qsTr("Pixels dragged before the sidebar opens")
+            label: "Umbral de arrastre"
+            subtext: "Píxeles arrastrados antes de abrir la barra lateral"
             value: Config.sidebar.dragThreshold
             from: 0
             to: 200
@@ -48,27 +48,27 @@ PageBase {
 
         // AI Assistant
         SectionHeader {
-            text: qsTr("AI Assistant")
+            text: "Asistente IA"
         }
 
         PopupRow {
             Layout.fillWidth: true
             first: true
             icon: "info"
-            label: qsTr("Instructions & Setup")
+            label: "Instrucciones y configuración"
 
             StyledText {
                 width: parent.width
                 wrapMode: Text.Wrap
-                text: qsTr("Caelestia\'s AI assistant runs entirely locally using Ollama for maximum privacy. No API keys are required!\n\nTo enable it:\n1. Install Ollama (e.g. \'sudo pacman -S ollama\')\n2. Start the Ollama daemon\n3. Download a model (e.g., \'ollama run llama3\')\n\nOnce Ollama is running on port 11434, the assistant connects automatically.")
+                text: "El asistente IA de Caelestia funciona localmente con Ollama para máxima privacidad. ¡No requiere claves API!\n\nPara activarlo:\n1. Instala Ollama (ej. \'sudo pacman -S ollama\')\n2. Inicia el servicio de Ollama\n3. Descarga un modelo (ej. \'ollama run llama3\')\n\nCuando Ollama esté activo en el puerto 11434, el asistente se conecta automáticamente."
             }
         }
 
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Enable Assistant")
-            subtext: qsTr("Show the AI Assistant in the sidebar")
+            text: "Activar asistente"
+            subtext: "Mostrar asistente IA en la barra lateral"
             checked: GlobalConfig.ai.enableOllama
             onToggled: GlobalConfig.ai.enableOllama = checked
         }
@@ -77,22 +77,22 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Enable Tool Usage")
-            subtext: qsTr("Allow the assistant to search the web, take screenshots, etc.")
+            text: "Activar uso de herramientas"
+            subtext: "Permitir al asistente buscar en la web, tomar capturas, etc."
             checked: GlobalConfig.ai.enableCelestialMode
             onToggled: GlobalConfig.ai.enableCelestialMode = checked
         }
 
         // OSD Sliders
         SectionHeader {
-            text: qsTr("OSD Sliders")
+            text: "Controles OSD"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Volume slider")
-            subtext: qsTr("Show the volume OSD slider")
+            text: "Control de volumen"
+            subtext: "Mostrar control deslizante de volumen"
             checked: Config.osd.enableVolume
             onToggled: GlobalConfig.osd.enableVolume = checked
         }
@@ -100,8 +100,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Microphone slider")
-            subtext: qsTr("Show the microphone OSD slider")
+            text: "Control de micrófono"
+            subtext: "Mostrar control deslizante de micrófono"
             checked: Config.osd.enableMicrophone
             onToggled: GlobalConfig.osd.enableMicrophone = checked
         }
@@ -110,22 +110,22 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Brightness slider")
-            subtext: qsTr("Show the brightness OSD slider")
+            text: "Control de brillo"
+            subtext: "Mostrar control deslizante de brillo"
             checked: Config.osd.enableBrightness
             onToggled: GlobalConfig.osd.enableBrightness = checked
         }
 
         // Sidebar Tabs
         SectionHeader {
-            text: qsTr("Sidebar Tabs")
+            text: "Pestañas de barra lateral"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Show News tab")
-            subtext: qsTr("Show the News tab in the sidebar")
+            text: "Mostrar pestaña de noticias"
+            subtext: "Mostrar noticias en la barra lateral"
             checked: GlobalConfig.ai.showNews
             onToggled: GlobalConfig.ai.showNews = checked
         }
@@ -134,22 +134,22 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Show Caelestia Mode")
-            subtext: qsTr("Show the Caelestia Mode toggle at the bottom of notifications")
+            text: "Mostrar Modo Caelestia"
+            subtext: "Mostrar Modo Caelestia al final de notificaciones"
             checked: GlobalConfig.ai.showCaelestiaMode
             onToggled: GlobalConfig.ai.showCaelestiaMode = checked
         }
 
         // Utilities Panel
         SectionHeader {
-            text: qsTr("Utilities Panel")
+            text: "Panel de utilidades"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Show Keep Awake")
-            subtext: qsTr("Show the Keep Awake card")
+            text: "Mostrar No dormir"
+            subtext: "Mostrar tarjeta No dormir"
             checked: Config.utilities.showKeepAwake
             onToggled: GlobalConfig.utilities.showKeepAwake = checked
         }
@@ -157,8 +157,8 @@ PageBase {
         ToggleRow {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
-            text: qsTr("Show Screen Recorder")
-            subtext: qsTr("Show the Screen Recorder card")
+            text: "Mostrar Grabador de pantalla"
+            subtext: "Mostrar tarjeta de grabación"
             checked: Config.utilities.showScreenRecorder
             onToggled: GlobalConfig.utilities.showScreenRecorder = checked
         }
@@ -167,30 +167,30 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Show Quick Toggles")
-            subtext: qsTr("Show the Quick Toggles card")
+            text: "Mostrar accesos rápidos"
+            subtext: "Mostrar tarjeta de accesos rápidos"
             checked: Config.utilities.showQuickToggles
             onToggled: GlobalConfig.utilities.showQuickToggles = checked
         }
 
         // Quick Toggles
         SectionHeader {
-            text: qsTr("Quick Toggles")
+            text: "Accesos rápidos"
         }
 
         Repeater {
             id: toggleRepeater
             model: [
-                { id: "wifi",           label: qsTr("Wi-Fi") },
-                { id: "bluetooth",      label: qsTr("Bluetooth") },
-                { id: "mic",            label: qsTr("Microphone") },
-                { id: "settings",       label: qsTr("Settings") },
-                { id: "colorpicker",    label: Strings.localizeEnglishSpelling(qsTr("Colour Picker")) },
-                { id: "dnd",            label: qsTr("Do Not Disturb") },
-                { id: "vpn",            label: qsTr("VPN") },
-                { id: "wallpaper",      label: qsTr("Wallpaper") },
-                { id: "badapple",       label: qsTr("Bad Apple") },
-                { id: "pauseWallpaper", label: qsTr("Pause Wallpaper") },
+                { id: "wifi",           label: "Wi-Fi" },
+                { id: "bluetooth",      label: "Bluetooth" },
+                { id: "mic",            label: "Micrófono" },
+                { id: "settings",       label: "Ajustes" },
+                { id: "colorpicker",    label: Strings.localizeEnglishSpelling("Selector de color") },
+                { id: "dnd",            label: "No molestar" },
+                { id: "vpn",            label: "VPN" },
+                { id: "wallpaper",      label: "Fondo" },
+                { id: "badapple",       label: "Bad Apple" },
+                { id: "pauseWallpaper", label: "Pausar fondo" },
             ]
 
             delegate: ToggleRow {

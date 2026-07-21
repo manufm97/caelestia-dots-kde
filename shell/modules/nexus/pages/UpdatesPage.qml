@@ -16,7 +16,7 @@ import qs.utils
 PageBase {
     id: root
     
-    title: qsTr("Updates")
+    title: "Actualizaciones"
 
     property list<MenuItem> branchItems
 
@@ -82,8 +82,8 @@ PageBase {
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: UpdateChecker.hasUpdate 
-                        ? qsTr("%1 new commits on %2").arg(UpdateChecker.pendingCount).arg(UpdateChecker.currentBranch)
-                        : qsTr("You're all caught up!")
+                        ? "%1 nuevos commits en %2".arg(UpdateChecker.pendingCount).arg(UpdateChecker.currentBranch)
+                        : "¡Estás al día!"
                     color: UpdateChecker.hasUpdate ? Colours.palette.m3primary : Colours.palette.m3outlineVariant
                     font: Tokens.font.title.medium
                 }
@@ -91,7 +91,7 @@ PageBase {
                 IconTextButton {
                     Layout.alignment: Qt.AlignHCenter
                     visible: !UpdateChecker.hasUpdate
-                    text: qsTr("Check again")
+                    text: "Verificar de nuevo"
                     type: TextButton.Tonal
                     icon: "refresh"
                     onClicked: UpdateChecker.checkUpdates()
@@ -100,14 +100,14 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Options")
+            text: "Opciones"
         }
 
         SelectRow {
             first: true
             last: true
-            label: qsTr("Update branch")
-            subtext: qsTr("Currently tracking branch: %1").arg(UpdateChecker.currentBranch)
+            label: "Rama de actualización"
+            subtext: "Rama actual: %1".arg(UpdateChecker.currentBranch)
             menuItems: root.branchItems
             active: root.activeBranchItem
             onSelected: item => {
@@ -116,7 +116,7 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Latest Changes")
+            text: "Últimos cambios"
             visible: UpdateChecker.commits.length > 0
         }
 
@@ -136,36 +136,36 @@ PageBase {
         }
 
         SectionHeader {
-            text: qsTr("Customize Installation")
+            text: "Personalizar instalación"
         }
 
         NavRow {
             first: true
             icon: "folder"
-            label: qsTr("Open Backup Folder")
-            status: qsTr("View your previously backed-up configuration files")
+            label: "Abrir carpeta de respaldo"
+            status: "Ver tus respaldos de configuración"
             onClicked: {
                 backupFolderProcess.running = true;
             }
         }
 
         ToggleRow {
-            text: qsTr("Deploy Configurations")
-            subtext: qsTr("Update your custom dotfiles in ~/.config")
+            text: "Desplegar configuraciones"
+            subtext: "Actualizar tus dotfiles en ~/.config"
             checked: updaterSettings.deployConfigs
             onToggled: updaterSettings.deployConfigs = checked
         }
 
         ToggleRow {
             last: true
-            text: qsTr("Build Shell UI")
-            subtext: qsTr("Compile and install Quickshell UI updates")
+            text: "Construir interfaz del shell"
+            subtext: "Compilar e instalar actualizaciones de Quickshell"
             checked: updaterSettings.buildShell
             onToggled: updaterSettings.buildShell = checked
         }
 
         SectionHeader {
-            text: qsTr("Install Update")
+            text: "Instalar actualización"
             visible: UpdateChecker.hasUpdate || root.updateRunning || root.updateLogs !== ""
         }
 
@@ -186,7 +186,7 @@ PageBase {
 
                 IconTextButton {
                     Layout.fillWidth: true
-                    text: root.updateRunning ? qsTr("Updating...") : (root.updateProgress === 1.0 ? qsTr("Log Out") : qsTr("Install Update"))
+                    text: root.updateRunning ? "Actualizando..." : (root.updateProgress === 1.0 ? "Cerrar sesión" : "Instalar actualización")
                     type: TextButton.Primary
                     icon: root.updateRunning ? "hourglass_empty" : (root.updateProgress === 1.0 ? "logout" : "system_update_alt")
                     enabled: (!root.updateRunning && UpdateChecker.hasUpdate) || root.updateProgress === 1.0
@@ -293,10 +293,10 @@ PageBase {
             onExited: code => {
                 root.updateRunning = false;
                 if (code === 0) {
-                    Toaster.toast(qsTr("Update Successful"), qsTr("The update is complete. Please log out to apply changes."), "done");
+                    Toaster.toast("Actualización exitosa", "Actualización completa. Cierra sesión para aplicar cambios.", "done");
                     UpdateChecker.reload();
                 } else {
-                    Toaster.toast(qsTr("Update Failed"), qsTr("The update script returned error code %1").arg(code), "error");
+                    Toaster.toast("Actualización fallida", "El script devolvió el código de error %1".arg(code), "error");
                 }
             }
         }

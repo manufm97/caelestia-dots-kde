@@ -26,7 +26,7 @@ ColumnLayout {
     StyledText {
         Layout.topMargin: Tokens.padding.medium * root.scaleOffset
         Layout.leftMargin: Tokens.padding.small * root.scaleOffset
-        text: qsTr("Battery")
+        text: "Batería"
         font.weight: 500
         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
     }
@@ -170,7 +170,7 @@ ColumnLayout {
                     spacing: Tokens.spacing.small * root.scaleOffset
 
                     StyledText {
-                        text: UPower.displayDevice.isLaptopBattery ? qsTr("%1%").arg(Math.round(UPower.displayDevice.percentage * 100)) : qsTr("N/A")
+                        text: UPower.displayDevice.isLaptopBattery ? "%1%".arg(Math.round(UPower.displayDevice.percentage * 100)) : "N/D"
                         font.pointSize: 28 * root.fontScale
                         font.weight: 600
                     }
@@ -191,15 +191,15 @@ ColumnLayout {
 
                         text: {
                             if (!UPower.displayDevice.isLaptopBattery)
-                                return qsTr("No battery detected");
+                                return "No se detectó batería";
 
                             if (UPower.onBattery)
-                                return qsTr("~ %1").arg(formatSeconds(UPower.displayDevice.timeToEmpty, "Calculating..."));
+                                return "~ %1".arg(formatSeconds(UPower.displayDevice.timeToEmpty, "Calculating..."));
 
                             if (UPower.displayDevice.state === UPowerDeviceState.FullyCharged || UPower.displayDevice.percentage >= 1.0)
-                                return qsTr("Fully charged!");
+                                return "¡Completamente cargada!";
 
-                            return qsTr("~ %1").arg(formatSeconds(UPower.displayDevice.timeToFull, "Calculating..."));
+                            return "~ %1".arg(formatSeconds(UPower.displayDevice.timeToFull, "Calculating..."));
                         }
                         color: Colours.palette.m3onSurfaceVariant
                         font.pointSize: Tokens.font.body.medium.pointSize * root.fontScale
@@ -236,7 +236,7 @@ ColumnLayout {
 
                             StyledText {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: qsTr("Degraded: %1").arg(PerformanceDegradationReason.toString(PowerProfiles.degradationReason))
+                                text: "Degradado: %1".arg(PerformanceDegradationReason.toString(PowerProfiles.degradationReason))
                                 color: Colours.palette.m3onError
                                 font.pointSize: Tokens.font.mono.medium.pointSize * root.fontScale
                             }

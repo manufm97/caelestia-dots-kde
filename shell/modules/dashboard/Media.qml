@@ -114,12 +114,12 @@ Item {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Nothing playing")
+                        text: "Sin reproducción"
                         font: Tokens.font.headline.medium
                     }
 
                     StyledText {
-                        text: qsTr("Play something for it to show up here!")
+                        text: "¡Reproduce algo para que aparezca aquí!"
                         color: Colours.palette.m3onSurfaceVariant
                         font: Tokens.font.body.large
                     }
