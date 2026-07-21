@@ -13,7 +13,7 @@ Singleton {
     property bool available: true // We assume it's available or we can check with `which hyprsunset`
 
     function nightLightToast(message: string): void {
-        Toaster.toast(qsTr("Night Light"), qsTr(message), "dark_mode");
+        Toaster.toast("Luz nocturna", message, "dark_mode");
     }
 
     function start(temp): void {

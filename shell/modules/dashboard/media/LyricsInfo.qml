@@ -149,7 +149,7 @@ Item {
                 opacity: 0
 
                 StyledText {
-                    text: qsTr("Backend: %1").arg(LyricsBackend.toString(Lyrics.backend))
+                    text: "Motor: %1".arg(LyricsBackend.toString(Lyrics.backend))
                     color: Colours.palette.m3onSurfaceVariant
                     animate: true
                 }
@@ -161,7 +161,7 @@ Item {
                     StyledText {
                         Layout.fillWidth: true
                         Layout.maximumWidth: Tokens.sizes.dashboard.mediaTabWidth / 2
-                        text: qsTr("Selected candidate: %1 | %2 | %3").arg(Lyrics.selectedCandidate.title).arg(Lyrics.selectedCandidate.artist).arg(Lyrics.selectedCandidate.album)
+                        text: "Candidato seleccionado: %1 | %2 | %3".arg(Lyrics.selectedCandidate.title).arg(Lyrics.selectedCandidate.artist).arg(Lyrics.selectedCandidate.album)
                         color: Colours.palette.m3onSurfaceVariant
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         animate: true
@@ -180,7 +180,7 @@ Item {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: qsTr("Offset: %1 ms").arg(Math.round(Lyrics.offset))
+                        text: "Desfase: %1 ms".arg(Math.round(Lyrics.offset))
                         color: Colours.palette.m3onSurfaceVariant
                         animate: true
                     }
@@ -209,7 +209,7 @@ Item {
                 StyledText {
                     id: placeholderText
 
-                    text: Lyrics.loading ? qsTr("Loading...") : qsTr("No lyrics found")
+                    text: Lyrics.loading ? "Cargando..." : "No se encontraron letras"
                     color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.body.medium
                     animate: true

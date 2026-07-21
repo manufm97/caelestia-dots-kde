@@ -8,7 +8,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Status icons")
+    title: "Iconos de estado"
     isSubPage: true
 
     ColumnLayout {
@@ -20,42 +20,42 @@ PageBase {
         // Visible icons
         SectionHeader {
             first: true
-            text: qsTr("Visible icons")
+            text: "Iconos visibles"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Speakers")
+            text: "Altavoces"
             checked: Config.bar.status.showAudio
             onToggled: GlobalConfig.bar.status.showAudio = checked
         }
 
         ToggleRow {
-            text: qsTr("Microphone")
+            text: "Micrófono"
             checked: Config.bar.status.showMicrophone
             onToggled: GlobalConfig.bar.status.showMicrophone = checked
         }
 
         ToggleRow {
-            text: qsTr("Keyboard layout")
+            text: "Distribución del teclado"
             checked: Config.bar.status.showKbLayout
             onToggled: GlobalConfig.bar.status.showKbLayout = checked
         }
 
         ToggleRow {
-            text: qsTr("Network")
+            text: "Red"
             checked: Config.bar.status.showNetwork
             onToggled: GlobalConfig.bar.status.showNetwork = checked
         }
 
         ToggleRow {
-            text: qsTr("Wi-Fi")
+            text: "Wi-Fi"
             checked: Config.bar.status.showWifi
             onToggled: GlobalConfig.bar.status.showWifi = checked
         }
 
         ToggleRow {
-            text: qsTr("Bluetooth")
+            text: "Bluetooth"
             checked: Config.bar.status.showBluetooth
             onToggled: GlobalConfig.bar.status.showBluetooth = checked
         }
@@ -70,14 +70,14 @@ PageBase {
 
         // Behaviour
         SectionHeader {
-            text: Strings.localizeEnglishSpelling(qsTr("Behaviour"))
+            text: Strings.localizeEnglishSpelling("Comportamiento")
         }
 
         ToggleRow {
             first: true
             last: true
-            text: qsTr("Popout on hover")
-            subtext: qsTr("Show a details popout when hovering the status icons")
+            text: "Ventana emergente al pasar"
+            subtext: "Mostrar detalles al pasar sobre iconos"
             checked: Config.bar.popouts.statusIcons
             onToggled: GlobalConfig.bar.popouts.statusIcons = checked
         }

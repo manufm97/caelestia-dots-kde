@@ -21,7 +21,7 @@ PageBase {
             adapter.discovering = on;
     }
 
-    title: qsTr("Pair new device")
+    title: "Emparejar nuevo dispositivo"
     isSubPage: true
 
     Component.onCompleted: setScan(true)
@@ -56,7 +56,7 @@ PageBase {
                 anchors.leftMargin: Tokens.padding.large
                 anchors.verticalCenterOffset: Math.round(fontInfo.pointSize * 0.2)
 
-                text: qsTr("Available devices")
+                text: "Dispositivos disponibles"
                 color: Colours.palette.m3onSurfaceVariant
                 font: Tokens.font.body.small
             }
@@ -70,7 +70,7 @@ PageBase {
             extraHeight: scanIndicator.implicitHeight
             last: true
             placeholderIcon: "bluetooth_searching"
-            placeholderText: qsTr("Searching for devices…")
+            placeholderText: "Buscando dispositivos…"
             list.anchors.top: scanIndicator.bottom
 
             model: ScriptModel {
@@ -139,14 +139,14 @@ PageBase {
 
                         StyledText {
                             Layout.fillWidth: true
-                            text: newDevice.modelData?.name || qsTr("Unknown device")
+                            text: newDevice.modelData?.name || "Dispositivo desconocido"
                             font: Tokens.font.body.small
                             elide: Text.ElideRight
                         }
 
                         StyledText {
                             Layout.fillWidth: true
-                            text: newDevice.modelData?.pairing ? qsTr("Pairing...") : (newDevice.modelData?.address ?? "")
+                            text: newDevice.modelData?.pairing ? "Emparejando..." : (newDevice.modelData?.address ?? "")
                             color: Colours.palette.m3outline
                             font: Tokens.font.label.small
                             elide: Text.ElideRight

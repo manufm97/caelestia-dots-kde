@@ -17,7 +17,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Select wallpaper")
+    title: "Seleccionar fondo"
 
     property color sortColor: "transparent"
     property var colorDistances: ({})
@@ -83,7 +83,7 @@ PageBase {
 
             IconTextButton {
                 icon: "photo_library"
-                text: qsTr("Browse")
+                text: "Examinar"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -94,8 +94,8 @@ PageBase {
                 FileDialog {
                     id: browseDialog
 
-                    title: qsTr("Select an image")
-                    filterLabel: qsTr("Image files")
+                    title: "Seleccionar imagen"
+                    filterLabel: "Archivos de imagen"
                     filters: Images.validImageExtensions
                     onAccepted: path => {
                         Wallpapers.setWallpaper(path);
@@ -105,7 +105,7 @@ PageBase {
 
             IconTextButton {
                 icon: "shuffle"
-                text: qsTr("Random")
+                text: "Aleatorio"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -121,7 +121,7 @@ PageBase {
 
         StyledText {
             Layout.topMargin: Tokens.spacing.medium
-            text: qsTr("Featured wallpapers")
+            text: "Fondos destacados"
             font: Tokens.font.title.small
         }
 
@@ -344,13 +344,13 @@ PageBase {
 
                 type: SplitButton.Tonal
                 fallbackIcon: "collections"
-                fallbackText: qsTr("All")
+                fallbackText: "Todos"
                 minLeftWidth: 100
 
                 menuItems: [
                     MenuItem {
                         property string filterValue: "all"
-                        text: qsTr("All")
+                        text: "Todos"
                         icon: "collections"
                         onClicked: {
                             if (root.nState) root.nState.wallpaperFilterType = "all"
@@ -358,7 +358,7 @@ PageBase {
                     },
                     MenuItem {
                         property string filterValue: "image"
-                        text: qsTr("Images")
+                        text: "Imágenes"
                         icon: "image"
                         onClicked: {
                             if (root.nState) root.nState.wallpaperFilterType = "image"
@@ -366,7 +366,7 @@ PageBase {
                     },
                     MenuItem {
                         property string filterValue: "gif"
-                        text: qsTr("GIFs")
+                        text: "GIFs"
                         icon: "gif"
                         onClicked: {
                             if (root.nState) root.nState.wallpaperFilterType = "gif"
@@ -374,7 +374,7 @@ PageBase {
                     },
                     MenuItem {
                         property string filterValue: "video"
-                        text: qsTr("Videos")
+                        text: "Vídeos"
                         icon: "movie"
                         onClicked: {
                             if (root.nState) root.nState.wallpaperFilterType = "video"
@@ -391,7 +391,7 @@ PageBase {
 
         StyledText {
             Layout.topMargin: Tokens.spacing.large
-            text: qsTr("Local wallpapers")
+            text: "Fondos locales"
             font: Tokens.font.title.small
         }
 
@@ -543,7 +543,7 @@ PageBase {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("No local wallpapers found")
+                        text: "No se encontraron fondos locales"
                         color: Colours.palette.m3outline
                         font: Tokens.font.title.small
                     }

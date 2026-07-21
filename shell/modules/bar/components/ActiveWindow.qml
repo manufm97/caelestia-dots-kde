@@ -16,7 +16,7 @@ Item {
 
     readonly property string windowTitle: {
         const hr = new Date().getHours();
-        const msg = hr < 12 ? "Good Morning" : hr < 18 ? "Good Afternoon" : hr < 22 ? "Good Evening" : "Good Night";
+        const msg = hr < 12 ? "Buenos días" : hr < 18 ? "Buenas tardes" : hr < 22 ? "Buenas tardes" : "Buenas noches";
         const username = Quickshell.env("USER") || "User";
         const formattedUser = username.charAt(0).toUpperCase() + username.slice(1);
         return `${msg}, ${formattedUser}!`;

@@ -133,7 +133,7 @@ StyledRect {
             anchors.bottom: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: qsTr("Usage")
+            text: "Uso"
             color: Colours.palette.m3onSurfaceVariant
             font: Tokens.font.body.small
         }

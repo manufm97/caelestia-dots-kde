@@ -57,7 +57,7 @@ PageBase {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Wallpaper disabled")
+                        text: "Fondo desactivado"
                         color: Colours.palette.m3onSurfaceVariant
                         font: Tokens.font.body.large
                     }
@@ -148,7 +148,7 @@ PageBase {
 
             IconTextButton {
                 icon: "wallpaper"
-                text: qsTr("Wallpapers")
+                text: "Fondos de pantalla"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -161,7 +161,7 @@ PageBase {
 
             IconTextButton {
                 icon: "image_search"
-                text: qsTr("Wallhaven")
+                text: "Wallhaven"
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true
@@ -174,7 +174,7 @@ PageBase {
 
             IconTextButton {
                 icon: "palette"
-                text: Strings.localizeEnglishSpelling(qsTr("Colours"))
+                text: Strings.localizeEnglishSpelling("Colores")
                 font: Tokens.font.body.large
                 isRound: true
                 shapeMorph: true

@@ -13,7 +13,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("All apps")
+    title: "Todas las apps"
     isSubPage: true
 
     ColumnLayout {

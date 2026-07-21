@@ -377,12 +377,12 @@ Item {
             StyledText {
                 text: {
                     if (root.state === "wallpapers")
-                        return qsTr("No wallpapers found");
+                        return "No se encontraron fondos";
                     if (root.state === "keybinds")
-                        return qsTr("No keybinds found");
+                        return "No se encontraron atajos";
                     if (root.state === "animations")
-                        return qsTr("No animations found");
-                    return qsTr("No results");
+                        return "No se encontraron animaciones";
+                    return "Sin resultados";
                 }
                 color: Colours.palette.m3onSurfaceVariant
                 font: Tokens.font.body.builders.large.weight(Font.Medium).build()
@@ -391,12 +391,12 @@ Item {
             StyledText {
                 text: {
                     if (root.state === "wallpapers")
-                        return Wallpapers.list.length === 0 ? qsTr("Try putting some wallpapers in %1").arg(Paths.shortenHome(Paths.wallsdir)) : qsTr("Try searching for something else");
+                        return Wallpapers.list.length === 0 ? "Prueba a poner fondos en %1".arg(Paths.shortenHome(Paths.wallsdir)) : "Prueba a buscar otra cosa";
                     if (root.state === "keybinds")
-                        return qsTr("No keybinds match your search");
+                        return "Ningún atajo coincide con tu búsqueda";
                     if (root.state === "animations")
-                        return qsTr("Try adding .lua files to\n~/.config/caelestia/animations/");
-                    return qsTr("Try searching for something else");
+                        return "Prueba añadir archivos .lua a\n~/.config/caelestia/animaciones/";
+                    return "Prueba a buscar otra cosa";
                 }
                 color: Colours.palette.m3onSurfaceVariant
                 font: Tokens.font.body.medium

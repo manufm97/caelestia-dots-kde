@@ -25,7 +25,7 @@ Item {
     property bool isHistoryTab: false
     property string currentChatId: ""
     property var currentRequest: null
-    
+
 
     Timer {
         id: typingTimer
@@ -35,7 +35,7 @@ Item {
         property string currentText: ""
         property int charIndex: 0
         property int targetIdx: -1
-        
+
         onTriggered: {
             if (targetIdx < 0 || targetIdx >= chatHistory.count) {
                 stop();
@@ -61,7 +61,7 @@ Item {
             listView.positionViewAtEnd();
         }
     }
-    
+
     property real savedContentY: -1
 
     // Refresh the model list when switching to an OpenAI-compatible provider, so a
@@ -792,391 +792,7 @@ Item {
         }
     }
 
-    // ---- Claude Code provider (subscription `claude` CLI, no API key) ----
-
-    function claudeCodeCwd() {
-        return Quickshell.env("HOME") || ".";
-    }
-
-    // Resolve the `claude` binary without depending on the shell PATH (Quickshell may
-    // not inherit ~/.local/bin). If the config value is left at the default "claude",
-    // point at the official installer location; a custom value is used verbatim.
-    function claudeCodeBinPath() {
-        var b = (GlobalConfig.ai.claudeCodeBin || "claude").trim();
-        if (b === "" || b === "claude") {
-            var home = Quickshell.env("HOME") || "";
-            if (home !== "")
-                return home + "/.local/bin/claude";
-            return "claude";
-        }
-        return b;
-    }
-
-    // ---- Claude accounts (multi-login via CLAUDE_CONFIG_DIR) ----
-    // The default ~/.claude login is always present as an implicit "Default" (id "").
-    // Additional accounts each get their own config dir under ~/.config/caelestia/claude/<id>.
-    function claudeAccounts() {
-        var list = [{ "id": "", "name": "Default", "dir": "" }];
-        try {
-            var parsed = JSON.parse(GlobalConfig.ai.claudeAccountsJson || "[]");
-            if (Array.isArray(parsed)) {
-                var home = Quickshell.env("HOME") || "";
-                for (var i = 0; i < parsed.length; i++) {
-                    var a = parsed[i];
-                    if (a && a.id)
-                        list.push({
-                            "id": String(a.id),
-                            "name": String(a.name || a.id),
-                            "dir": home + "/.config/caelestia/claude/" + String(a.id)
-                        });
-                }
-            }
-        } catch (e) {}
-        return list;
-    }
-
-    function activeClaudeAccountObj() {
-        var id = GlobalConfig.ai.activeClaudeAccount || "";
-        var list = claudeAccounts();
-        for (var i = 0; i < list.length; i++)
-            if (list[i].id === id)
-                return list[i];
-        return list[0];
-    }
-
-    function activeClaudeConfigDir() {
-        return activeClaudeAccountObj().dir || "";
-    }
-
-    // Real display names (login email / name) read from each account's .claude.json.
-    property var resolvedAccountNames: ({})
-
-    function accountJsonPath(id) {
-        var home = Quickshell.env("HOME") || "";
-        if (!id || id === "")
-            return home + "/.claude.json";
-        return home + "/.config/caelestia/claude/" + id + "/.claude.json";
-    }
-
-    function accountLabel(id) {
-        if (resolvedAccountNames[id])
-            return resolvedAccountNames[id];
-        var list = claudeAccounts();
-        for (var i = 0; i < list.length; i++)
-            if (list[i].id === id)
-                return list[i].name;
-        return "Default";
-    }
-
-    // One FileView per account resolves its login name from .claude.json.
-    Instantiator {
-        model: root.claudeAccountIds
-        delegate: FileView {
-            required property string modelData
-            path: root.accountJsonPath(modelData)
-            printErrors: false
-            watchChanges: false
-            onLoaded: {
-                try {
-                    var d = JSON.parse(text());
-                    var oa = d.oauthAccount || {};
-                    var nm = oa.displayName || oa.emailAddress || "";
-                    if (nm) {
-                        var map = root.resolvedAccountNames;
-                        map[modelData] = nm;
-                        root.resolvedAccountNames = Object.assign({}, map);
-                    }
-                } catch (e) {}
-            }
-        }
-    }
-
-    readonly property var claudeAccountIds: {
-        var l = [];
-        var a = claudeAccounts();
-        for (var i = 0; i < a.length; i++)
-            l.push(a[i].id);
-        return l;
-    }
-
-    // Env-var line injected into the dynamically-built Process (empty for Default).
-    function claudeCodeEnvSnippet() {
-        var dir = activeClaudeConfigDir();
-        if (dir && dir !== "")
-            return "    environment: ({ \"CLAUDE_CONFIG_DIR\": " + JSON.stringify(dir) + " })\n";
-        return "";
-    }
-
-    function logClaudeCodeStderr(proc, line) {
-        if (!line)
-            return;
-        var t = line.trim();
-        if (t === "")
-            return;
-        proc.errAcc = (proc.errAcc || "") + t + "\n";
-        Logger.log("[ClaudeCode] " + t);
-    }
-
-    // Heuristic: does this CLI output indicate the Claude account isn't logged in?
-    function isClaudeCodeAuthError(text) {
-        if (!text)
-            return false;
-        var t = String(text).toLowerCase();
-        return t.indexOf("login") !== -1
-            || t.indexOf("log in") !== -1
-            || t.indexOf("logged in") !== -1
-            || t.indexOf("not authenticated") !== -1
-            || t.indexOf("unauthorized") !== -1
-            || t.indexOf("authentication") !== -1
-            || t.indexOf("oauth") !== -1
-            || t.indexOf("invalid api key") !== -1
-            || t.indexOf("api key") !== -1
-            || t.indexOf("expired") !== -1
-            || t.indexOf("sign in") !== -1
-            || t.indexOf("credentials") !== -1;
-    }
-
-    function claudeCodeAuthHint() {
-        return "⚠️ Claude hesabınıza giriş yapılmamış görünüyor.\n\nBir terminal açıp `claude` komutunu çalıştırın ve aboneliğinizle giriş yapın (login), ardından burada tekrar deneyin.";
-    }
-
-    // Generate a short chat title via a one-shot `claude -p ... --output-format json`.
-    function generateClaudeCodeTitleAsync(chatId, firstMessage) {
-        if (!firstMessage)
-            return;
-        var safeMsg = firstMessage.substring(0, 200);
-        var prompt = "Output ONLY a concise 2-4 word title for the following message. No quotes, no trailing punctuation, no explanation.\n\nMessage: " + safeMsg;
-
-        var cmd = [claudeCodeBinPath(), "-p", prompt, "--output-format", "json", "--dangerously-skip-permissions"];
-        var commandStr = JSON.stringify(cmd);
-        var cwdStr = JSON.stringify(claudeCodeCwd());
-        var chatIdStr = JSON.stringify(chatId);
-        var qml =
-            "import QtQuick\n" +
-            "import Quickshell.Io\n" +
-            "Process {\n" +
-            "    id: tproc\n" +
-            "    command: " + commandStr + "\n" +
-            "    workingDirectory: " + cwdStr + "\n" +
-            claudeCodeEnvSnippet() +
-            "    stdout: StdioCollector { onStreamFinished: root.handleClaudeCodeTitle(" + chatIdStr + ", text || \"\", tproc); }\n" +
-            "    onExited: code => { if (code !== 0) tproc.destroy(); }\n" +
-            "}";
-        try {
-            var obj = Qt.createQmlObject(qml, root, "claudeCodeTitleProc");
-            obj.running = true;
-        } catch (e) {
-            Logger.log("[AI] claude-code title process error: " + e.message);
-        }
-    }
-
-    function handleClaudeCodeTitle(chatId, text, proc) {
-        try {
-            var parsed = JSON.parse(text);
-            if (parsed && parsed.result && !parsed.is_error)
-                applyGeneratedTitle(chatId, String(parsed.result));
-        } catch (e) {}
-        if (proc)
-            proc.destroy();
-    }
-
-    function stopClaudeCode() {
-        if (root.currentClaudeCodeProc) {
-            try {
-                root.currentClaudeCodeProc.running = false;
-            } catch (e) {}
-            root.currentClaudeCodeProc = null;
-        }
-    }
-
-    function sendClaudeCode(promptText) {
-        // Drop any stale empty assistant placeholder, then add a fresh bubble to stream into.
-        for (var i = chatHistory.count - 1; i >= 0; i--) {
-            var m = chatHistory.get(i);
-            if (!m.isUser && !m.isFinished && m.text === "")
-                chatHistory.remove(i);
-        }
-        chatHistory.append({
-            "isUser": false,
-            "text": "",
-            "isFinished": false,
-            "thoughtText": ""
-        });
-        listView.positionViewAtEnd();
-
-        var bin = claudeCodeBinPath();
-        var sid = claudeCodeSessionFor(currentChatId);
-
-        // Fresh session (new chat, or the active account changed) → seed it with the
-        // prior transcript so the new account continues the same conversation.
-        var promptToSend = promptText;
-        if (sid === "") {
-            var transcript = claudeCodeTranscript();
-            if (transcript !== "")
-                promptToSend = transcript;
-        }
-
-        var cmd = [bin, "-p", promptToSend, "--output-format", "stream-json", "--verbose", "--include-partial-messages", "--dangerously-skip-permissions"];
-
-        var mdl = GlobalConfig.ai.defaultClaudeCodeModel || "default";
-        if (mdl && mdl !== "default") {
-            cmd.push("--model");
-            cmd.push(mdl);
-        }
-
-        var eff = GlobalConfig.ai.claudeCodeEffort || "default";
-        if (eff && eff !== "default" && effortLevelsFor(mdl).indexOf(eff) !== -1) {
-            cmd.push("--effort");
-            cmd.push(eff);
-        }
-
-        if (sid !== "") {
-            cmd.push("--resume");
-            cmd.push(sid);
-        }
-
-        var commandStr = JSON.stringify(cmd);
-        var cwdStr = JSON.stringify(claudeCodeCwd());
-        var processQml =
-            "import QtQuick\n" +
-            "import Quickshell.Io\n" +
-            "Process {\n" +
-            "    id: proc\n" +
-            "    command: " + commandStr + "\n" +
-            "    workingDirectory: " + cwdStr + "\n" +
-            claudeCodeEnvSnippet() +
-            "    property string acc: \"\"\n" +
-            "    property string thought: \"\"\n" +
-            "    property string sess: \"\"\n" +
-            "    property string errAcc: \"\"\n" +
-            "    property bool done: false\n" +
-            "    stdout: SplitParser { onRead: line => root.onClaudeCodeLine(proc, line) }\n" +
-            "    stderr: SplitParser { onRead: line => root.logClaudeCodeStderr(proc, line) }\n" +
-            "    onExited: code => root.onClaudeCodeExit(proc, code)\n" +
-            "}";
-        try {
-            var obj = Qt.createQmlObject(processQml, root, "claudeCodeProc");
-            root.currentClaudeCodeProc = obj;
-            obj.running = true;
-        } catch (e) {
-            console.error("CLAUDE CODE PROCESS ERROR: " + e.message);
-            chatHistory.setProperty(chatHistory.count - 1, "text", "⚠️ Failed to launch Claude Code: " + e.message);
-            chatHistory.setProperty(chatHistory.count - 1, "isFinished", true);
-            isTyping = false;
-            isThinking = false;
-            inAgentLoop = false;
-            saveHistory();
-        }
-    }
-
-    function onClaudeCodeLine(proc, line) {
-        line = (line || "").trim();
-        if (line === "")
-            return;
-
-        var evt;
-        try {
-            evt = JSON.parse(line);
-        } catch (e) {
-            return; // non-JSON diagnostic output
-        }
-
-        if (evt.session_id)
-            proc.sess = evt.session_id;
-
-        if (evt.type === "system")
-            return;
-
-        // Token-level streaming (when the CLI emits partial messages).
-        if (evt.type === "stream_event" && evt.event) {
-            var ev = evt.event;
-            if (ev.type === "content_block_delta" && ev.delta) {
-                if (ev.delta.type === "text_delta") {
-                    proc.acc += ev.delta.text || "";
-                    if (isThinking) isThinking = false;
-                } else if (ev.delta.type === "thinking_delta") {
-                    proc.thought += ev.delta.thinking || "";
-                }
-                root.currentThoughtText = proc.thought.trim();
-                chatHistory.setProperty(chatHistory.count - 1, "thoughtText", proc.thought.trim());
-                chatHistory.setProperty(chatHistory.count - 1, "text", proc.acc.trim());
-                listView.positionViewAtEnd();
-            }
-            return;
-        }
-
-        // Whole assistant messages (also carry tool_use blocks). Used as the fallback
-        // when token-level partials aren't emitted, and to surface tool activity.
-        if (evt.type === "assistant" && evt.message && evt.message.content) {
-            var hasTool = false;
-            var textPart = "";
-            for (var i = 0; i < evt.message.content.length; i++) {
-                var b = evt.message.content[i];
-                if (b.type === "tool_use") {
-                    hasTool = true;
-                    if (b.name)
-                        currentActionText = "Running " + b.name + "...";
-                } else if (b.type === "text") {
-                    textPart += b.text || "";
-                }
-            }
-            if (textPart.trim() !== "" && proc.acc.indexOf(textPart) === -1) {
-                proc.acc = (proc.acc ? proc.acc + "\n\n" : "") + textPart;
-                if (isThinking) isThinking = false;
-                chatHistory.setProperty(chatHistory.count - 1, "text", proc.acc.trim());
-                listView.positionViewAtEnd();
-            }
-            if (hasTool && textPart.trim() === "")
-                isThinking = true;
-            return;
-        }
-
-        if (evt.type === "result") {
-            var resText = (evt.result !== undefined && evt.result !== null) ? String(evt.result) : "";
-            var errored = (evt.is_error === true) || (evt.subtype && String(evt.subtype).indexOf("error") !== -1);
-            if (errored && (isClaudeCodeAuthError(resText) || isClaudeCodeAuthError(proc.errAcc))) {
-                proc.acc = claudeCodeAuthHint();
-            } else if (proc.acc.trim() === "" && resText !== "") {
-                proc.acc = resText;
-            }
-            finalizeClaudeCode(proc);
-            return;
-        }
-    }
-
-    function finalizeClaudeCode(proc) {
-        if (proc.done)
-            return;
-        proc.done = true;
-        var finalText = (proc.acc || "").trim();
-        chatHistory.setProperty(chatHistory.count - 1, "text", finalText !== "" ? finalText : "(no output)");
-        chatHistory.setProperty(chatHistory.count - 1, "isFinished", true);
-        setClaudeCodeSession(currentChatId, proc.sess);
-        isTyping = false;
-        isThinking = false;
-        inAgentLoop = false;
-        currentActionText = "Thinking...";
-        saveHistory();
-        listView.positionViewAtEnd();
-    }
-
-    function onClaudeCodeExit(proc, code) {
-        if (!proc.done) {
-            if ((proc.acc || "").trim() === "") {
-                if (isClaudeCodeAuthError(proc.errAcc))
-                    chatHistory.setProperty(chatHistory.count - 1, "text", claudeCodeAuthHint());
-                else if (code !== 0)
-                    chatHistory.setProperty(chatHistory.count - 1, "text",
-                        "⚠️ Claude Code çalıştırılamadı (çıkış kodu " + code + "). `claude` CLI kurulu ve giriş yapılmış mı? Bir terminalde `claude` çalıştırıp giriş yapmayı deneyin.");
-            }
-            finalizeClaudeCode(proc);
-        }
-        if (root.currentClaudeCodeProc === proc)
-            root.currentClaudeCodeProc = null;
-        proc.destroy();
-    }
-
-    property string currentActionText: "Thinking..."
+    property string currentActionText: "Pensando..."
 
     function fetchOllamaModels() {
         var ollamaUrl = GlobalConfig.ai.ollamaUrl || "http://localhost:11434";
@@ -1366,14 +982,14 @@ Item {
                 "thoughtText": msg.thoughtText || ""
             });
         }
-        
+
         if (msgs.length === 0) return;
-        
+
         var found = false;
         for (var j = 0; j < allChatSessions.length; j++) {
             if (allChatSessions[j].id === currentChatId) {
                 allChatSessions[j].messages = msgs;
-                
+
                 var firstUser = null;
                 for (var k = 0; k < msgs.length; k++) {
                     if (msgs[k].isUser) { firstUser = msgs[k]; break; }
@@ -1387,31 +1003,31 @@ Item {
                 break;
             }
         }
-        
+
         if (!found) {
             var firstUserMsg = null;
             for (var m = 0; m < msgs.length; m++) {
                 if (msgs[m].isUser) { firstUserMsg = msgs[m]; break; }
             }
-            
+
             var initialTitle = "New Chat";
-            
+
             allChatSessions.unshift({
                 "id": currentChatId || ("chat_" + Date.now()),
                 "title": initialTitle,
                 "messages": msgs
             });
-            
+
             historySessionsModel.insert(0, {
                 "id": currentChatId || ("chat_" + Date.now()),
                 "title": initialTitle
             });
-            
+
             if (firstUserMsg) {
                 generateChatTitleAsync(currentChatId, firstUserMsg.text);
             }
         }
-        
+
         GlobalConfig.ai.ollamaHistoryJson = JSON.stringify(allChatSessions);
     }
 
@@ -1432,7 +1048,7 @@ Item {
                     break;
                 }
             }
-            
+
             GlobalConfig.ai.ollamaHistoryJson = JSON.stringify(allChatSessions);
 
             if (currentChatId === id) {
@@ -1551,11 +1167,11 @@ Item {
 
     function updateChatTitle(chatId, title) {
         if (!title || !chatId) return;
-        
+
         for (var i = 0; i < allChatSessions.length; i++) {
             if (allChatSessions[i].id === chatId) {
                 allChatSessions[i].title = title;
-                
+
                 var inModel = false;
                 for (var j = 0; j < historySessionsModel.count; j++) {
                     if (historySessionsModel.get(j).id === chatId) {
@@ -1564,14 +1180,14 @@ Item {
                         break;
                     }
                 }
-                
+
                 if (!inModel) {
                     historySessionsModel.insert(0, {
                         "id": chatId || "",
                         "title": title || "New Chat"
                     });
                 }
-                
+
                 GlobalConfig.ai.ollamaHistoryJson = JSON.stringify(allChatSessions);
                 break;
             }
@@ -1626,19 +1242,19 @@ Item {
         inAgentLoop = true;
         currentThoughtText = "";
         isThoughtExpanded = false;
-        
+
         if (isSystemToolResult) {
             if (toolName === "web_search" || toolName === "read_webpage") {
-                currentActionText = "Reading results...";
+                currentActionText = "Leyendo resultados...";
             } else if (toolName === "take_screenshot") {
-                currentActionText = "Analyzing screen...";
+                currentActionText = "Analizando pantalla...";
             } else if (toolName === "get_weather") {
-                currentActionText = "Analyzing weather...";
+                currentActionText = "Analizando clima...";
             } else {
-                currentActionText = "Thinking...";
+                currentActionText = "Pensando...";
             }
         } else {
-            currentActionText = "Thinking...";
+            currentActionText = "Pensando...";
         }
 
         // Claude Code (subscription CLI) uses a Process, not XMLHttpRequest.
@@ -1673,38 +1289,38 @@ Item {
             xhr.open("POST", ollamaUrl + "/api/chat", true);
             xhr.setRequestHeader("Content-Type", "application/json");
         }
-        
+
         var processedTextLength = 0;
         var accumulatedThoughtText = "";
         var accumulatedContentText = "";
         var rawAccumulatedContentText = "";
         var finalToolCalls = null;
-        
+
         for (var i = chatHistory.count - 1; i >= 0; i--) {
             var m = chatHistory.get(i);
             if (!m.isUser && !m.isFinished && m.text === "") {
                 chatHistory.remove(i);
             }
         }
-        
+
         chatHistory.append({
             "isUser": false,
             "text": "",
             "isFinished": false,
             "thoughtText": ""
         });
-        
+
         listView.positionViewAtEnd();
-        
+
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 3 || xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     var currentText = xhr.responseText;
                     var unparsed = currentText.substring(processedTextLength);
                     var lines = unparsed.split('\n');
-                    
+
                     var linesToProcess = (xhr.readyState === XMLHttpRequest.DONE) ? lines.length : lines.length - 1;
-                    
+
                     for (var i = 0; i < linesToProcess; i++) {
                         var rawLine = lines[i];
                         var line = rawLine.trim();
@@ -1823,19 +1439,19 @@ Item {
                         listView.positionViewAtEnd();
                     }
                 }
-                
+
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                             root.rateLimitRetries = 0;
                     chatHistory.setProperty(chatHistory.count - 1, "isFinished", true);
                         saveHistory();
-                        
+
                         var enableTools = GlobalConfig.ai.enableCelestialMode;
                         var textToolCalls = enableTools ? parseTextToolCalls(rawAccumulatedContentText) : [];
 
                         if (textToolCalls.length > 0) {
                             if (enableTools) {
-                                currentActionText = "Using tools...";
+                                currentActionText = "Usando herramientas...";
                                 accumulatedToolResults = "";
                                 accumulatedToolImage = "";
                                 runningToolsCount = 0;
@@ -1851,29 +1467,29 @@ Item {
                                     }
 
                                     if (toolName === "take_screenshot") {
-                                        currentActionText = "Analyzing screen...";
-                                        var screenCmd = `spectacle -b -m -n -o ${Paths.runtimeTemp("orion_screenshot.png")}`;
+                                        currentActionText = "Analizando pantalla...";
+                                        var screenCmd = `grim -g "$(hyprctl monitors -j | jq -r '.[] | select(.focused) | \\"\\\\(.x),\\\\(.y) \\\\(.width)x\\\\(.height)\\"')" ${Paths.runtimeTemp("orion_screenshot.png")}`;
                                         runAgentCommand(screenCmd, "screenshot_take");
 
                                     } else if (toolName === "web_search") {
-                                        currentActionText = "Searching the web...";
+                                        currentActionText = "Buscando en la web...";
                                         var query = String(args.query || "");
                                         var page = args.page || 1;
                                         runAgentCommand(["env", "PYTHONIOENCODING=utf8", "python3", Quickshell.shellDir + "/scripts/orion_search.py", "--mode", "search", "--query", query, "--page", String(page)], "exec_" + toolName);
 
                                     } else if (toolName === "read_webpage") {
-                                        currentActionText = "Reading webpage...";
+                                        currentActionText = "Leyendo página web...";
                                         var url = String(args.url || "");
                                         runAgentCommand(["env", "PYTHONIOENCODING=utf8", "python3", Quickshell.shellDir + "/scripts/orion_search.py", "--mode", "read", "--url", url], "exec_" + toolName);
 
                                     } else if (toolName === "open_app") {
-                                        currentActionText = "Opening app...";
+                                        currentActionText = "Abriendo aplicación...";
                                         var app = String(args.app_name || "");
                                         var safeApp = shellQuote("Name=.*" + app);
                                         runAgentCommand(["sh", "-c", 'grep -i -m 1 "^Exec=" $(find /usr/share/applications ~/.local/share/applications -name "*.desktop" -exec grep -il "$1" {} + 2>/dev/null) | cut -d "=" -f 2- | sed "s/ %[a-zA-Z]//g" | xargs -I {} sh -c "setsid {} >/dev/null 2>&1 &"', "--", safeApp], "exec_" + toolName);
 
                                     } else if (toolName === "set_timer") {
-                                        currentActionText = "Setting timer...";
+                                        currentActionText = "Configurando temporizador...";
                                         var secs = Number(args.seconds) || 5;
                                         var msg = String(args.message || "Timer finished");
                                         var timerQml = "import QtQuick; Timer { interval: " + (secs * 1000) + "; running: true; onTriggered: { root.runAgentCommand(['notify-send', 'Orion Timer', " + JSON.stringify(msg) + "], 'timer_trigger'); destroy(); } }";
@@ -1881,12 +1497,12 @@ Item {
                                         accumulatedToolResults += "Tool: set_timer\nResult: Timer set for " + secs + " seconds with message: " + msg + "\n\n";
 
                                     } else if (toolName === "get_weather") {
-                                        currentActionText = "Checking weather...";
-                                        var weatherStr = Weather.city + ": " + Weather.temp + " (" + Weather.description + "). Humidity: " + Weather.humidity + "%, Wind: " + Weather.windSpeed + " km/h";
+                                        currentActionText = "Consultando clima...";
+                                        var weatherStr = Weather.city + ": " + Weather.temp + " (" + Weather.description + "). Humedad: " + Weather.humidity + "%, Viento: " + Weather.windSpeed + " km/h";
                                         accumulatedToolResults += "Tool: get_weather\nResult: Local weather from system dashboard: " + weatherStr + "\n\n";
 
                                     } else if (toolName === "caelestia_command") {
-                                        currentActionText = "Running caelestia...";
+                                        currentActionText = "Ejecutando caelestia...";
                                         var subcmd = String(args.subcommand || "");
                                         var subargs = String(args.args || "").trim();
                                         var cmdArr = ["caelestia", subcmd];
@@ -1904,80 +1520,26 @@ Item {
                                     if (accumulatedToolResults !== "") {
                                         checkToolsFinished();
                                     } else {
-                                        currentActionText = "Thinking...";
+                                        currentActionText = "Pensando...";
                                         isTyping = false;
                                         isThinking = false;
                                         inAgentLoop = false;
                                     }
                                 }
                             } else {
-                                currentActionText = "Thinking...";
+                                currentActionText = "Pensando...";
                                 isTyping = false;
                                 isThinking = false;
                                 inAgentLoop = false;
                             }
                         } else {
-                            currentActionText = "Thinking...";
+                            currentActionText = "Pensando...";
                             isTyping = false;
                             isThinking = false;
                             inAgentLoop = false;
                         }
                     } else {
-                        var providerName = root.providerLabel(root.provider);
-                        // Providers explain themselves in the error body — a rate limit
-                        // even says how long to wait. Surfacing that beats a bare status
-                        // code the user can do nothing with.
-                        var apiDetail = "";
-                        try {
-                            const errBody = JSON.parse(xhr.responseText);
-                            const e = Array.isArray(errBody) ? (errBody[0] || {}).error : errBody.error;
-                            if (e) {
-                                // OpenRouter wraps the upstream provider's error: its own
-                                // message is just "Provider returned error", and the part
-                                // worth reading (which model, which provider, what to do)
-                                // sits in metadata.raw.
-                                const raw = e.metadata && e.metadata.raw ? String(e.metadata.raw) : "";
-                                const provider = e.metadata && e.metadata.provider_name ? String(e.metadata.provider_name) : "";
-                                if (raw)
-                                    apiDetail = " " + (provider ? provider + ": " : "") + raw.split("\n")[0];
-                                else if (e.message)
-                                    apiDetail = " " + String(e.message).split("\n")[0];
-                            }
-                        } catch (e) {}
-                        // A rate limit is not really a failure — the provider told us
-                        // when it will accept the next request, so wait that long and
-                        // finish the answer instead of dropping it on the user.
-                        // A daily quota does not come back in the seconds the provider
-                        // suggests retrying after, so retrying just spends more of the
-                        // very allowance that ran out. Only wait out short-term limits.
-                        const perDayQuota = /PerDay|per day/i.test(xhr.responseText || "");
-                        if (xhr.status === 429 && perDayQuota)
-                            root.cancelRateLimitRetry();
-
-                        if (xhr.status === 429 && !perDayQuota && root.rateLimitRetries < root.maxRateLimitRetries) {
-                            if ((xhr.responseText || "").indexOf("free_tier") !== -1)
-                                root.onFreeTier = true;
-                            const waitMs = root.rateLimitDelayMs(xhr);
-                            root.rateLimitRetries++;
-                            root.rateLimitSecondsLeft = Math.max(1, Math.round(waitMs / 1000));
-                            root.currentActionText = qsTr("Rate limited — retrying in %1s…").arg(root.rateLimitSecondsLeft);
-                            root.isTyping = true;
-                            root.isThinking = true;
-                            rateLimitRetryTimer.forChat = root.currentChatId;
-                            rateLimitRetryTimer.forModel = root.activeModel();
-                            rateLimitRetryTimer.retryFn = () => root.sendPrompt(promptText, isSystemToolResult, base64Image, toolName, true);
-                            rateLimitRetryTimer.restart();
-                            return;
-                        }
-
-                        var hint = "";
-                        if (xhr.status === 429 && perDayQuota)
-                            hint = " This model's daily free quota is used up — it resets tomorrow. Pick another model, or use Claude Code, which is not on this quota.";
-                        else if (xhr.status === 429)
-                            hint = " Rate limit reached and still limited after " + root.maxRateLimitRetries + " retries — wait a minute and try again.";
-                        else if (root.needsApiKey && (xhr.status === 401 || xhr.status === 403))
-                            hint = " Check your API key.";
-                        var errMsg = (xhr.status === 0) ? "Generation cancelled" : (providerName + " request failed (status " + xhr.status + ")." + hint + apiDetail);
+                        var errMsg = (xhr.status === 0) ? "Generación cancelada" : "Ollama falló (estado %1).".arg(xhr.status);
                         var currentText = chatHistory.get(chatHistory.count - 1).text;
                         if (currentText.trim() === "") {
                             chatHistory.setProperty(chatHistory.count - 1, "text", errMsg);
@@ -1999,7 +1561,7 @@ Item {
         if (enableTools) {
             sysPrompt += "\n\nYou have access to the following tools. To call a tool, output a <tool_call> block containing ONLY valid JSON. Do not output any text inside the block other than the JSON object.\n\nFORMAT:\n<tool_call>\n{\"name\": \"TOOL_NAME\", \"args\": {ARGUMENTS}}\n</tool_call>\n\nAVAILABLE TOOLS:\n- take_screenshot: Captures the user's screen for visual analysis. Args: none.\n  Example: <tool_call>\n{\"name\": \"take_screenshot\", \"args\": {}}\n</tool_call>\n\n- web_search: Searches the web. Args: query (string, required), page (number, optional).\n  Example: <tool_call>\n{\"name\": \"web_search\", \"args\": {\"query\": \"latest news\"}}\n</tool_call>\n\n- read_webpage: Fetches and reads the text of a URL. Args: url (string, required).\n  Example: <tool_call>\n{\"name\": \"read_webpage\", \"args\": {\"url\": \"https://example.com\"}}\n</tool_call>\n\n- open_app: Launches an installed desktop application. Args: app_name (string, required).\n  Example: <tool_call>\n{\"name\": \"open_app\", \"args\": {\"app_name\": \"dolphin\"}}\n</tool_call>\n\n- set_timer: Sets a countdown timer that fires a desktop notification. Args: seconds (number, required), message (string, required).\n  Example: <tool_call>\n{\"name\": \"set_timer\", \"args\": {\"seconds\": 300, \"message\": \"Break time!\"}}\n</tool_call>\n\n- get_weather: Gets the current local weather from the system dashboard. Args: none.\n  Example: <tool_call>\n{\"name\": \"get_weather\", \"args\": {}}\n</tool_call>\n\n- caelestia_command: Runs a caelestia CLI command. Valid subcommands: shell, toggle, scheme, search, screenshot, record, clipboard, emoji, wallpaper, resizer, install, update. Args: subcommand (string, required), args (string, optional extra flags).\n  Example: <tool_call>\n{\"name\": \"caelestia_command\", \"args\": {\"subcommand\": \"wallpaper\", \"args\": \"--random\"}}\n</tool_call>\n\nCRITICAL RULES:\n1. ALWAYS use a <tool_call> block to call a tool. NEVER pretend to perform actions in plain text.\n2. You may output a brief acknowledgment before the <tool_call> block (e.g. 'Opening Dolphin for you!') but you MUST include the block.\n3. You can include multiple <tool_call> blocks in one response.\n4. After receiving tool results, respond naturally to the user based on what the tool returned.";
         }
-        
+
         var requestBody;
         if (root.isClaude) {
             // Anthropic Messages API: system prompt is a top-level field; messages must
@@ -2132,7 +1694,7 @@ Item {
                      radius: Tokens.rounding.full
                      color: Colours.palette.m3primary
                      x: isHistoryTab ? historyTab.x : chatTab.x
-                     
+
                      Behavior on x { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                      Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                  }
@@ -2145,7 +1707,7 @@ Item {
                          id: chatTab
                          height: parent.height
                          width: !isHistoryTab ? 40 : chatContent.implicitWidth + Tokens.padding.medium * 2
-                         
+
 
                          Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
@@ -2178,7 +1740,7 @@ Item {
                          id: historyTab
                          height: parent.height
                          width: isHistoryTab ? 40 : historyContent.implicitWidth + Tokens.padding.medium * 2
-                         
+
 
                          Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
@@ -2199,7 +1761,7 @@ Item {
                              }
                              Text {
                                  anchors.verticalCenter: parent.verticalCenter
-                                 text: "History"
+                                 text: "Historial"
                                  color: isHistoryTab ? Colours.palette.m3onPrimary : Colours.palette.m3onSurfaceVariant
                                  font: Tokens.font.body.small
                                  visible: !isHistoryTab
@@ -2280,7 +1842,7 @@ Item {
                  menuItems: modelVariants.instances
 
                  fallbackIcon: "smart_toy"
-                 fallbackText: qsTr("Select Model")
+                 fallbackText: "Seleccionar modelo"
                  stateLayer.disabled: true
 
                  Variants {
@@ -2362,7 +1924,7 @@ Item {
 
 
          }
-         
+
          Item {
              id: contentStack
              anchors.top: selectorRow.bottom
@@ -2388,7 +1950,7 @@ Item {
                      spacing: Tokens.spacing.medium
                      model: chatHistory
                      boundsBehavior: Flickable.StopAtBounds
-                     
+
                      ColumnLayout {
                          anchors.centerIn: parent
                          opacity: chatHistory.count === 0 && !isTyping && !isThinking ? 1.0 : 0.0
@@ -2425,14 +1987,14 @@ Item {
                              color: Colours.palette.m3onSurfaceVariant
 
                              property var phrases: [
-                                 "Ask away, %1!",
-                                 "How can I help you today, %1?",
-                                 "What's on your mind, %1?",
-                                 "Ready when you are, %1!",
-                                 "Let's get started, %1.",
-                                 "What shall we explore today, %1?",
-                                 "I'm all ears, %1!"
-                             ]
+                                "¡Pregunta lo que quieras, %1!",
+                                "¿Cómo puedo ayudarte hoy, %1?",
+                                "¿En qué piensas, %1?",
+                                "¡Listo cuando quieras, %1!",
+                                "Empecemos, %1.",
+                                "¿Qué exploramos hoy, %1?",
+                                "¡Soy todo oídos, %1!"
+                            ]
 
                              Component.onCompleted: {
                                  var user = Quickshell.env("USER") || "user";
@@ -2452,7 +2014,7 @@ Item {
                          height: isThinking ? bubbleBg.height + Tokens.spacing.medium : 0
                          visible: opacity > 0
                          opacity: isThinking ? 1 : 0
-                         
+
                          Behavior on height { Anim { type: Anim.DefaultSpatial } }
                          Behavior on opacity { Anim { type: Anim.DefaultSpatial } }
 
@@ -2475,29 +2037,29 @@ Item {
                                  anchors.fill: parent
                                  anchors.margins: Tokens.padding.medium
                                  spacing: Tokens.spacing.small
-                                 
+
                                  Row {
                                      spacing: Tokens.spacing.small
-                                     
+
                                      LoadingIndicator {
                                          width: 20
                                          height: 20
                                          color: Colours.palette.m3primary
                                      }
-                                     
+
                                      // M3 Expressive Animated Text Wrapper
                                      Item {
                                          width: mainText.implicitWidth
                                          height: mainText.implicitHeight
                                          // The bubble smoothly expands/shrinks as the text width changes
                                          Behavior on width { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                                         
+
                                          StyledText {
                                              id: mainText
                                              text: displayedText
                                              color: Colours.palette.m3onSurfaceVariant
                                              font: Tokens.font.body.small
-                                             
+
                                              property string displayedText: root.currentActionText
                                              property string nextText: ""
 
@@ -2536,13 +2098,13 @@ Item {
                                              }
                                          }
                                      }
-                                     
+
                                      Item {
                                          visible: root.currentThoughtText !== ""
                                          width: Tokens.spacing.medium
                                          height: 1
                                      }
-                                     
+
                                      Item {
                                          visible: root.currentThoughtText !== ""
                                          width: thoughtRowFooter.implicitWidth
@@ -2571,7 +2133,7 @@ Item {
                                      width: footerThoughtContent.width
                                      height: root.isThoughtExpanded ? footerThoughtContent.implicitHeight : 0
                                      clip: true
-                                     
+
                                      Behavior on height { NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
 
                                      TextEdit {
@@ -2587,7 +2149,7 @@ Item {
                                          selectionColor: Colours.palette.m3primary
                                          selectedTextColor: Colours.palette.m3onPrimary
                                          opacity: root.isThoughtExpanded ? 1.0 : 0.0
-                                         
+
                                          Behavior on opacity {
                                              SequentialAnimation {
                                                  PauseAnimation { duration: root.isThoughtExpanded ? 100 : 0 }
@@ -2611,26 +2173,26 @@ Item {
                          width: listView.width - Tokens.padding.large
                          visible: (!delegateItem.isFinished && isThinking) ? false : (delegateItem.text !== "" || delegateItem.thoughtText !== "")
                          height: visible ? bubbleRect.height : 0
-                         
+
                          scale: 0.0
                          opacity: 0.0
-                         
+
                          Component.onCompleted: {
                              popInAnim.start();
                          }
-                         
+
                          ParallelAnimation {
                              id: popInAnim
                              NumberAnimation { target: delegateItem; property: "scale"; from: 0.8; to: 1.0; duration: 300; easing.type: Easing.OutBack }
                              NumberAnimation { target: delegateItem; property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutQuad }
                          }
-                         
+
                          SequentialAnimation {
                              id: popDoneAnim
                              NumberAnimation { target: delegateItem; property: "scale"; from: 1.0; to: 1.02; duration: 100; easing.type: Easing.OutQuad }
                              NumberAnimation { target: delegateItem; property: "scale"; from: 1.02; to: 1.0; duration: 150; easing.type: Easing.OutSine }
                          }
-                         
+
                          onIsFinishedChanged: {
                              if (isFinished) popDoneAnim.start();
                          }
@@ -2640,7 +2202,7 @@ Item {
                              readonly property real maxBubbleWidth: delegateItem.width * 0.85
                              anchors.right: delegateItem.isUser ? parent.right : undefined
                              anchors.left: delegateItem.isUser ? undefined : parent.left
-                             
+
                              // Let implicitWidth dictate width (with +8 buffer for layout engine) to stop short words from splitting line breaks
                              width: Math.min(maxBubbleWidth, bubbleLayout.implicitWidth + Tokens.padding.medium * 2 + 8)
                              height: bubbleLayout.implicitHeight + Tokens.padding.medium * 2
@@ -2652,7 +2214,7 @@ Item {
                              topRightRadius: Tokens.rounding.large
                              bottomLeftRadius: delegateItem.isUser ? Tokens.rounding.large : 4
                              bottomRightRadius: delegateItem.isUser ? 4 : Tokens.rounding.large
-                             
+
                              Column {
                                  id: bubbleLayout
                                  anchors.top: parent.top
@@ -2673,7 +2235,7 @@ Item {
                                          id: thoughtRow
                                          spacing: Tokens.spacing.small
                                          Text {
-                                             text: "Thought Process"
+                                             text: "Proceso de pensamiento"
                                              color: Colours.palette.m3onSurfaceVariant
                                              font: Tokens.font.body.small
                                          }
@@ -2698,16 +2260,16 @@ Item {
                                      width: thoughtContent.width
                                      height: bubbleLayout.isExpanded ? thoughtContent.implicitHeight : 0
                                      clip: true
-                                     
+
                                      Behavior on height { NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
 
                                      TextEdit {
                                          id: thoughtContent
                                          width: Math.min(implicitWidth, bubbleRect.maxBubbleWidth - Tokens.padding.medium * 2)
                                          textFormat: Text.MarkdownText
-                                         
+
                                          property string fullThought: bubbleLayout.delegateThought
-                                         
+
                                          property bool cursorVisible: true
                                          Timer {
                                              running: !delegateItem.isFinished
@@ -2715,9 +2277,9 @@ Item {
                                              interval: 400
                                              onTriggered: thoughtContent.cursorVisible = !thoughtContent.cursorVisible
                                          }
-                                         
+
                                          text: delegateItem.isFinished ? fullThought : fullThought + (cursorVisible ? "▌" : "")
-                                         
+
                                          color: Colours.palette.m3onSurfaceVariant
                                          font: Tokens.font.body.small
                                          wrapMode: Text.Wrap
@@ -2726,7 +2288,7 @@ Item {
                                          selectionColor: Colours.palette.m3primary
                                          selectedTextColor: Colours.palette.m3onPrimary
                                          opacity: bubbleLayout.isExpanded ? 1.0 : 0.0
-                                         
+
                                          Behavior on opacity {
                                              SequentialAnimation {
                                                  PauseAnimation { duration: bubbleLayout.isExpanded ? 100 : 0 }
@@ -2740,9 +2302,9 @@ Item {
                                      id: messageText
                                      textFormat: Text.MarkdownText
                                      width: Math.min(implicitWidth, bubbleRect.maxBubbleWidth - Tokens.padding.medium * 2)
-                                     
+
                                      property string fullText: delegateItem.text !== undefined ? delegateItem.text : ""
-                                     
+
                                      property bool cursorVisible: true
                                      Timer {
                                          running: !delegateItem.isFinished
@@ -2750,9 +2312,9 @@ Item {
                                          interval: 400
                                          onTriggered: messageText.cursorVisible = !messageText.cursorVisible
                                      }
-                                     
+
                                      text: delegateItem.isFinished ? fullText : fullText + (cursorVisible ? "▌" : "")
-                                     
+
                                      color: delegateItem.isUser ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
                                      font: Tokens.font.body.small
                                      wrapMode: Text.Wrap
@@ -2948,11 +2510,11 @@ Item {
                              id: inputScroll
                              Layout.fillWidth: true
                              Layout.fillHeight: true
-                             
+
                              TextArea {
                                  id: inputArea
                                  verticalAlignment: TextInput.AlignVCenter
-                                 placeholderText: qsTr("Ask assistant...")
+                                 placeholderText: "Preguntar al asistente..."
                                  color: Colours.palette.m3onSurface
                                  placeholderTextColor: Colours.palette.m3outline
                                  font: Tokens.font.body.small
@@ -3014,7 +2576,7 @@ Item {
                                  shape: root.isTyping ? MaterialShape.Cookie4Sided : (inputArea.text.length > 0 ? MaterialShape.Arrow : MaterialShape.Circle)
                                  scale: (inputArea.text.length === 0 && !root.isTyping) ? 1 : sendMouse.pressed ? 0.6 : sendMouse.containsMouse ? 0.8 : 0.7
                                  rotation: 0
-                                 
+
                                  Behavior on scale { Anim { type: Anim.FastSpatial } }
                                  Behavior on color { CAnim {} }
 
@@ -3070,7 +2632,7 @@ Item {
                      anchors.right: parent.right
                      anchors.bottom: newChatButton.top
                      anchors.bottomMargin: Tokens.spacing.medium
-                     
+
                      cellWidth: width / 2
                      cellHeight: 90
                      model: historySessionsModel
@@ -3133,7 +2695,7 @@ Item {
                                      Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                      Layout.preferredWidth: 24
                                      Layout.preferredHeight: 24
-                                     
+
                                      StyledRect {
                                          anchors.fill: parent
                                          radius: 12
@@ -3187,7 +2749,7 @@ Item {
                              font: Tokens.font.icon.small
                          }
                          Text {
-                             text: "Clear All"
+                             text: "Borrar todo"
                              color: Colours.palette.m3onErrorContainer
                              font: Tokens.font.body.small
                          }
@@ -3219,7 +2781,7 @@ Item {
                              font: Tokens.font.icon.small
                          }
                          Text {
-                             text: "New Chat"
+                             text: "Nuevo chat"
                              color: Colours.palette.m3onPrimaryContainer
                              font: Tokens.font.body.small
                          }

@@ -23,8 +23,8 @@ Toolbar {
     ToolbarTabBar {
         id: tabBar
         tabButtonList: [
-            {"icon": "content_cut", "name": qsTr("Screenshot")},
-            {"icon": "image_search", "name": qsTr("Google Lens")}
+            {"icon": "content_cut", "name": "Captura de pantalla"},
+            {"icon": "image_search", "name": "Google Lens"}
         ]
         currentIndex: root.action === RegionSelection.SnipAction.Search ? 1 : 0
         onCurrentIndexChanged: {

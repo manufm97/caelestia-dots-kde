@@ -36,7 +36,7 @@ Item {
                 if (xhr.status === 200) {
                     parseNews(xhr.responseText);
                 } else {
-                    errorMessage = qsTr("Failed to fetch news (Status: %1)").arg(xhr.status);
+                    errorMessage = "Error al obtener noticias (Estado: %1)".arg(xhr.status);
                 }
             }
         };
@@ -78,7 +78,7 @@ Item {
         }
         
         if (newsModel.count === 0) {
-            errorMessage = qsTr("No news articles found.");
+            errorMessage = "No se encontraron artículos.";
         }
     }
 
@@ -98,7 +98,7 @@ Item {
 
             StyledText {
                 Layout.fillWidth: true
-                text: qsTr("Arch Linux News")
+                text: "Noticias de Arch Linux"
                 font: Tokens.font.title.medium
                 color: root.cOnSurface
             }
@@ -126,7 +126,7 @@ Item {
 
             StyledText {
                 anchors.centerIn: parent
-                text: qsTr("Fetching latest news...")
+                text: "Obteniendo últimas noticias..."
                 color: root.cOnSurfaceVariant
             }
         }

@@ -96,13 +96,13 @@ Item {
                             id: tabRepeater
                             model: {
                                 var tabs = [
-                                    { id: "notifications", label: qsTr("Notifications"), icon: "notifications" }
+                                    { id: "notifications", label: "Notificaciones", icon: "notifications" }
                                 ];
                                 if (root.aiEnabled) {
                                     tabs.push({ id: "ai", label: qsTr("AI Assistant"), icon: "smart_toy" });
                                 }
                                 if (GlobalConfig.ai.showNews) {
-                                    tabs.push({ id: "news", label: qsTr("News"), icon: "newspaper" });
+                                    tabs.push({ id: "news", label: "Noticias", icon: "newspaper" });
                                 }
                                 return tabs;
                             }
@@ -155,7 +155,7 @@ Item {
                         id: indicator
                         anchors.verticalCenter: parent.bottom
                         implicitHeight: 6
-                        
+
                         property int activeIndex: {
                             var arr = tabRepeater.model;
                             for (var i = 0; i < arr.length; i++) {
@@ -206,7 +206,7 @@ Item {
                         visible: opacity > 0
                         props: root.props
                         visibilities: root.visibilities
-                        
+
                         Behavior on x { Anim { type: Anim.DefaultSpatial } }
                         Behavior on opacity { Anim { type: Anim.DefaultSpatial } }
                     }
@@ -223,11 +223,11 @@ Item {
                         x: root.activeTab === "ai" ? 0 : (indicator.activeIndex < 1 ? width : -width)
                         opacity: root.activeTab === "ai" ? 1 : 0
                         visible: opacity > 0
-                        
+
                         sourceComponent: AiAssistant {
                             anchors.fill: parent
                         }
-                        
+
                         Behavior on x { Anim { type: Anim.DefaultSpatial } }
                         Behavior on opacity { Anim { type: Anim.DefaultSpatial } }
                     }
@@ -239,7 +239,7 @@ Item {
                         x: root.activeTab === "news" ? 0 : width
                         opacity: root.activeTab === "news" ? 1 : 0
                         visible: opacity > 0
-                        
+
                         Behavior on x { Anim { type: Anim.DefaultSpatial } }
                         Behavior on opacity { Anim { type: Anim.DefaultSpatial } }
                     }

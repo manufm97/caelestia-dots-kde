@@ -367,8 +367,8 @@ PageBase {
             visible: !root.branchDataLoading
             first: true
             icon: "folder"
-            label: qsTr("Open Backup Folder")
-            status: qsTr("View your previously backed-up configuration files")
+            label: "Abrir carpeta de respaldo"
+            status: "Ver tus respaldos de configuración"
             onClicked: {
                 backupFolderProcess.running = true;
             }

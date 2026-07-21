@@ -22,31 +22,31 @@ Item {
             {
                 component: dashComponent,
                 iconName: "dashboard",
-                text: qsTr("Dashboard"),
+                text: "Panel principal",
                 enabled: Config.dashboard.showDashboard
             },
             {
                 component: mediaComponent,
                 iconName: "queue_music",
-                text: qsTr("Media"),
+                text: "Medios",
                 enabled: Config.dashboard.showMedia
             },
             {
                 component: performanceComponent,
                 iconName: "speed",
-                text: qsTr("Performance"),
+                text: "Rendimiento",
                 enabled: Config.dashboard.showPerformance
             },
             {
                 component: weatherComponent,
                 iconName: "cloud",
-                text: qsTr("Weather"),
+                text: "Clima",
                 enabled: Config.dashboard.showWeather
             },
             {
                 component: terminalComponent,
                 iconName: "terminal",
-                text: qsTr("Terminal"),
+                text: "Terminal",
                 enabled: Config.dashboard.showTerminal
             }
         ];

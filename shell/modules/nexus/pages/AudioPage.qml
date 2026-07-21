@@ -12,7 +12,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Audio")
+    title: "Audio"
 
     function addApp() {
         let appName = silenceAppInput.text.trim();
@@ -37,7 +37,7 @@ PageBase {
         SliderRow {
             first: true
             icon: Icons.getVolumeIcon(Audio.volume, Audio.muted)
-            label: qsTr("Output")
+            label: "Salida"
             valueLabel: Math.round(value * 100) + "%"
             value: Audio.volume
             enabled: !Audio.muted
@@ -46,7 +46,7 @@ PageBase {
         }
 
         ToggleRow {
-            text: qsTr("Muted")
+            text: "Silenciado"
             checked: Audio.muted
             onToggled: Audio.setStreamMuted(Audio.sink, checked)
         }
@@ -56,7 +56,7 @@ PageBase {
             currentId: Audio.sink?.id ?? -1
             iconName: "speaker"
             placeholderIcon: "speaker"
-            placeholderText: qsTr("No output devices")
+            placeholderText: "Sin dispositivos de salida"
             onSelected: node => Audio.setAudioSink(node)
         }
 
@@ -65,7 +65,7 @@ PageBase {
             Layout.topMargin: Tokens.spacing.large - parent.spacing
             first: true
             icon: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
-            label: qsTr("Input")
+            label: "Entrada"
             valueLabel: Math.round(value * 100) + "%"
             value: Audio.sourceVolume
             enabled: !Audio.sourceMuted
@@ -74,7 +74,7 @@ PageBase {
         }
 
         ToggleRow {
-            text: qsTr("Muted")
+            text: "Silenciado"
             checked: Audio.sourceMuted
             onToggled: Audio.setStreamMuted(Audio.source, checked)
         }
@@ -84,7 +84,7 @@ PageBase {
             currentId: Audio.source?.id ?? -1
             iconName: "mic"
             placeholderIcon: "mic_off"
-            placeholderText: qsTr("No input devices")
+            placeholderText: "Sin dispositivos de entrada"
             onSelected: node => Audio.setAudioSource(node)
         }
 
@@ -120,14 +120,14 @@ PageBase {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: qsTr("App volumes")
+                        text: "Volumen de apps"
                         font: Tokens.font.body.small
                         elide: Text.ElideRight
                     }
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: Audio.streams.length === 0 ? qsTr("No apps playing audio") : Audio.streams.length === 1 ? qsTr("1 app playing audio") : qsTr("%1 apps playing audio").arg(Audio.streams.length)
+                        text: Audio.streams.length === 0 ? "Sin apps reproduciendo audio" : Audio.streams.length === 1 ? "1 app reproduciendo audio" : "%1 apps reproduciendo audio".arg(Audio.streams.length)
                         color: Colours.palette.m3outline
                         font: Tokens.font.label.small
                         elide: Text.ElideRight
@@ -147,7 +147,7 @@ PageBase {
         StyledText {
             Layout.fillWidth: true
             Layout.topMargin: Tokens.spacing.large - parent.spacing
-            text: qsTr("Sound effects")
+            text: "Efectos de sonido"
             font: Tokens.font.body.small
             color: Colours.palette.m3primary
         }
@@ -155,7 +155,7 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Enable sound effects")
+            text: "Activar efectos de sonido"
             checked: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.enabled = checked
         }
@@ -163,7 +163,7 @@ PageBase {
         SliderRow {
             Layout.fillWidth: true
             icon: "volume_up"
-            label: qsTr("SFX Volume")
+            label: "Volumen de efectos"
             valueLabel: Math.round(value * 100) + "%"
             value: GlobalConfig.audio.sounds.sfxVolume
             enabled: GlobalConfig.audio.sounds.enabled
@@ -173,7 +173,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Camera click")
+            text: "Clic de cámara"
             checked: GlobalConfig.audio.sounds.cameraClick
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.cameraClick = checked
@@ -181,7 +181,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Charging started")
+            text: "Carga iniciada"
             checked: GlobalConfig.audio.sounds.chargingStarted
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.chargingStarted = checked
@@ -189,7 +189,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Volume tick")
+            text: "Tic de volumen"
             checked: GlobalConfig.audio.sounds.effectTick
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.effectTick = checked
@@ -197,7 +197,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Screen lock")
+            text: "Bloqueo de pantalla"
             checked: GlobalConfig.audio.sounds.lock
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.lock = checked
@@ -205,7 +205,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Screen unlock")
+            text: "Desbloqueo de pantalla"
             checked: GlobalConfig.audio.sounds.unlock
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.unlock = checked
@@ -213,7 +213,7 @@ PageBase {
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Low battery")
+            text: "Batería baja"
             checked: GlobalConfig.audio.sounds.lowBattery
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.lowBattery = checked
@@ -222,7 +222,7 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             last: true
-            text: qsTr("Screen record")
+            text: "Grabación de pantalla"
             checked: GlobalConfig.audio.sounds.screenRecord
             enabled: GlobalConfig.audio.sounds.enabled
             onToggled: GlobalConfig.audio.sounds.screenRecord = checked
@@ -232,7 +232,7 @@ PageBase {
         StyledText {
             Layout.fillWidth: true
             Layout.topMargin: Tokens.spacing.large - parent.spacing
-            text: qsTr("Notification silencing")
+            text: "Silenciar notificaciones"
             font: Tokens.font.body.small
             color: Colours.palette.m3primary
         }
@@ -241,7 +241,7 @@ PageBase {
             Layout.fillWidth: true
             Layout.leftMargin: Tokens.padding.small
             Layout.bottomMargin: Tokens.spacing.medium
-            text: qsTr("Mute notification sounds for specific apps")
+            text: "Silenciar notificaciones de apps específicas"
             color: Colours.palette.m3outline
             font: Tokens.font.body.small
             wrapMode: Text.WordWrap
@@ -260,7 +260,7 @@ PageBase {
             }
 
             IconTextButton {
-                text: qsTr("Add")
+                text: "Añadir"
                 icon: "add"
                 onClicked: root.addApp()
             }

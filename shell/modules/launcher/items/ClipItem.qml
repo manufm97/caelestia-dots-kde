@@ -20,7 +20,7 @@ Item {
         root.list.visibilities.launcher = false;
         const preview = root.modelData.preview.length > 30 ? root.modelData.preview.slice(0, 30) + "..." : root.modelData.preview;
         Quickshell.execDetached(["sh", "-c", "cliphist decode " + root.modelData.id + " | wl-copy"]);
-        Toaster.toast(qsTr("Copied to clipboard"), preview, "content_paste");
+        Toaster.toast("Copiado al portapapeles", preview, "content_paste");
     }
 
     Component.onCompleted: {

@@ -12,7 +12,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Per Element Scaling Offset")
+    title: "Ajuste de escala por elemento"
     isSubPage: true
 
     ColumnLayout {
@@ -24,8 +24,8 @@ PageBase {
         ToggleRow {
             first: true
             last: !GlobalConfig.bar.perElementPreviewScale && !GlobalConfig.bar.perElementFontScale
-            text: qsTr("Enable per-element offsets")
-            subtext: qsTr("Customize preview scale and font for each popout type")
+            text: "Activar ajustes por elemento"
+            subtext: "Personaliza escala y fuente para cada tipo de ventana emergente"
             checked: GlobalConfig.bar.perElementPreviewScale || GlobalConfig.bar.perElementFontScale
             onToggled: {
                 GlobalConfig.bar.perElementPreviewScale = checked;
@@ -48,9 +48,9 @@ PageBase {
                 spacing: Tokens.spacing.medium
 
                 TextButton {
-                    text: qsTr("RESET ALL")
+                    text: "RESTABLECER TODO"
                     type: TextButton.Filled
-                    ToolTip.text: qsTr("Reset all to 0")
+                    ToolTip.text: "Restablecer todo a 0"
                     ToolTip.visible: hovered
                     onClicked: {
                         const keys = ["activeWindow", "audio", "battery", "bluetooth", "dock", "github", "lockStatus", "network", "notifications", "peripheralBattery", "trayMenu", "wirelessPassword"];
@@ -64,14 +64,14 @@ PageBase {
                 Item { Layout.fillWidth: true } // Spacer to push headers to the right
 
                 StyledText {
-                    text: qsTr("Scale")
+                    text: "Escala"
                     font: Tokens.font.label.large
                     Layout.preferredWidth: 156 // Matches CustomSpinBox width
                     horizontalAlignment: Text.AlignHCenter
                 }
 
                 StyledText {
-                    text: qsTr("Font")
+                    text: "Fuente"
                     font: Tokens.font.label.large
                     Layout.preferredWidth: 156 // Matches CustomSpinBox width
                     horizontalAlignment: Text.AlignHCenter
@@ -81,7 +81,7 @@ PageBase {
             DoubleStepperRow {
                 first: true
                 last: false
-                label: qsTr("Active window")
+                label: "Ventana activa"
                 
                 scaleValue: GlobalConfig.bar.previewScales.activeWindow
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -94,7 +94,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Audio")
+                label: "Audio"
                 
                 scaleValue: GlobalConfig.bar.previewScales.audio
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -107,7 +107,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Battery")
+                label: "Batería"
                 
                 scaleValue: GlobalConfig.bar.previewScales.battery
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -120,7 +120,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Bluetooth")
+                label: "Bluetooth"
                 
                 scaleValue: GlobalConfig.bar.previewScales.bluetooth
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -133,7 +133,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Dock")
+                label: "Muelle"
                 
                 scaleValue: GlobalConfig.bar.previewScales.dock
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -146,7 +146,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("GitHub")
+                label: "GitHub"
                 
                 scaleValue: GlobalConfig.bar.previewScales.github
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -159,7 +159,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Lock status")
+                label: "Estado de bloqueo"
                 
                 scaleValue: GlobalConfig.bar.previewScales.lockStatus
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -172,7 +172,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Network")
+                label: "Red"
                 
                 scaleValue: GlobalConfig.bar.previewScales.network
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -185,7 +185,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Notifications")
+                label: "Notificaciones"
                 
                 scaleValue: GlobalConfig.bar.previewScales.notifications
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -198,7 +198,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Peripheral battery")
+                label: "Batería periféricos"
                 
                 scaleValue: GlobalConfig.bar.previewScales.peripheralBattery
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -211,7 +211,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: false
-                label: qsTr("Tray menu")
+                label: "Menú de bandeja"
                 
                 scaleValue: GlobalConfig.bar.previewScales.trayMenu
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05
@@ -224,7 +224,7 @@ PageBase {
             DoubleStepperRow {
                 first: false
                 last: true
-                label: qsTr("Wireless password")
+                label: "Contraseña Wi-Fi"
                 
                 scaleValue: GlobalConfig.bar.previewScales.wirelessPassword
                 scaleFrom: -1.0; scaleTo: 1.0; scaleStepSize: 0.05

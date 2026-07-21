@@ -23,7 +23,7 @@ ColumnLayout {
 
     StyledText {
         Layout.fillWidth: true
-        text: Notifs.list.length > 0 ? qsTr("%1 notification%2").arg(Notifs.list.length).arg(Notifs.list.length === 1 ? "" : "s") : qsTr("Notifications")
+        text: Notifs.list.length > 0 ? "%1 notificación%2".arg(Notifs.list.length).arg(Notifs.list.length === 1 ? "" : "es") : "Notificaciones"
         color: Colours.palette.m3outline
         font: Tokens.font.mono.builders.small.weight(Font.Medium).build()
         elide: Text.ElideRight
@@ -62,7 +62,7 @@ ColumnLayout {
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: Config.lock.hideNotifs ? qsTr("Unlock for Notifications") : qsTr("No Notifications")
+                    text: Config.lock.hideNotifs ? "Desbloquear para notificaciones" : "Sin notificaciones"
                     color: Colours.palette.m3outlineVariant
                     font: Tokens.font.mono.builders.large.weight(Font.Medium).build()
                 }

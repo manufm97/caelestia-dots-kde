@@ -11,11 +11,11 @@ PageBase {
     // Notification fullscreen visibility, mapped to GlobalConfig.notifs.fullscreen
     readonly property list<MenuItem> notifFullscreenItems: [
         MenuItem {
-            text: qsTr("Off")
+            text: "Desactivado"
             icon: "notifications_off"
         },
         MenuItem {
-            text: qsTr("On")
+            text: "Activado"
             icon: "notifications"
         }
     ]
@@ -24,15 +24,15 @@ PageBase {
     // Toast fullscreen visibility, mapped to GlobalConfig.utilities.toasts.fullscreen
     readonly property list<MenuItem> toastFullscreenItems: [
         MenuItem {
-            text: qsTr("Off")
+            text: "Desactivado"
             icon: "notifications_off"
         },
         MenuItem {
-            text: qsTr("Important")
+            text: "Importante"
             icon: "priority_high"
         },
         MenuItem {
-            text: qsTr("On")
+            text: "Activado"
             icon: "notifications"
         }
     ]
@@ -49,35 +49,35 @@ PageBase {
         // Notifications
         SectionHeader {
             first: true
-            text: qsTr("Notifications")
+            text: "Notificaciones"
         }
 
         SelectRow {
             first: true
-            label: qsTr("Show in fullscreen")
-            subtext: qsTr("Whether notifications appear over fullscreen apps")
+            label: "Mostrar en pantalla completa"
+            subtext: "Si las notificaciones aparecen sobre apps a pantalla completa"
             menuItems: root.notifFullscreenItems
             active: root.notifFullscreenItems[Math.max(0, root.notifFullscreenValues.indexOf(GlobalConfig.notifs.fullscreen))]
             onSelected: item => GlobalConfig.notifs.fullscreen = root.notifFullscreenValues[root.notifFullscreenItems.indexOf(item)]
         }
 
         ToggleRow {
-            text: qsTr("Expire automatically")
-            subtext: qsTr("Dismiss notifications after their timeout")
+            text: "Expirar automáticamente"
+            subtext: "Descartar notificaciones tras su tiempo de espera"
             checked: GlobalConfig.notifs.expire
             onToggled: GlobalConfig.notifs.expire = checked
         }
 
         ToggleRow {
-            text: qsTr("Open expanded")
-            subtext: qsTr("Show notifications expanded by default")
+            text: "Abrir expandidas"
+            subtext: "Mostrar notificaciones expandidas por defecto"
             checked: GlobalConfig.notifs.openExpanded
             onToggled: GlobalConfig.notifs.openExpanded = checked
         }
 
         StepperRow {
-            label: qsTr("Default timeout")
-            subtext: qsTr("Time before a notification dismisses (ms)")
+            label: "Tiempo de espera predeterminado"
+            subtext: "Tiempo antes de descartar una notificación (ms)"
             value: GlobalConfig.notifs.defaultExpireTimeout
             from: 1000
             to: 60000
@@ -87,8 +87,8 @@ PageBase {
 
         StepperRow {
             last: true
-            label: qsTr("Group preview count")
-            subtext: qsTr("Notifications shown per group before collapsing")
+            label: "Vista previa de grupo"
+            subtext: "Notificaciones mostradas por grupo antes de colapsar"
             value: GlobalConfig.notifs.groupPreviewNum
             from: 1
             to: 10
@@ -98,21 +98,21 @@ PageBase {
 
         // Toasts
         SectionHeader {
-            text: qsTr("Toasts")
+            text: "Toasts"
         }
 
         SelectRow {
             first: true
-            label: qsTr("Show in fullscreen")
-            subtext: qsTr("Whether toasts appear over fullscreen apps")
+            label: "Mostrar en pantalla completa"
+            subtext: "Si los toasts aparecen sobre apps a pantalla completa"
             menuItems: root.toastFullscreenItems
             active: root.toastFullscreenItems[Math.max(0, root.toastFullscreenValues.indexOf(GlobalConfig.utilities.toasts.fullscreen))]
             onSelected: item => GlobalConfig.utilities.toasts.fullscreen = root.toastFullscreenValues[root.toastFullscreenItems.indexOf(item)]
         }
 
         StepperRow {
-            label: qsTr("Visible toasts")
-            subtext: qsTr("Maximum number of toasts shown at once")
+            label: "Toasts visibles"
+            subtext: "Máximo número de toasts mostrados a la vez"
             value: GlobalConfig.utilities.maxToasts
             from: 1
             to: 10
@@ -121,15 +121,15 @@ PageBase {
         }
 
         ToggleRow {
-            text: qsTr("Toast transparency")
-            subtext: qsTr("Apply transparency and blur to toast notifications")
+            text: "Transparencia de toasts"
+            subtext: "Aplicar transparencia y desenfoque a toasts"
             checked: GlobalConfig.utilities.toasts.transparency
             onToggled: GlobalConfig.utilities.toasts.transparency = checked
         }
 
         SliderRow {
             last: true
-            label: qsTr("Base transparency")
+            label: "Transparencia base"
             valueLabel: Math.round(value * 100) + "%"
             value: GlobalConfig.utilities.toasts.transparencyBase
             enabled: GlobalConfig.utilities.toasts.transparency
@@ -167,67 +167,67 @@ PageBase {
 
         // Toast events
         SectionHeader {
-            text: qsTr("Toast events")
+            text: "Eventos de toast"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Charging changes")
+            text: "Cambios de carga"
             checked: GlobalConfig.utilities.toasts.chargingChanged
             onToggled: GlobalConfig.utilities.toasts.chargingChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Game mode changes")
+            text: "Cambios de modo juego"
             checked: GlobalConfig.utilities.toasts.gameModeChanged
             onToggled: GlobalConfig.utilities.toasts.gameModeChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Do not disturb changes")
+            text: "Cambios de No molestar"
             checked: GlobalConfig.utilities.toasts.dndChanged
             onToggled: GlobalConfig.utilities.toasts.dndChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Audio output changes")
+            text: "Cambios de salida de audio"
             checked: GlobalConfig.utilities.toasts.audioOutputChanged
             onToggled: GlobalConfig.utilities.toasts.audioOutputChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Audio input changes")
+            text: "Cambios de entrada de audio"
             checked: GlobalConfig.utilities.toasts.audioInputChanged
             onToggled: GlobalConfig.utilities.toasts.audioInputChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Caps lock changes")
+            text: "Cambios de BloqMayús"
             checked: GlobalConfig.utilities.toasts.capsLockChanged
             onToggled: GlobalConfig.utilities.toasts.capsLockChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Num lock changes")
+            text: "Cambios de BloqNum"
             checked: GlobalConfig.utilities.toasts.numLockChanged
             onToggled: GlobalConfig.utilities.toasts.numLockChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("Keyboard layout changes")
+            text: "Cambios de distribución"
             checked: GlobalConfig.utilities.toasts.kbLayoutChanged
             onToggled: GlobalConfig.utilities.toasts.kbLayoutChanged = checked
         }
 
         ToggleRow {
-            text: qsTr("VPN changes")
+            text: "Cambios de VPN"
             checked: GlobalConfig.utilities.toasts.vpnChanged
             onToggled: GlobalConfig.utilities.toasts.vpnChanged = checked
         }
 
         ToggleRow {
             last: true
-            text: qsTr("Now playing")
+            text: "Reproduciendo ahora"
             checked: GlobalConfig.utilities.toasts.nowPlaying
             onToggled: GlobalConfig.utilities.toasts.nowPlaying = checked
         }

@@ -496,7 +496,7 @@ PanelWindow {
                 opacity: root.draggedAway ? 0 : root.contentRegionOpacity
                 borderColor: root.imageBorderColor
                 fillColor: targeted ? root.imageFillColor : "transparent"
-                text: qsTr("Content region")
+                text: "Región de contenido"
             }
         }
 
@@ -559,7 +559,7 @@ PanelWindow {
                 onClicked: root.snip();
                 Tooltip {
                     target: parent
-                    text: qsTr("Snip selected region (Enter)")
+                    text: "Recortar región seleccionada (Intro)"
                 }
             }
             IconButton {
@@ -577,7 +577,7 @@ PanelWindow {
                 }
                 Tooltip {
                     target: parent
-                    text: root.regionConfirmPending ? qsTr("Clear selection") : qsTr("Close")
+                    text: root.regionConfirmPending ? "Limpiar selección" : "Cerrar"
                 }
             }
         }

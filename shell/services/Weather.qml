@@ -20,8 +20,8 @@ Singleton {
     property list<var> locationSearchResults: []
     property int locationSearchToken: 0
 
-    readonly property string icon: cc ? Icons.getWeatherIcon(cc.weatherCode) : "cloud_alert"
-    readonly property string description: cc?.weatherDesc ?? qsTr("No weather")
+    readonly property string icon: cc ? Icons.getWeatherIcon(cc.weatherCode, cc.isDay) : "cloud_alert"
+    readonly property string description: cc?.weatherDesc ?? "Sin clima"
     readonly property string temp: formatTemp(cc?.tempC)
     readonly property string feelsLike: formatTemp(cc?.feelsLikeC)
     readonly property int humidity: cc?.humidity ?? 0
@@ -201,7 +201,7 @@ Singleton {
                     city = geoCity;
                     cachedCities.set(coords, geoCity);
                 } else {
-                    city = "Unknown City";
+                    city = "Ciudad desconocida";
                 }
             });
         };
@@ -279,7 +279,7 @@ Singleton {
                     maxTempF: Math.round(json.daily.temperature_2m_max[i] * 9 / 5 + 32),
                     minTempF: Math.round(json.daily.temperature_2m_min[i] * 9 / 5 + 32),
                     weatherCode: json.daily.weather_code[i],
-                    icon: Icons.getWeatherIcon(json.daily.weather_code[i])
+                    icon: Icons.getWeatherIcon(json.daily.weather_code[i], cc?.isDay ?? true)
                 });
             forecast = forecastList;
 
@@ -297,7 +297,7 @@ Singleton {
                     tempC: Math.round(json.hourly.temperature_2m[i]),
                     precipChance: json.hourly.precipitation_probability[i],
                     weatherCode: json.hourly.weather_code[i],
-                    icon: Icons.getWeatherIcon(json.hourly.weather_code[i])
+                    icon: Icons.getWeatherIcon(json.hourly.weather_code[i], time.getHours() >= 6 && time.getHours() < 20)
                 });
             }
             hourlyForecast = hourlyList;
@@ -321,36 +321,36 @@ Singleton {
 
     function getWeatherCondition(code) {
         const conditions = {
-            "0": "Clear",
-            "1": "Clear",
-            "2": "Partly cloudy",
-            "3": "Overcast",
-            "45": "Fog",
-            "48": "Fog",
-            "51": "Drizzle",
-            "53": "Drizzle",
-            "55": "Drizzle",
-            "56": "Freezing drizzle",
-            "57": "Freezing drizzle",
-            "61": "Light rain",
-            "63": "Rain",
-            "65": "Heavy rain",
-            "66": "Light rain",
-            "67": "Heavy rain",
-            "71": "Light snow",
-            "73": "Snow",
-            "75": "Heavy snow",
-            "77": "Snow",
-            "80": "Light rain",
-            "81": "Rain",
-            "82": "Heavy rain",
-            "85": "Light snow showers",
-            "86": "Heavy snow showers",
-            "95": "Thunderstorm",
-            "96": "Thunderstorm with hail",
-            "99": "Thunderstorm with hail"
+            "0": "Despejado",
+            "1": "Despejado",
+            "2": "Parcialmente nublado",
+            "3": "Cubierto",
+            "45": "Niebla",
+            "48": "Niebla",
+            "51": "Llovizna",
+            "53": "Llovizna",
+            "55": "Llovizna",
+            "56": "Llovizna helada",
+            "57": "Llovizna helada",
+            "61": "Lluvia ligera",
+            "63": "Lluvia",
+            "65": "Lluvia intensa",
+            "66": "Lluvia ligera",
+            "67": "Lluvia intensa",
+            "71": "Nieve ligera",
+            "73": "Nieve",
+            "75": "Nieve intensa",
+            "77": "Nieve",
+            "80": "Lluvia ligera",
+            "81": "Lluvia",
+            "82": "Lluvia intensa",
+            "85": "Chubascos de nieve ligeros",
+            "86": "Chubascos de nieve intensos",
+            "95": "Tormenta",
+            "96": "Tormenta con granizo",
+            "99": "Tormenta con granizo"
         };
-        return conditions[code] || "Unknown";
+        return conditions[code] || "Desconocido";
     }
 
     onLocChanged: fetchWeatherData()

@@ -16,7 +16,7 @@ import qs.modules.launcher.services
 PageBase {
     id: root
 
-    title: qsTr("Apps")
+    title: "Aplicaciones"
 
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -27,7 +27,7 @@ PageBase {
         // Default applications
         SectionHeader {
             first: true
-            text: qsTr("Default applications")
+            text: "Aplicaciones predeterminadas"
         }
 
         ToggleRow {
@@ -35,7 +35,7 @@ PageBase {
             first: true
             text: qsTr("Force System Defaults (xdg-open)")
             subtext: qsTr("Override applications to use KDE system defaults")
-            
+
             checked: GlobalConfig.general.apps.audio.join(" ") === "xdg-open" &&
                      GlobalConfig.general.apps.playback.join(" ") === "xdg-open" &&
                      GlobalConfig.general.apps.explorer.join(" ") === "xdg-open"
@@ -56,7 +56,7 @@ PageBase {
         DefaultRow {
             enabled: !systemDefaultsToggle.checked
             icon: "terminal"
-            label: qsTr("Terminal")
+            label: "Terminal"
             status: GlobalConfig.general.apps.terminal.join(" ")
             hideSystemDefault: true
             onSelected: app => GlobalConfig.general.apps.terminal = app.command
@@ -65,7 +65,7 @@ PageBase {
         DefaultRow {
             enabled: !systemDefaultsToggle.checked
             icon: "volume_up"
-            label: qsTr("Audio")
+            label: "Audio"
             status: GlobalConfig.general.apps.audio.join(" ")
             onSelected: app => GlobalConfig.general.apps.audio = app.command
         }
@@ -73,7 +73,7 @@ PageBase {
         DefaultRow {
             enabled: !systemDefaultsToggle.checked
             icon: "play_circle"
-            label: qsTr("Media playback")
+            label: "Reproducción de medios"
             status: GlobalConfig.general.apps.playback.join(" ")
             onSelected: app => GlobalConfig.general.apps.playback = app.command
         }
@@ -82,22 +82,22 @@ PageBase {
             enabled: !systemDefaultsToggle.checked
             last: true
             icon: "folder"
-            label: qsTr("File manager")
+            label: "Gestor de archivos"
             status: GlobalConfig.general.apps.explorer.join(" ")
             onSelected: app => GlobalConfig.general.apps.explorer = app.command
         }
 
         // Library
         SectionHeader {
-            text: qsTr("Library")
+            text: "Biblioteca"
         }
 
         NavRow {
             first: true
             last: true
             icon: "apps"
-            label: qsTr("All apps")
-            status: Strings.localizeEnglishSpelling(qsTr("Browse installed apps, set favourites and hidden"))
+            label: "Todas las apps"
+            status: Strings.localizeEnglishSpelling("Explorar apps instaladas, favoritas y ocultas")
             onClicked: root.nState.openSubPage(1)
         }
     }
@@ -164,14 +164,14 @@ PageBase {
 
                             StyledText {
                                 Layout.fillWidth: true
-                                text: qsTr("System Default")
+                                text: "Predeterminado del sistema"
                                 font: Tokens.font.body.small
                                 elide: Text.ElideRight
                             }
 
                             StyledText {
                                 Layout.fillWidth: true
-                                text: qsTr("Uses xdg-open (KDE Default)")
+                                text: "Usa xdg-open (predeterminado de KDE)"
                                 color: Colours.palette.m3outline
                                 font: Tokens.font.label.small
                                 elide: Text.ElideRight

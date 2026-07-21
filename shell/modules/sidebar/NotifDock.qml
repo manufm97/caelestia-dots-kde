@@ -65,7 +65,7 @@ Item {
             anchors.right: parent.right
             anchors.leftMargin: Tokens.spacing.extraSmall
 
-            text: root.notifCount > 0 ? qsTr("notification%1").arg(root.notifCount === 1 ? "" : "s") : qsTr("Notifications")
+            text: root.notifCount > 0 ? "notificación%1".arg(root.notifCount === 1 ? "" : "es") : "Notificaciones"
             color: Colours.palette.m3outline
             font: Tokens.font.label.large
             elide: Text.ElideRight
@@ -199,14 +199,14 @@ Item {
                 
                 StyledText {
                     Layout.fillWidth: true
-                    text: "Caelestia Mode"
+                    text: "Modo Caelestia"
                     font: Tokens.font.body.medium
                     elide: Text.ElideRight
                 }
                 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Visibilities.isCaelestiaMode ? "Spinning kurukuru activated" : "Classic dinosaur character"
+                    text: Visibilities.isCaelestiaMode ? "Kurukuru giratorio activado" : "Dinosaurio clásico"
                     color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.body.small
                     elide: Text.ElideRight

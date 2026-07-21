@@ -101,9 +101,9 @@ Singleton {
 
     function getStreamName(stream: PwNode): string {
         if (!stream)
-            return qsTr("Unknown");
+            return "Desconocido";
         // Try application name first, then description, then name
-        return stream.properties["application.name"] || stream.description || stream.name || qsTr("Unknown Application");
+        return stream.properties["application.name"] || stream.description || stream.name || "Aplicación desconocida";
     }
 
     Component {
@@ -116,7 +116,7 @@ Singleton {
     function playSoundSource(sourcePath: string, enabled: bool, volume: real): void {
         if (!GlobalConfig.audio.sounds.enabled || !enabled)
             return;
-            
+
         let sfx = root._sfxCache[sourcePath];
         if (!sfx) {
             sfx = sfxComponent.createObject(root, { source: sourcePath, volume: volume });
@@ -188,10 +188,10 @@ Singleton {
         if (!sink?.ready)
             return;
 
-        const newSinkName = sink.description || sink.name || qsTr("Unknown Device");
+        const newSinkName = sink.description || sink.name || "Dispositivo desconocido";
 
         if (previousSinkName && previousSinkName !== newSinkName && GlobalConfig.utilities.toasts.audioOutputChanged)
-            Toaster.toast(qsTr("Audio output changed"), qsTr("Now using: %1").arg(newSinkName), "volume_up");
+            Toaster.toast("Salida de audio cambiada", "Usando: %1".arg(newSinkName), "volume_up");
 
         previousSinkName = newSinkName;
     }
@@ -200,10 +200,10 @@ Singleton {
         if (!source?.ready)
             return;
 
-        const newSourceName = source.description || source.name || qsTr("Unknown Device");
+        const newSourceName = source.description || source.name || "Dispositivo desconocido";
 
         if (previousSourceName && previousSourceName !== newSourceName && GlobalConfig.utilities.toasts.audioInputChanged)
-            Toaster.toast(qsTr("Audio input changed"), qsTr("Now using: %1").arg(newSourceName), "mic");
+            Toaster.toast("Entrada de audio cambiada", "Usando: %1".arg(newSourceName), "mic");
 
         previousSourceName = newSourceName;
     }

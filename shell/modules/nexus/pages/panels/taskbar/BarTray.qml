@@ -8,7 +8,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Tray")
+    title: "Bandeja"
     isSubPage: true
 
     ColumnLayout {
@@ -19,27 +19,27 @@ PageBase {
 
         ToggleRow {
             first: true
-            text: qsTr("Background")
+            text: "Fondo"
             checked: Config.bar.tray.background
             onToggled: GlobalConfig.bar.tray.background = checked
         }
 
         ToggleRow {
-            text: Strings.localizeEnglishSpelling(qsTr("Recolour icons"))
+            text: Strings.localizeEnglishSpelling("Recolorear iconos")
             checked: Config.bar.tray.recolour
             onToggled: GlobalConfig.bar.tray.recolour = checked
         }
 
         ToggleRow {
-            text: qsTr("Compact")
+            text: "Compacto"
             checked: Config.bar.tray.compact
             onToggled: GlobalConfig.bar.tray.compact = checked
         }
 
         ToggleRow {
             last: true
-            text: qsTr("Popout on hover")
-            subtext: qsTr("Show the tray menu popout when hovering")
+            text: "Ventana emergente al pasar"
+            subtext: "Mostrar menú al pasar"
             checked: Config.bar.popouts.tray
             onToggled: GlobalConfig.bar.popouts.tray = checked
         }

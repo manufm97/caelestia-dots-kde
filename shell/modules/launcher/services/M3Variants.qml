@@ -35,56 +35,56 @@ Searcher {
         Variant {
             variant: "vibrant"
             icon: "sentiment_very_dissatisfied"
-            name: qsTr("Vibrant")
-            description: qsTr("A high chroma palette. The primary palette's chroma is at maximum.")
+            name: "Vibrante"
+            description: "Paleta de croma alto. El croma de la paleta primaria está al máximo."
         },
         Variant {
             variant: "tonalspot"
             icon: "android"
-            name: qsTr("Tonal Spot")
-            description: Strings.localizeEnglishSpelling(qsTr("Default for Material theme colours. A pastel palette with a low chroma."))
+            name: "Tono puntual"
+            description: Strings.localizeEnglishSpelling("Por defecto para tema Material. Paleta pastel con croma bajo.")
         },
         Variant {
             variant: "expressive"
             icon: "compare_arrows"
-            name: qsTr("Expressive")
-            description: Strings.localizeEnglishSpelling(qsTr("A medium chroma palette. The primary palette's hue is different from the seed colour, for variety."))
+            name: "Expresivo"
+            description: Strings.localizeEnglishSpelling("Paleta de croma medio. El tono primario difiere del color semilla para variedad.")
         },
         Variant {
             variant: "fidelity"
             icon: "compare"
-            name: qsTr("Fidelity")
-            description: Strings.localizeEnglishSpelling(qsTr("Matches the seed colour, even if the seed colour is very bright (high chroma)."))
+            name: "Fidelidad"
+            description: Strings.localizeEnglishSpelling("Coincide con el color semilla, incluso si es muy brillante.")
         },
         Variant {
             variant: "content"
             icon: "sentiment_calm"
-            name: qsTr("Content")
-            description: qsTr("Almost identical to fidelity.")
+            name: "Contenido"
+            description: "Casi idéntico a fidelidad."
         },
         Variant {
             variant: "fruitsalad"
             icon: "nutrition"
-            name: qsTr("Fruit Salad")
-            description: Strings.localizeEnglishSpelling(qsTr("A playful theme - the seed colour's hue does not appear in the theme."))
+            name: "Macedonia"
+            description: Strings.localizeEnglishSpelling("Un tema divertido: el tono del color semilla no aparece en el tema.")
         },
         Variant {
             variant: "rainbow"
             icon: "looks"
-            name: qsTr("Rainbow")
-            description: Strings.localizeEnglishSpelling(qsTr("A playful theme - the seed colour's hue does not appear in the theme."))
+            name: "Arcoíris"
+            description: Strings.localizeEnglishSpelling("Un tema divertido: el tono del color semilla no aparece en el tema.")
         },
         Variant {
             variant: "neutral"
             icon: "contrast"
-            name: qsTr("Neutral")
-            description: qsTr("Close to grayscale, a hint of chroma.")
+            name: "Neutral"
+            description: "Cerca de escala de grises, con un toque de croma."
         },
         Variant {
             variant: "monochrome"
             icon: "filter_b_and_w"
-            name: qsTr("Monochrome")
-            description: Strings.localizeEnglishSpelling(qsTr("All colours are grayscale, no chroma."))
+            name: "Monocromo"
+            description: Strings.localizeEnglishSpelling("Todos los colores en escala de grises, sin croma.")
         }
     ]
     useFuzzy: GlobalConfig.launcher.useFuzzy.variants

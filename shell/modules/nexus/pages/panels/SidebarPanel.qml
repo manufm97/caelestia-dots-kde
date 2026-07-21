@@ -12,7 +12,7 @@ import qs.modules.nexus.common
 PageBase {
     id: root
 
-    title: qsTr("Sidebar")
+    title: "Barra lateral"
     isSubPage: true
 
     ColumnLayout {
@@ -23,12 +23,12 @@ PageBase {
 
         SectionHeader {
             first: true
-            text: qsTr("General")
+            text: "General"
         }
 
         ToggleRow {
             first: true
-            text: qsTr("Enabled")
+            text: "Activado"
             checked: Config.sidebar.enabled
             onToggled: GlobalConfig.sidebar.enabled = checked
         }
@@ -37,8 +37,8 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            label: qsTr("Drag threshold")
-            subtext: qsTr("Pixels dragged before the sidebar opens")
+            label: "Umbral de arrastre"
+            subtext: "Píxeles arrastrados antes de abrir la barra lateral"
             value: Config.sidebar.dragThreshold
             from: 0
             to: 200
@@ -48,14 +48,14 @@ PageBase {
 
         // Sidebar Tabs
         SectionHeader {
-            text: qsTr("Sidebar Tabs")
+            text: "Pestañas de barra lateral"
         }
 
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Show News tab")
-            subtext: qsTr("Show the News tab in the sidebar")
+            text: "Mostrar pestaña de noticias"
+            subtext: "Mostrar noticias en la barra lateral"
             checked: GlobalConfig.ai.showNews
             onToggled: GlobalConfig.ai.showNews = checked
         }
@@ -64,8 +64,8 @@ PageBase {
             Layout.topMargin: Tokens.spacing.extraSmall / 2 - parent.spacing
             Layout.fillWidth: true
             last: true
-            text: qsTr("Show Caelestia Mode")
-            subtext: qsTr("Show the Caelestia Mode toggle at the bottom of notifications")
+            text: "Mostrar Modo Caelestia"
+            subtext: "Mostrar Modo Caelestia al final de notificaciones"
             checked: GlobalConfig.ai.showCaelestiaMode
             onToggled: GlobalConfig.ai.showCaelestiaMode = checked
         }

@@ -96,7 +96,7 @@ Variants {
 
                     BigRecorderButton {
                         materialSymbol: "screenshot_region"
-                        name: qsTr("Screenshot region")
+                        name: "Región de captura"
                         onClicked: {
                             Visibilities.getForActive().screenshot = false;
                             Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "screenshot"]);
@@ -105,7 +105,7 @@ Variants {
 
                     BigRecorderButton {
                         materialSymbol: "photo_camera"
-                        name: qsTr("Screenshot")
+                        name: "Captura de pantalla"
                         onClicked: {
                             Visibilities.getForActive().screenshot = false;
                             Quickshell.execDetached(["bash", "-c", "spectacle -b -n -f -c 2>/dev/null || " +
@@ -115,7 +115,7 @@ Variants {
 
                     BigRecorderButton {
                         materialSymbol: "screen_record"
-                        name: qsTr("Record region")
+                        name: "Grabar región"
                         onClicked: {
                             Visibilities.getForActive().screenshot = false;
                             Quickshell.execDetached(["spectacle", "-R", "r"]);
@@ -124,7 +124,7 @@ Variants {
                     
                     BigRecorderButton {
                         materialSymbol: "capture"
-                        name: qsTr("Record screen")
+                        name: "Grabar pantalla"
                         onClicked: {
                             Visibilities.getForActive().screenshot = false;
                             Quickshell.execDetached(["spectacle", "-R", "s"]);
@@ -136,7 +136,7 @@ Variants {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     type: ButtonBase.Tonal
                     icon: "animated_images"
-                    text: qsTr("Open recordings folder")
+                    text: "Abrir carpeta de grabaciones"
                     
                     inactiveColour: Colours.palette.m3surfaceContainerHigh
                     activeColour: Colours.palette.m3surfaceContainerHighest

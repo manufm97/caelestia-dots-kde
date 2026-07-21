@@ -108,22 +108,22 @@ QtObject {
 
         // Connectivity
         {
-            label: qsTr("Network"),
+            label: "Red",
             icon: "wifi",
-            description: qsTr("Wi-Fi, ethernet"),
+            description: "Wi-Fi, ethernet",
             category: "connectivity"
         },
         {
-            label: qsTr("Connected devices"),
+            label: "Dispositivos conectados",
             icon: "devices_other",
-            description: qsTr("Bluetooth, pairing"),
+            description: "Bluetooth, emparejamiento",
             category: "connectivity",
             noFill: true
         },
         {
-            label: qsTr("Audio"),
+            label: "Audio",
             icon: "volume_up",
-            description: qsTr("App volumes, sound devices"),
+            description: "Volumen de apps, dispositivos",
             category: "connectivity"
         },
 
@@ -169,19 +169,19 @@ QtObject {
 
         // System
         {
-            label: qsTr("Updates"),
+            label: "Actualizaciones",
             icon: "update",
-            description: qsTr("System updates"),
+            description: "Actualizaciones del sistema",
             category: "system"
         },
         {
-            label: qsTr("Plugins"),
+            label: "Plugins",
             icon: "extension",
-            description: qsTr("Manage plugins"),
+            description: "Gestionar plugins",
             category: "system"
         },
         {
-            label: qsTr("About"),
+            label: "Acerca de",
             icon: "info",
             description: qsTr("System information, credits"),
             category: "system"

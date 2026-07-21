@@ -139,7 +139,7 @@ StyledListView {
                 }
 
                 StyledText {
-                    text: modelData ? (modelData.path === "default" ? qsTr("Use default shell animations") : qsTr("Click to apply animation")) : ""
+                    text: modelData ? (modelData.path === "default" ? "Usar animaciones del shell por defecto" : "Clic para aplicar animación") : ""
                     font: Tokens.font.body.small
                     color: Colours.palette.m3outline
                     elide: Text.ElideRight
