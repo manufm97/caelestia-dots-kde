@@ -278,12 +278,12 @@ Item {
         property real idealX: (parent.width - width) / 2
         property real minX: leftLayout.x + leftLayout.width + Tokens.spacing.medium
         property real maxX: rightLayout.x - width - Tokens.spacing.medium
-        x: isHorizontal ? Math.max(minX, Math.min(idealX, maxX)) : undefined
+        x: isHorizontal ? Math.max(minX, Math.min(idealX, maxX)) : 0
 
         property real idealY: (parent.height - height) / 2
         property real minY: leftLayout.y + leftLayout.height + Tokens.spacing.medium
         property real maxY: rightLayout.y - height - Tokens.spacing.medium
-        y: !isHorizontal ? Math.max(minY, Math.min(idealY, maxY)) : undefined
+        y: !isHorizontal ? Math.max(minY, Math.min(idealY, maxY)) : 0
 
         columns: isHorizontal ? -1 : 1
         rows: isHorizontal ? 1 : -1

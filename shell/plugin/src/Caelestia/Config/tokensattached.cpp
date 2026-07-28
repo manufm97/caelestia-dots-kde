@@ -15,7 +15,7 @@ namespace {
 const AppearanceConfig* resolveAppearance(GlobalConfig* config, bool complete, const char* prop, QObject* parent) {
     if (config)
         return config->appearance();
-    if ((complete || !qobject_cast<QQuickItem*>(parent)) && parent)
+    if (complete && qobject_cast<QQuickItem*>(parent) && parent)
         qCWarning(lcConfig, "Tokens.%s accessed without a screen set on %s", prop, parent->metaObject()->className());
     return GlobalConfig::instance()->appearance();
 }
@@ -108,7 +108,7 @@ const AppearanceTransparency* Tokens::transparency() const {
 const SizeTokens* Tokens::sizes() const {
     if (m_tokens)
         return m_tokens->sizes();
-    if ((m_complete || !qobject_cast<QQuickItem*>(parent())) && parent())
+    if (m_complete && qobject_cast<QQuickItem*>(parent()) && parent())
         qCWarning(lcConfig, "Tokens.sizes accessed without a screen set on %s", parent()->metaObject()->className());
     return TokenConfig::instance()->sizes();
 }
