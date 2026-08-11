@@ -124,7 +124,7 @@ For detailed debug logs, enable Debug Mode in Nexus -> About -> Advanced, then r
 
 | Contributor | PRs |
 | --- | ---: |
-| [WinTone01](https://github.com/WinTone01) | 39 |
+| [WinTone01](https://github.com/WinTone01) | 40 |
 | [tomjod](https://github.com/tomjod) | 1 |
 | [Peace-W](https://github.com/Peace-W) | 1 |
 | [gitxpresso](https://github.com/gitxpresso) | 1 |
@@ -151,6 +151,7 @@ For detailed debug logs, enable Debug Mode in Nexus -> About -> Advanced, then r
 
 </td>
 </tr></table>
+
 <!-- contributors-end -->
 
 ## Credits
