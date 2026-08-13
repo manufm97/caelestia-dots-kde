@@ -39,6 +39,12 @@ Singleton {
             "99": "thunderstorm"
         })
 
+    readonly property var weatherNightIcons: ({
+            "0": "nightlight",
+            "1": "nightlight",
+            "2": "partly_cloudy_night"
+        })
+
     readonly property var categoryIcons: ({
             WebBrowser: "web",
             Printing: "print",
@@ -158,9 +164,12 @@ Singleton {
         return "bluetooth";
     }
 
-    function getWeatherIcon(code: string): string {
-        if (weatherIcons.hasOwnProperty(code))
+    function getWeatherIcon(code: string, isDay: bool = true): string {
+        if (weatherIcons.hasOwnProperty(code)) {
+            if (!isDay && weatherNightIcons.hasOwnProperty(code))
+                return weatherNightIcons[code];
             return weatherIcons[code];
+        }
         return "air";
     }
 

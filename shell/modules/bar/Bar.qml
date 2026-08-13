@@ -210,6 +210,8 @@ Item {
             } else {
                 popouts.hasCurrent = false;
             }
+        } else if (id === "weather") {
+            // weather handles its own popout via MouseArea
         } else {
             popouts.hasCurrent = false;
         }
@@ -462,6 +464,15 @@ Item {
                     visible: enabled && GithubStore.available
                     sourceComponent: GithubActivity {
                         popouts: root.popouts
+                    }
+                }
+            }
+            DelegateChoice {
+                roleValue: "weather"
+                delegate: WrappedLoader {
+                    visible: !root.fullscreen
+                    sourceComponent: BarWeather {
+                        bar: root
                     }
                 }
             }

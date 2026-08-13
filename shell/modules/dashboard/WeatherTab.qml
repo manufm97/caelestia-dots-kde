@@ -2,12 +2,38 @@ import QtQuick
 import QtQuick.Layouts
 import Caelestia.Config
 import qs.components
+import qs.components.controls
 import qs.services
 
 Item {
     id: root
 
     readonly property var today: Weather.forecast && Weather.forecast.length > 0 ? Weather.forecast[0] : null
+
+    property int hourlyPage: 0
+    readonly property int hourlyPerPage: 7
+    readonly property int hourlyPageCount: Math.max(1, Math.ceil(Weather.hourlyForecast.length / hourlyPerPage))
+
+    function clampHourlyPage() {
+        const maxPage = Math.max(0, root.hourlyPageCount - 1);
+        if (root.hourlyPage > maxPage)
+            root.hourlyPage = maxPage;
+    }
+
+    Connections {
+        target: Weather
+        ignoreUnknownSignals: true
+        function onHourlyForecastChanged() {
+            root.clampHourlyPage();
+        }
+    }
+
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        onTriggered: root.clampHourlyPage()
+    }
 
     implicitWidth: layout.implicitWidth > 800 ? layout.implicitWidth : 840
     implicitHeight: layout.implicitHeight
@@ -125,6 +151,111 @@ Item {
                 label: "Wind"
                 value: Weather.windSpeed ? Weather.windSpeed + " km/h" : "--"
                 colour: Colours.palette.m3tertiary
+            }
+        }
+
+        RowLayout {
+            Layout.topMargin: Tokens.spacing.medium
+            Layout.leftMargin: Tokens.padding.medium
+            Layout.rightMargin: Tokens.padding.medium
+            Layout.fillWidth: true
+            visible: hourlyRepeater.count > 0
+
+            StyledText {
+                text: qsTr("Hourly forecast")
+                font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
+                color: Colours.palette.m3onSurface
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            IconButton {
+                isRound: true
+                icon: "chevron_left"
+                type: IconButton.Text
+                font: Tokens.font.icon.builders.small.weight(Font.Bold).build()
+                padding: Tokens.padding.small
+                visible: root.hourlyPageCount > 1
+                disabled: root.hourlyPage <= 0
+                onClicked: root.hourlyPage--
+            }
+
+            IconButton {
+                isRound: true
+                icon: "chevron_right"
+                type: IconButton.Text
+                font: Tokens.font.icon.builders.small.weight(Font.Bold).build()
+                padding: Tokens.padding.small
+                visible: root.hourlyPageCount > 1
+                disabled: root.hourlyPage >= root.hourlyPageCount - 1
+                onClicked: root.hourlyPage++
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: Tokens.spacing.medium
+
+            Repeater {
+                id: hourlyRepeater
+
+                model: Math.min(root.hourlyPerPage, Math.max(0, Weather.hourlyForecast.length - root.hourlyPage * root.hourlyPerPage))
+
+                StyledRect {
+                    id: hourlyItem
+
+                    required property int index
+                    readonly property int hourIndex: root.hourlyPage * root.hourlyPerPage + index
+                    readonly property var modelData: Weather.hourlyForecast[hourIndex]
+
+                    Layout.fillWidth: true
+                    implicitHeight: hourlyItemColumn.implicitHeight + Tokens.padding.medium * 2
+
+                    radius: Tokens.rounding.large
+                    color: Colours.tPalette.m3surfaceContainer
+
+                    ColumnLayout {
+                        id: hourlyItemColumn
+
+                        anchors.centerIn: parent
+                        spacing: Tokens.spacing.small
+
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: hourlyItem.hourIndex === 0 ? qsTr("Now") : Qt.formatDateTime(new Date(hourlyItem.modelData.timestamp.replace("T", " ")), GlobalConfig.services.useTwelveHourClock ? "ha" : "hh:00")
+                            font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
+                            color: Colours.palette.m3primary
+                        }
+
+                        StyledText {
+                            Layout.topMargin: -Tokens.spacing.extraSmall
+                            Layout.alignment: Qt.AlignHCenter
+                            text: {
+                                const chance = hourlyItem.modelData.precipChance;
+                                return chance !== undefined && chance > 0 ? chance + "%" : "0%";
+                            }
+                            font: Tokens.font.body.small
+                            opacity: 0.7
+                            color: Colours.palette.m3onSurfaceVariant
+                        }
+
+                        MaterialIcon {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: hourlyItem.modelData.icon
+                            fontStyle: Tokens.font.icon.extraLarge
+                            color: Colours.palette.m3secondary
+                        }
+
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: Weather.formatTemp(hourlyItem.modelData.tempC).slice(0, -1)
+                            font: Tokens.font.body.builders.small.weight(Font.DemiBold).build()
+                            color: Colours.palette.m3tertiary
+                        }
+                    }
+                }
             }
         }
 

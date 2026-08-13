@@ -16,88 +16,86 @@ StyledRect {
 
     readonly property bool isHorizontal: Config.bar.position === "top" || Config.bar.position === "bottom"
 
+    readonly property string secondStr: Time.format("ss")
+
     implicitWidth: isHorizontal ? (horizontalLayout.implicitWidth + root.padding * 2) : barThickness
-    implicitHeight: isHorizontal ? barThickness : (verticalLayout.implicitHeight + root.padding * 2)
+    implicitHeight: isHorizontal ? Math.max(barThickness, horizontalLayout.implicitHeight + root.padding * 2) : (verticalLayout.implicitHeight + root.padding * 2)
 
     color: Qt.alpha(Colours.tPalette.m3surfaceContainer, Config.bar.clock.background ? Colours.tPalette.m3surfaceContainer.a : 0)
     radius: Tokens.rounding.full
 
-    RowLayout {
+    ColumnLayout {
         id: horizontalLayout
 
         anchors.centerIn: parent
         visible: isHorizontal
-        spacing: Tokens.spacing.extraSmall
+        spacing: 0
 
-        Loader {
-            asynchronous: true
-            active: Config.bar.clock.showIcon
-            visible: active
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 0
 
-            sourceComponent: MaterialIcon {
-                text: "calendar_month"
+            Loader {
+                asynchronous: true
+                active: Config.bar.clock.showIcon
+                visible: active
+
+                sourceComponent: MaterialIcon {
+                    text: "calendar_month"
+                    color: root.colour
+                }
+            }
+
+            StyledText {
+                text: Time.hourStr
+                font: root.font.build()
                 color: root.colour
+            }
+
+            StyledText {
+                text: ":"
+                font: root.font.build()
+                color: root.colour
+            }
+
+            StyledText {
+                text: Time.minuteStr
+                font: root.font.build()
+                color: root.colour
+            }
+
+            StyledText {
+                text: ":"
+                font: root.font.build()
+                color: root.colour
+            }
+
+            StyledText {
+                text: root.secondStr
+                font: root.font.build()
+                color: root.colour
+            }
+
+            Loader {
+                asynchronous: true
+                active: GlobalConfig.services.useTwelveHourClock
+                visible: active
+
+                sourceComponent: StyledText {
+                    text: Time.amPmStr.toLowerCase()
+                    font: Tokens.font.body.builders.small.scale(0.9).build()
+                    color: root.colour
+                }
             }
         }
 
         StyledText {
-            Layout.alignment: Qt.AlignVCenter
+            Layout.alignment: Qt.AlignHCenter
             visible: Config.bar.clock.showDate
-            text: Time.format("ddd")
+
+            text: Time.format("dd/MM/yyyy")
             font: Tokens.font.body.small
             color: root.colour
-        }
-
-        StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            visible: Config.bar.clock.showDate
-            text: Time.format("d")
-            font: Tokens.font.body.small
-            color: root.colour
-        }
-
-        Rectangle {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 1
-            Layout.preferredHeight: 16
-            visible: Config.bar.clock.showDate
-
-            color: root.colour
-            opacity: 0.2
-        }
-
-        StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            text: Time.hourStr
-            font: root.font.build()
-            color: root.colour
-        }
-
-        StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            text: ":"
-            font: root.font.build()
-            color: root.colour
-        }
-
-        StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            text: Time.minuteStr
-            font: root.font.build()
-            color: root.colour
-        }
-
-        Loader {
-            Layout.alignment: Qt.AlignVCenter
-            asynchronous: true
-            active: GlobalConfig.services.useTwelveHourClock
-            visible: active
-
-            sourceComponent: StyledText {
-                text: Time.amPmStr.toLowerCase()
-                font: Tokens.font.body.builders.small.scale(0.9).build()
-                color: root.colour
-            }
         }
     }
 
