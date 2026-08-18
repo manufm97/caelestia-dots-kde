@@ -279,7 +279,7 @@ Singleton {
                     maxTempF: Math.round(json.daily.temperature_2m_max[i] * 9 / 5 + 32),
                     minTempF: Math.round(json.daily.temperature_2m_min[i] * 9 / 5 + 32),
                     weatherCode: json.daily.weather_code[i],
-                    icon: Icons.getWeatherIcon(json.daily.weather_code[i])
+                    icon: Icons.getWeatherIcon(json.daily.weather_code[i], true)
                 });
             forecast = forecastList;
 

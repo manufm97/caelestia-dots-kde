@@ -11,7 +11,7 @@ StyledRect {
 
     readonly property color colour: Colours.palette.m3tertiary
     readonly property int padding: Config.bar.clock.background ? Tokens.padding.medium : Tokens.padding.extraSmall
-    readonly property var font: Tokens.font.body.builders.small.scale(1.1)
+    readonly property var font: Tokens.font.body.builders.small
     readonly property int barThickness: Math.round(Tokens.sizes.bar.innerWidth * Math.max(0.6, !isNaN(Config.bar.scale) ? Config.bar.scale : 1.0))
 
     readonly property bool isHorizontal: Config.bar.position === "top" || Config.bar.position === "bottom"
@@ -29,7 +29,7 @@ StyledRect {
 
         anchors.centerIn: parent
         visible: isHorizontal
-        spacing: 0
+        spacing: 2
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -83,7 +83,7 @@ StyledRect {
 
                 sourceComponent: StyledText {
                     text: Time.amPmStr.toLowerCase()
-                    font: Tokens.font.body.builders.small.scale(0.9).build()
+                    font: Tokens.font.body.builders.small.build()
                     color: root.colour
                 }
             }
@@ -153,7 +153,7 @@ StyledRect {
         }
 
         StyledText {
-            Layout.topMargin: -parent.spacing - 4
+            Layout.topMargin: -parent.spacing - 1
             Layout.alignment: Qt.AlignHCenter
             text: Time.minuteStr
             font: {
@@ -171,7 +171,7 @@ StyledRect {
         }
 
         Loader {
-            Layout.topMargin: -parent.spacing - 4
+            Layout.topMargin: -parent.spacing - 1
             Layout.alignment: Qt.AlignHCenter
             asynchronous: true
             active: GlobalConfig.services.useTwelveHourClock
@@ -179,7 +179,7 @@ StyledRect {
 
             sourceComponent: StyledText {
                 text: Time.amPmStr.toLowerCase()
-                font: Tokens.font.body.builders.small.scale(0.9).build()
+                font: Tokens.font.body.builders.small.build()
                 color: root.colour
             }
         }

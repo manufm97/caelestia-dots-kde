@@ -164,7 +164,7 @@ Singleton {
         return "bluetooth";
     }
 
-    function getWeatherIcon(code: string, isDay: bool = true): string {
+    function getWeatherIcon(code: string, isDay: bool): string {
         if (weatherIcons.hasOwnProperty(code)) {
             if (!isDay && weatherNightIcons.hasOwnProperty(code))
                 return weatherNightIcons[code];
