@@ -55,6 +55,23 @@ export QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 # stdbuf forces line-buffered stdout/stderr; without it, glibc fully-buffers
 # output when it isn't attached to a TTY (e.g. when captured by journald via
 # systemd), so qDebug/qWarning messages can sit unflushed indefinitely.
+# Launch the Waywallen wallpaper daemon so wallpapers render on all monitors
+# (the Plasma wallpaper plugin org.waywallen.kde depends on this daemon).
+if ! pgrep -f "waywallen" >/dev/null 2>&1; then
+    waywallen_appimage=""
+    for candidate in \
+        "\$HOME/Documentos/Utilidades/Waywallen/waywallen"*.AppImage \
+        "\$HOME/.local/bin/waywallen"*.AppImage
+    do
+        if [[ -f "\$candidate" ]]; then
+            waywallen_appimage="\$candidate"
+            break
+        fi
+    done
+    if [[ -n "\$waywallen_appimage" ]]; then
+        setsid nohup "\$waywallen_appimage" >/dev/null 2>&1 &
+    fi
+fi
 exec stdbuf -oL -eL "$QUICKSHELL_PATH" -d -n -p "\$HOME/.config/quickshell/caelestia/shell.qml"
 EOF
 chmod +x "$HOME/.local/bin/caelestia-autostart.sh"
