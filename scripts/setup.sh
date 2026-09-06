@@ -14,7 +14,7 @@ export CAELESTIA_SETUP_RUNNING=1
 tput civis 2>/dev/null || true
 
 # -- Paths ---------------------------------------------------------------------
-BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPTS_DIR="$BUNDLE_DIR/scripts"
 export BUNDLE_DIR
 export INSTALL_START_EPOCH="$(date +%s)"
@@ -90,7 +90,6 @@ silent_refresh_pacman_sources() {
         have_root=1
     else
         # Ask for sudo once upfront; sudo -v caches the ticket.
-        echo "[INFO]  Requesting sudo access to refresh/rank pacman mirrors..."
         if sudo -v; then
             have_root=1
         else
@@ -108,9 +107,19 @@ silent_refresh_pacman_sources() {
             fi
         }
 
+        # Enable parallel package downloads before anything syncs, so the
+        # large package steps don't download hundreds of packages serially.
+        if [[ -f /etc/pacman.conf ]]; then
+            if grep -q '^#\?ParallelDownloads' /etc/pacman.conf; then
+                as_root sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+            else
+                echo "ParallelDownloads = 5" | as_root tee -a /etc/pacman.conf >/dev/null
+            fi
+        fi
+
         if is_cachyos; then
             if command -v cachyos-rate-mirrors >/dev/null 2>&1; then
-                echo "[INFO]  Ranking Arch and CachyOS mirrors using cachyos-rate-mirrors..."
+                echo "[INFO]  Ranking CachyOS mirrors..."
                 as_root cachyos-rate-mirrors >/dev/null 2>&1 || echo "[WARN]  cachyos-rate-mirrors failed, continuing with current mirrors."
             else
                 echo "[WARN]  cachyos-rate-mirrors is not installed; continuing with current mirrors."
@@ -280,8 +289,34 @@ fi
 
 BIN="$BUNDLE_DIR/caelestia-install"
 
+# Try to fetch a prebuilt installer binary from GitHub Releases so we don't
+# have to compile the TUI on the user's machine. The binary is built by
+# .github/workflows/prebuilt-artifacts.yml and uploaded to the fixed
+# `caelestia-bin-repo` release tag. Falls back to compiling when unavailable
+# (no curl, offline, unsupported arch) or when forced via env var.
+try_download_prebuilt_installer() {
+    local arch
+    arch="$(uname -m)"
+    case "$arch" in
+        x86_64|aarch64) ;;
+        *) return 1 ;;
+    esac
+
+    local tmp_bin
+    tmp_bin="$(mktemp)"
+    local url
+    url="https://github.com/ladybug-me/caelestia-dots-kde/releases/download/caelestia-bin-repo/caelestia-install-${arch}"
+    if curl -fsSL --connect-timeout 10 --max-time 120 "$url" -o "$tmp_bin" 2>/dev/null; then
+        chmod +x "$tmp_bin"
+        printf '%s\n' "$tmp_bin"
+        return 0
+    fi
+    rm -f "$tmp_bin"
+    return 1
+}
+
 if [[ "${CAELESTIA_TMUX_MASTER:-0}" == "0" ]]; then
-    echo -n "Compiling Caelestia installer"
+    echo -n "Preparing Caelestia installer"
     {
         while true; do
             printf "."
@@ -294,6 +329,11 @@ if [[ "${CAELESTIA_TMUX_MASTER:-0}" == "0" ]]; then
         done
     } &
     SPINNER_PID=$!
+
+    PREBUILT_BIN=""
+    if [[ -z "${CAELESTIA_FORCE_BUILD_INSTALLER:-}" ]] && command -v curl >/dev/null 2>&1; then
+        PREBUILT_BIN="$(try_download_prebuilt_installer || true)"
+    fi
 
     # Check and install requirements
     MISSING_PKGS=()
@@ -337,7 +377,7 @@ if [[ "${CAELESTIA_TMUX_MASTER:-0}" == "0" ]]; then
             echo "Could not auto-install build tools. Please install manually: ${MISSING_PKGS[*]}"
             exit 1
         fi
-        echo -n "Compiling Caelestia installer"
+        echo -n "Preparing Caelestia installer"
         {
             while true; do
                 printf "."
@@ -352,38 +392,52 @@ if [[ "${CAELESTIA_TMUX_MASTER:-0}" == "0" ]]; then
         SPINNER_PID=$!
     fi
 
-    BUILD_DIR="$BUNDLE_DIR/installer/build"
-    BUILD_LOG="/tmp/caelestia_build.log"
-    rm -rf "$BUILD_DIR"
-    mkdir -p "$BUILD_DIR"
-    (
-        cd "$BUILD_DIR" || exit 1
-        cmake -DCMAKE_BUILD_TYPE=Release .. >"$BUILD_LOG" 2>&1 || exit 1
-        make -j"$(nproc 2>/dev/null || echo 1)" >>"$BUILD_LOG" 2>&1 || exit 1
-    ) || {
+    if [[ -n "$PREBUILT_BIN" ]]; then
         kill $SPINNER_PID 2>/dev/null || true
+        wait $SPINNER_PID 2>/dev/null || true
         echo ""
-        echo "[FATAL] Failed to build the Caelestia installer." >&2
-        echo "--- build log (last 60 lines) ---"
-        tail -n 60 "$BUILD_LOG" 2>/dev/null || cat "$BUILD_LOG" 2>/dev/null
-        echo "--- end build log ---"
-        echo "Full log saved to: $BUILD_LOG"
-        exit 1
-    }
-    
-    kill $SPINNER_PID 2>/dev/null || true
-    wait $SPINNER_PID 2>/dev/null || true
-    echo ""
+        rm -f "$BIN"
+        mv "$PREBUILT_BIN" "$BIN"
+        echo "[OK]    Using prebuilt installer binary (skipped compilation)."
+    else
+        BUILD_DIR="$BUNDLE_DIR/installer/build"
+        BUILD_LOG="/tmp/caelestia_build.log"
+        rm -rf "$BUILD_DIR"
+        mkdir -p "$BUILD_DIR"
+        (
+            cd "$BUILD_DIR" || exit 1
+            cmake -DCMAKE_BUILD_TYPE=Release .. >"$BUILD_LOG" 2>&1 || exit 1
+            make -j"$(nproc 2>/dev/null || echo 1)" >>"$BUILD_LOG" 2>&1 || exit 1
+        ) || {
+            kill $SPINNER_PID 2>/dev/null || true
+            echo ""
+            echo "[FATAL] Failed to build the Caelestia installer." >&2
+            echo "--- build log (last 60 lines) ---"
+            tail -n 60 "$BUILD_LOG" 2>/dev/null || cat "$BUILD_LOG" 2>/dev/null
+            echo "--- end build log ---"
+            echo "Full log saved to: $BUILD_LOG"
+            exit 1
+        }
 
-    rm -f "$BIN"
-    cp "$BUILD_DIR/caelestia-install" "$BIN" || {
-        echo "[FATAL] Failed to copy the compiled Caelestia installer to $BIN." >&2
-        exit 1
-    }
+
+        kill $SPINNER_PID 2>/dev/null || true
+        wait $SPINNER_PID 2>/dev/null || true
+        echo ""
+
+        rm -f "$BIN"
+        cp "$BUILD_DIR/caelestia-install" "$BIN" || {
+            echo "[FATAL] Failed to copy the compiled Caelestia installer to $BIN." >&2
+            exit 1
+        }
+    fi
 fi
 
 cleanup_install_state() {
+    # Always reset the terminal state on exit, regardless of how we exited (Ctrl+C, crash, etc.)
+    stty sane 2>/dev/null || true
     tput cnorm 2>/dev/null || true
+    printf '\033[0m\033[?1049l\033[?25h' 2>/dev/null || true
+
     if [[ -f /tmp/caelestia_inhibit.pid ]]; then
         kill -9 "$(cat /tmp/caelestia_inhibit.pid)" 2>/dev/null || true
     fi
@@ -391,7 +445,7 @@ cleanup_install_state() {
         qdbus6 org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit "$(cat /tmp/caelestia_kde_inhibit.cookie)" 2>/dev/null || true
     fi
     rm -f /tmp/caelestia_inhibit.pid /tmp/caelestia_kde_inhibit.cookie
-    
+
     if [[ -n "${TMUX:-}" && "${CAELESTIA_TMUX_MASTER:-0}" == "1" ]]; then
         tmux kill-session -t caelestia_install 2>/dev/null || true
         rm -f /tmp/caelestia_cmd /tmp/caelestia_status
@@ -403,13 +457,13 @@ trap cleanup_install_state EXIT
 if [[ -z "${TMUX:-}" && "${CAELESTIA_NO_TMUX:-0}" == "0" && "${CAELESTIA_USE_TMUX:-1}" == "1" ]]; then
     # Kill any stale session first
     tmux kill-session -t caelestia_install 2>/dev/null || true
-    
+
     export CAELESTIA_TMUX_MASTER=1
     rm -f /tmp/caelestia_cmd /tmp/caelestia_status
     rm -f /tmp/caelestia_installer_err.log
     mkfifo /tmp/caelestia_cmd
     mkfifo /tmp/caelestia_status
-    
+
     # Wrapper keeps the tmux pane alive after exit/crash for diagnostics.
     WRAPPER_SCRIPT="/tmp/caelestia_tmux_wrapper.sh"
     printf -v args_str '%q ' "$0" "$@"
@@ -432,9 +486,16 @@ WRAPPER_EOF
     # Keep pane visible on failure; close normally on success.
     tmux set-option -t caelestia_install remain-on-exit failed
     tmux set-option -t caelestia_install mouse on
-    
+
     tmux attach-session -t caelestia_install
     _tmux_exit=$?
+
+    # Always restore terminal state immediately after tmux exits, regardless of
+    # how it exited (normal, Ctrl+C, crash).  The TUI binary may have left the
+    # terminal in raw mode / alt-screen; without this the shell appears "stuck".
+    stty sane 2>/dev/null || true
+    tput cnorm 2>/dev/null || true
+    printf '\033[0m\033[?1049l\033[?25h' 2>/dev/null || true
 
     # Surface inner-script diagnostics in the outer terminal.
     _needs_pause=0
