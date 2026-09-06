@@ -362,24 +362,31 @@ for root, dirs, files in os.walk(QML_ROOT):
         changed = False
 
         for i, line in enumerate(lines):
-            if not is_translatable_line(line):
-                continue
             if is_in_triple_string(lines, i):
                 continue
 
-            # Si la línea ya tiene qsTr(), solo actualizar el texto español
-            qstr_match = QSTR_RE.search(line)
-            if qstr_match:
-                current_text = qstr_match.group(1)
-                if should_skip_string(current_text):
-                    continue
-                new_spa = eng_to_spa.get(current_text)
-                if new_spa is not None and new_spa != current_text:
-                    old_line = lines[i]
-                    lines[i] = line.replace(f'qsTr("{current_text}")', f'qsTr("{new_spa}")')
-                    if lines[i] != old_line:
-                        stats["updated"] += 1
-                        changed = True
+            # Si la línea ya tiene qsTr(), actualizar TODAS las ocurrencias
+            qstr_matches = list(re.finditer(r'qsTr\("([^"]+)"\)', line))
+            if qstr_matches:
+                old_line = line
+                new_line = line
+                for match in reversed(qstr_matches):
+                    current_text = match.group(1)
+                    if should_skip_string(current_text):
+                        continue
+                    new_spa = eng_to_spa.get(current_text)
+                    if new_spa is None or new_spa == current_text:
+                        continue
+                    replacement = f'qsTr("{new_spa}")'
+                    new_line = new_line[:match.start()] + replacement + new_line[match.end():]
+
+                if new_line != old_line:
+                    lines[i] = new_line
+                    stats["updated"] += 1
+                    changed = True
+                continue
+
+            if not is_translatable_line(line):
                 continue
 
             for (start, end, quote, eng_text) in find_string_literals(line):

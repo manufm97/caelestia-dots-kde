@@ -128,15 +128,19 @@ Singleton {
             const days = Math.floor(up / 86400);
             const hours = Math.floor((up % 86400) / 3600);
             const minutes = Math.floor((up % 3600) / 60);
+            const seconds = up % 60;
 
-            let str = "";
+            const parts = [];
             if (days > 0)
-                str += `${days} day${days === 1 ? "" : "s"}`;
+                parts.push(days === 1 ? qsTr("%1 day").arg(days) : qsTr("%1 days").arg(days));
             if (hours > 0)
-                str += `${str ? ", " : ""}${hours} hour${hours === 1 ? "" : "s"}`;
-            if (minutes > 0 || !str)
-                str += `${str ? ", " : ""}${minutes} minute${minutes === 1 ? "" : "s"}`;
-            root.uptime = str;
+                parts.push(hours === 1 ? qsTr("%1 hour").arg(hours) : qsTr("%1 hours").arg(hours));
+            if (minutes > 0)
+                parts.push(minutes === 1 ? qsTr("%1 minute").arg(minutes) : qsTr("%1 minutes").arg(minutes));
+            if (!parts.length)
+                parts.push(seconds === 1 ? qsTr("%1 second").arg(seconds) : qsTr("%1 seconds").arg(seconds));
+
+            root.uptime = parts.join(", ");
         }
     }
 
