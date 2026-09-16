@@ -110,7 +110,7 @@ QtObject {
                     BarWorkspaces {}
                 }
                 Component {
-                    BarActiveWindow {}
+                    BarGreeter {}
                 }
                 Component {
                     BarTray {}
@@ -138,6 +138,9 @@ QtObject {
                 }
                 Component {
                     BarUpdates {}
+                }
+                Component {
+                    TabSwitcherPanel {}
                 }
             }
         },

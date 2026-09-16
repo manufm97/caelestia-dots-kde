@@ -16,6 +16,7 @@ Item {
     required property ShellScreen screen
     required property real offsetScale
     required property DrawerVisibilities visibilities
+    Config.screen: root.screen.name
     readonly property alias content: content
     readonly property alias winfo: winfo
     readonly property real nonAnimWidth: content.shouldBeActive ? content.implicitWidth : winfo.shouldBeActive ? winfo.implicitWidth : content.implicitWidth
@@ -23,7 +24,7 @@ Item {
     readonly property Item current: (content.item as Content)?.current ?? null
     readonly property bool isDetached: detachedMode.length > 0
     readonly property bool sidebarOpen: popoutState.sidebarOpen
-    readonly property bool isDockPopout: currentName === "dockhover" || currentName === "dockcontext" || currentName === "activewindow" || currentName === "github" || currentName === "updateIndicator"
+    readonly property bool isDockPopout: currentName === "dockhover" || currentName === "dockcontext" || currentName === "greeter" || currentName === "greetercontext" || currentName === "activewindow" || currentName === "github" || currentName === "updateIndicator"
     property alias currentName: popoutState.currentName
     property alias hasCurrent: popoutState.hasCurrent
     property alias dockModel: popoutState.dockModel

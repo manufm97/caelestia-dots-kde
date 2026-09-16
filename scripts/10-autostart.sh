@@ -67,7 +67,7 @@ fi
 # from the shell inherits those descriptors - which is how the shell was
 # handing apps a stdout that goes nowhere. Vesktop deadlocks in exactly that
 # state when a call starts (issue #402); reproducible outside the shell with
-# `vesktop >/dev/null 2>&1`.
+# \`vesktop >/dev/null 2>&1\`.
 #
 # Dropping it also makes the old stdbuf wrapper unnecessary: journald stdio is
 # what the line-buffering hack was working around, and stdbuf leaked
@@ -157,12 +157,18 @@ if [[ "${APPLY_MATERIAL_YOU:-true}" == "true" ]]; then
 [Unit]
 Description=KDE Material You Colors
 PartOf=graphical-session.target
-After=graphical-session.target
+After=graphical-session.target plasma-plasmashell.service
 
 [Service]
 Type=simple
 ExecStart=$KMYC_PATH
-Restart=on-failure
+# KMY reads the wallpaper and the current color scheme out of the running
+# Plasma session. Started before plasmashell exists it can see neither and
+# applies a built-in default, which is what used to leave the desktop on the
+# wrong colors until the service was restarted by hand once the session had
+# settled. Restart=always, not on-failure, because it can also give up early
+# and exit cleanly.
+Restart=always
 RestartSec=3
 
 [Install]

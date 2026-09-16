@@ -15,6 +15,7 @@ Item {
     id: root
 
     required property ShellScreen screen
+    Config.screen: screen.name
     required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
     required property bool fullscreen
@@ -37,7 +38,25 @@ Item {
             return Qt.rect(ox, oy, contentWidth, screen.height);
         return Qt.rect(ox + screen.width - contentWidth, oy, contentWidth, screen.height);
     }
-    readonly property bool dodging: dodgeEnabled && Hypr.hasWindowOverlapping(screen.name, dodgeRect.x, dodgeRect.y, dodgeRect.width, dodgeRect.height, Config.bar.dodgeFocusedOnly)
+    // Touch the tracked QML properties here so QML re-evaluates this binding
+    // whenever window data, focus, or workspace changes — hasWindowOverlapping()
+    // is a plain JS function and QML does not track what it reads internally.
+    readonly property var _dodgeWatchWindowList: (typeof KWinActiveWindowBridge !== "undefined") ? KWinActiveWindowBridge.windowList : null
+    readonly property var _dodgeWatchActiveWindow: (typeof KWinActiveWindowBridge !== "undefined") ? KWinActiveWindowBridge.activeWindow : null
+    readonly property int _dodgeWatchActiveId: (typeof KWinWorkspaceState !== "undefined") ? KWinWorkspaceState.activeId : -1
+    // activeByOutput tracks per-screen workspace changes independently — needed
+    // so switching ws on an unfocused screen still re-evaluates dodge on that bar.
+    readonly property var _dodgeWatchActiveByOutput: (typeof KWinWorkspaceState !== "undefined") ? KWinWorkspaceState.activeByOutput : null
+    readonly property bool dodging: {
+        // Reading these tracked props here makes QML invalidate this binding
+        // when windowList, activeWindow, activeId, or per-screen workspace changes.
+        void _dodgeWatchWindowList;
+        void _dodgeWatchActiveWindow;
+        void _dodgeWatchActiveId;
+        void _dodgeWatchActiveByOutput;
+        return dodgeEnabled && Hypr.hasWindowOverlapping(screen.name, dodgeRect.x, dodgeRect.y, dodgeRect.width, dodgeRect.height, Config.bar.dodgeFocusedOnly);
+    }
+
     // Treat a dodging bar as non-persistent: it stays out of the way but is
     // still reachable through the hover edge and the usual toggles.
     readonly property bool keptOpen: Config.bar.persistent && !dodging
@@ -55,7 +74,7 @@ Item {
     readonly property int visualThickness: !disabled && (Config.bar.persistent || visibilities.bar) ? contentWidth : Config.border.thickness
     readonly property bool shouldBeVisible: !fullscreen && !disabled && !visibilities.overview && (keptOpen || visibilities.bar || isHovered)
     property bool isHovered
-    readonly property bool isHorizontal: Config.bar.position === "top" || Config.bar.position === "bottom"
+    readonly property bool isHorizontal: root.position === "top" || root.position === "bottom"
     readonly property int clampedThickness: Math.max(Config.border.minThickness, isHorizontal ? implicitHeight : implicitWidth)
     readonly property int clampedWidth: isHorizontal ? root.width : clampedThickness
     readonly property int clampedHeight: isHorizontal ? clampedThickness : root.height
@@ -147,7 +166,7 @@ Item {
         states: [
             State {
                 name: "left"
-                when: Config.bar.position === "left"
+                when: root.position === "left"
 
                 AnchorChanges {
                     target: content
@@ -159,7 +178,7 @@ Item {
             },
             State {
                 name: "right"
-                when: Config.bar.position === "right"
+                when: root.position === "right"
 
                 AnchorChanges {
                     target: content
@@ -171,7 +190,7 @@ Item {
             },
             State {
                 name: "top"
-                when: Config.bar.position === "top"
+                when: root.position === "top"
 
                 AnchorChanges {
                     target: content
@@ -183,7 +202,7 @@ Item {
             },
             State {
                 name: "bottom"
-                when: Config.bar.position === "bottom"
+                when: root.position === "bottom"
 
                 AnchorChanges {
                     target: content

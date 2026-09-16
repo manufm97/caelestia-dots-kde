@@ -65,7 +65,7 @@ Item {
             let localPos = mapToItem(layout, x, y);
             if (localPos.x >= 0 && localPos.x <= layout.width && localPos.y >= 0 && localPos.y <= layout.height) {
                 let ch = layout.childAt(localPos.x, localPos.y);
-                if (ch && ch.hasOwnProperty("id")) return ch;
+                if (ch && ch.hasOwnProperty("id")) return ch; 
             }
         }
         return null;
@@ -104,7 +104,7 @@ Item {
             closeTray();
 
         if (!ch) {
-            if (popouts.hasCurrent && (popouts.currentName === "dockcontext" || popouts.currentName === "dockhover" || popouts.currentName === "activewindow")) return;
+            if (popouts.hasCurrent && (popouts.currentName === "dockcontext" || popouts.currentName === "dockhover" || popouts.currentName === "greeter" || popouts.currentName === "greetercontext" || popouts.currentName === "activewindow")) return;
             if (!Config.bar.popouts.tray && popouts.currentName.startsWith("traymenu")) return;
             // skip hover-driven tray recalculation in click mode
             popouts.hasCurrent = false;
@@ -170,24 +170,28 @@ Item {
             } else {
                 popouts.hasCurrent = false;
             }
-        } else if (id === "activeWindow" && Config.bar.popouts.activeWindow && Config.bar.activeWindow.showOnHover) {
+        } else if ((id === "greeter" || id === "activeWindow") && (Config.bar.popouts.greeter ?? Config.bar.popouts.activeWindow) && (Config.bar.greeter.showOnHover ?? Config.bar.activeWindow.showOnHover)) {
             const item = ch.item as Item;
             if (item) {
                 const relPos = pos - top;
                 const inside = isHorizontal ? (relPos >= 0 && relPos <= item.implicitWidth) : (relPos >= 0 && relPos <= item.implicitHeight);
                 if (inside) {
-                    popouts.currentName = id.toLowerCase();
-                    popouts.currentCenter = isHorizontal ? item.mapToItem(null, item.implicitWidth / 2, 0).x : (item.mapToItem(null, 0, item.implicitHeight / 2).y ?? 0);
-                    popouts.hasCurrent = true;
+                    if (!popouts.hasCurrent || popouts.currentName !== "greetercontext") {
+                        popouts.currentName = "greeter";
+                        popouts.currentCenter = isHorizontal ? item.mapToItem(null, item.implicitWidth / 2, 0).x : (item.mapToItem(null, 0, item.implicitHeight / 2).y ?? 0);
+                        popouts.hasCurrent = true;
+                    }
                 } else {
-                    popouts.hasCurrent = false;
+                    if (popouts.currentName !== "greetercontext") {
+                        popouts.hasCurrent = false;
+                    }
                 }
             } else {
                 popouts.hasCurrent = false;
             }
         } else if (id === "dock") {
-            if (popouts.hasCurrent && (popouts.currentName === "dockcontext" || popouts.currentName === "activewindow")) return;
-
+            if (popouts.hasCurrent && (popouts.currentName === "dockcontext" || popouts.currentName === "greeter" || popouts.currentName === "greetercontext" || popouts.currentName === "activewindow")) return;
+            
             const item = ch.item;
             if (item && typeof item.handleHover === "function") {
                 const relPos = pos - top;
@@ -232,7 +236,7 @@ Item {
 
     function handleWheel(pos: real, angleDelta: point): void {
         const ch = getLoaderAt(isHorizontal ? pos : width / 2, isHorizontal ? height / 2 : pos) as WrappedLoader;
-
+        
         if (ch?.id === "dock") {
             if (ch.item && typeof ch.item.handleWheel === "function") {
                 ch.item.handleWheel(angleDelta);
@@ -275,7 +279,7 @@ Item {
         anchors.top: !isHorizontal ? parent.top : undefined
         anchors.verticalCenter: isHorizontal ? parent.verticalCenter : undefined
         anchors.horizontalCenter: !isHorizontal ? parent.horizontalCenter : undefined
-
+        
         anchors.leftMargin: isHorizontal ? root.vPadding : 0
         anchors.topMargin: !isHorizontal ? root.vPadding : 0
 
@@ -340,7 +344,7 @@ Item {
         anchors.bottom: !isHorizontal ? parent.bottom : undefined
         anchors.verticalCenter: isHorizontal ? parent.verticalCenter : undefined
         anchors.horizontalCenter: !isHorizontal ? parent.horizontalCenter : undefined
-
+        
         anchors.rightMargin: isHorizontal ? root.vPadding : 0
         anchors.bottomMargin: !isHorizontal ? root.vPadding : 0
 
@@ -388,9 +392,18 @@ Item {
                 }
             }
             DelegateChoice {
+                roleValue: "greeter"
+                delegate: WrappedLoader {
+                    sourceComponent: Greeter {
+                        bar: root
+                        monitor: Brightness.getMonitorForScreen(root.screen)
+                    }
+                }
+            }
+            DelegateChoice {
                 roleValue: "activeWindow"
                 delegate: WrappedLoader {
-                    sourceComponent: ActiveWindow {
+                    sourceComponent: Greeter {
                         bar: root
                         monitor: Brightness.getMonitorForScreen(root.screen)
                     }
@@ -487,15 +500,6 @@ Item {
                 }
             }
             DelegateChoice {
-                roleValue: "weather"
-                delegate: WrappedLoader {
-                    visible: !root.fullscreen
-                    sourceComponent: BarWeather {
-                        bar: root
-                    }
-                }
-            }
-            DelegateChoice {
                 roleValue: "showDesktop"
                 delegate: WrappedLoader {
                     sourceComponent: ShowDesktop {}
@@ -519,13 +523,13 @@ Item {
         asynchronous: false
         Layout.alignment: root.isHorizontal ? Qt.AlignVCenter : Qt.AlignHCenter
 
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
 
         Layout.preferredWidth: implicitWidth
         Layout.preferredHeight: implicitHeight
